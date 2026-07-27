@@ -1,0 +1,32 @@
+[project]
+name = "face-verification"
+version = "0.1.0"
+description = "Evaluation of a pretrained face-verification pipeline on real benchmark datasets (LFW, CPLFW) for duplicate-profile review."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "numpy==2.5.1",
+    "opencv-python-headless==4.13.0.92",
+    "Pillow==12.3.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=7.0",
+]
+review = [
+    "streamlit>=1.38",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

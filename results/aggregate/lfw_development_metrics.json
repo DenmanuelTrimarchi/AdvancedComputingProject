@@ -1,0 +1,19 @@
+{
+  "artifact_type": "lfw_verification_metrics",
+  "split": "dev",
+  "protocol_file": "pairsDevTest.txt",
+  "status": "not_run",
+  "accuracy": null,
+  "precision": null,
+  "recall": null,
+  "f1": null,
+  "false_match_rate": null,
+  "false_non_match_rate": null,
+  "roc_auc": null,
+  "equal_error_rate": null,
+  "confusion_matrix": null,
+  "failure_rate": null,
+  "claim": "No benchmark or biometric accuracy claim has been produced.",
+  "reason": "Real dataset and verified model binaries are absent; the ethics/DPIA/licence approval gate in docs/ETHICS_AND_BIOMETRICS.md is closed.",
+  "schema_version": 1
+}

@@ -1,0 +1,8 @@
+# Example only — real values belong in your local .env (copy from
+# .env.example), never committed here or anywhere else in this repository.
+# This file exists purely to show the expected shape.
+
+data_root: /secure/path/face-verification/datasets
+protocol_root: /secure/path/face-verification/protocols
+model_root: /secure/path/face-verification/models
+cache_root: /secure/path/face-verification/cache

@@ -1,0 +1,15 @@
+{
+  "artifact_type": "duplicate_gallery_metrics",
+  "status": "not_run",
+  "gallery_size": null,
+  "duplicate_probe_count": null,
+  "unknown_probe_count": null,
+  "duplicate_detection_rate": null,
+  "false_duplicate_review_rate": null,
+  "rank1_identification_rate": null,
+  "true_duplicate_miss_rate": null,
+  "policy_note": "A result above threshold would open a case for human review only. It is not evidence of scam activity and does not ban, reject or accuse any identity.",
+  "claim": "No duplicate-profile benchmark or detection-rate claim has been produced.",
+  "reason": "No approved gallery manifest, real dataset, calibrated threshold or verified model binary has been supplied.",
+  "schema_version": 1
+}

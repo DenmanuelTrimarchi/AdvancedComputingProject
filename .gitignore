@@ -1,0 +1,28 @@
+# Biometric research inputs and derived artifacts never belong in Git.
+.venv/
+.env
+data/*
+!data/README.md
+models/*.onnx
+models/*.bin
+cache/
+*.sqlite
+*.db
+results/raw/
+results/pair_scores/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
+
+# Standard Python packaging noise
+*.egg-info/
+build/
+dist/
+.mypy_cache/
+.ruff_cache/
+
+# Allow disclosure-reviewed aggregate results
+!results/aggregate/
+!results/README.md

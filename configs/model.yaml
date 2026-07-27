@@ -1,0 +1,25 @@
+# Immutable model contract, for reference. src/face_verification/config.py
+# is the source of truth read by the code — this file documents the same
+# values so they can be reviewed without reading Python.
+
+model_version: opencv-sface-2021dec-yunet-2023mar
+preprocessing_revision: opencv-yunet-sface-exif-bgr-l2-v1
+embedding_dimensions: 128
+
+detector:
+  filename: face_detection_yunet_2023mar.onnx
+  sha256: 8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4
+  score_threshold: 0.9
+  nms_threshold: 0.3
+  top_k: 5000
+  licence: MIT
+
+embedder:
+  filename: face_recognition_sface_2021dec.onnx
+  sha256: 0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79
+  licence: Apache-2.0
+
+dependencies:
+  numpy: 2.5.1
+  opencv-python-headless: 4.13.0.92
+  Pillow: 12.3.0

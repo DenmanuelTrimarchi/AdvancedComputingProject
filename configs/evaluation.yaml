@@ -1,0 +1,21 @@
+# Evaluation parameters. Dataset/protocol/model *paths* are deliberately
+# never stored here — they come only from environment variables (see
+# .env.example) so this file can never leak a researcher's local filesystem
+# layout.
+
+random_seed: 20260727
+
+calibration:
+  protocol_file: pairsDevTrain.txt
+  target_false_match_rates: [0.001, 0.01, 0.05]
+  default_operating_strategy: balanced_accuracy
+
+lfw:
+  development_protocol_file: pairsDevTest.txt
+  final_protocol_file: pairs.txt
+
+cplfw:
+  protocol_file: pairs_CPLFW.txt
+
+gallery:
+  max_unknown_identities: null  # null = use every eligible unknown identity

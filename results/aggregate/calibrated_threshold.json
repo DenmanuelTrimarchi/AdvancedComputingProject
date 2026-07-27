@@ -1,0 +1,12 @@
+{
+  "artifact_type": "calibrated_threshold",
+  "dataset": "LFW",
+  "protocol_file": "pairsDevTrain.txt",
+  "status": "not_run",
+  "threshold": null,
+  "operating_strategy": null,
+  "candidates": null,
+  "claim": "No calibration has been performed.",
+  "reason": "Real dataset and verified model binaries are absent; the ethics/DPIA/licence approval gate in docs/ETHICS_AND_BIOMETRICS.md is closed.",
+  "schema_version": 1
+}
