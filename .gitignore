@@ -3,6 +3,11 @@
 .env
 data/*
 !data/README.md
+datasets/
+*.tgz
+*.tar.gz
+*.zip
+*.rar
 models/*.onnx
 models/*.bin
 cache/

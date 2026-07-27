@@ -133,16 +133,59 @@ def test_header_count_mismatch_is_rejected(tmp_path):
         parse_lfw_pairs(protocol_path, dataset_root)
 
 
-def test_cplfw_parses_the_same_format(tmp_path):
-    dataset_root = _build_dataset(tmp_path)
+def _build_flat_cplfw_dataset(tmp_path: Path) -> Path:
+    # CPLFW images are flat (no per-identity subdirectory), unlike LFW.
+    dataset_root = tmp_path / "cplfw"
+    dataset_root.mkdir()
+    for name in ("Alice_Smith_1.jpg", "Alice_Smith_2.jpg", "Bob_Jones_1.jpg", "Bob_Jones_2.jpg"):
+        make_test_image(dataset_root, name, fill=15)
+    return dataset_root
+
+
+def test_cplfw_uses_the_real_two_line_per_pair_format(tmp_path):
+    # Real pairs_CPLFW.txt has no header; every pair is two consecutive
+    # "filename label" lines with the label repeated on both lines.
+    dataset_root = _build_flat_cplfw_dataset(tmp_path)
     protocol_path = _write_protocol(
         tmp_path,
         "pairs_CPLFW.txt",
         [
-            "1",
-            "Alice_Smith 1 2",
-            "Alice_Smith 1 Bob_Jones 1",
+            "Alice_Smith_1.jpg 1",
+            "Alice_Smith_2.jpg 1",
+            "Alice_Smith_1.jpg 0",
+            "Bob_Jones_1.jpg 0",
         ],
     )
     pairs = parse_cplfw_pairs(protocol_path, dataset_root)
     assert len(pairs) == 2
+    assert pairs[0].same_identity is True
+    assert pairs[1].same_identity is False
+
+
+def test_cplfw_rejects_mismatched_label_within_a_pair(tmp_path):
+    dataset_root = _build_flat_cplfw_dataset(tmp_path)
+    protocol_path = _write_protocol(
+        tmp_path,
+        "pairs_CPLFW.txt",
+        [
+            "Alice_Smith_1.jpg 1",
+            "Alice_Smith_2.jpg 0",  # labels disagree within one pair
+        ],
+    )
+    with pytest.raises(ProtocolError):
+        parse_cplfw_pairs(protocol_path, dataset_root)
+
+
+def test_cplfw_rejects_odd_line_count(tmp_path):
+    dataset_root = _build_flat_cplfw_dataset(tmp_path)
+    protocol_path = _write_protocol(
+        tmp_path,
+        "pairs_CPLFW.txt",
+        [
+            "Alice_Smith_1.jpg 1",
+            "Alice_Smith_2.jpg 1",
+            "Bob_Jones_1.jpg 0",  # unpaired trailing line
+        ],
+    )
+    with pytest.raises(ProtocolError):
+        parse_cplfw_pairs(protocol_path, dataset_root)
