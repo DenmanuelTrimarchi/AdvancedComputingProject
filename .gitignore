@@ -30,4 +30,5 @@ dist/
 
 # Allow disclosure-reviewed aggregate results
 !results/aggregate/
+!results/figures/
 !results/README.md

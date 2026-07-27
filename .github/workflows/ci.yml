@@ -22,10 +22,10 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install package (dev + review extras)
+      - name: Install package (dev + review + report extras)
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e '.[dev,review]'
+          python -m pip install -e '.[dev,review,report]'
 
       - name: Check pinned dependency contract
         run: python scripts/check_environment.py
@@ -35,9 +35,12 @@ jobs:
 
       - name: Confirm no real dataset or model file crept into the repo
         run: |
-          if find . -iname "*.onnx" -o -iname "*.tgz" -o -iname "*.rar" \
+          if find . \( -iname "*.onnx" -o -iname "*.tgz" -o -iname "*.rar" \) \
                -not -path "./.git/*" | grep -q .; then
             echo "::error::Found a model/dataset archive file tracked in the repo"
-            find . -iname "*.onnx" -o -iname "*.tgz" -o -iname "*.rar" -not -path "./.git/*"
+            find . \( -iname "*.onnx" -o -iname "*.tgz" -o -iname "*.rar" \) -not -path "./.git/*"
             exit 1
           fi
+
+      - name: Confirm committed results contain no personal/absolute path
+        run: python scripts/check_public_results_privacy.py --results-root results/aggregate

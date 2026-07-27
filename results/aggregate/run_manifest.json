@@ -1,20 +1,22 @@
 {
   "artifact_type": "run_manifest",
-  "created_at": "2026-07-27T12:07:56.743034+00:00",
-  "dataset_root": "/Users/manu/SecureResearchData/face-verification/datasets",
+  "cplfw_image_variant": "raw",
+  "created_at": "2026-07-27T23:41:13.440875+00:00",
+  "dataset_root_variable": "FACE_DATA_ROOT",
+  "dataset_storage": "access-controlled private research storage; path omitted from public artifacts",
   "frozen_threshold": 0.3630116835391414,
   "frozen_threshold_candidate": "balanced_accuracy",
-  "gallery_manifest_path": "results/raw/gallery_manifest.json",
-  "model_root": "/Users/manu/SecureResearchData/face-verification/models",
+  "gallery_manifest": "results/raw/gallery_manifest.json",
+  "model_root_variable": "FACE_MODEL_ROOT",
   "output_file_sha256": {
-    "calibrated_threshold.json": "f146ecab0e93e295cb727132cce6044730e6710df942c4e26383440b4ebbc1c2",
-    "cplfw_metrics.json": "f397ee604c3f6d092d7ead6fe8542c8e46c9d6394238e88e874a96903d8e3734",
-    "duplicate_gallery_metrics.json": "cf94ab75ac245cedabba97a4178f5b5ac9d9ea8fe9f167fa5426787d650c0790",
-    "lfw_development_metrics.json": "c6bcf069bb86952961358aea875f00a0de04ce103d47e6066fe9d74cd724844a",
-    "lfw_final_metrics.json": "c7ee95cadfff8765b7505df6e542d73589c47a0b1743fe13c4e618c1ae9e2b92"
+    "calibrated_threshold.json": "7f3efa80ea17e30585820633d2eaf18384d4e68ab7dccd26df4e8c1923def22b",
+    "cplfw_metrics.json": "19dcbb29a195af2058d185a34dc505fab354e8869fa6b1f41150fa95bb700cb8",
+    "duplicate_gallery_metrics.json": "8a4112337c97ed43e9bdc07847cdd4b0cef1bffaaca6d5e26c6db2a4596481f2",
+    "lfw_development_metrics.json": "4e0c192419a289344f872652e5a0fe64519ea4d57c64a4dd5b20707187bb9d07",
+    "lfw_final_metrics.json": "c08b67592ed597ecb672707fb4453b7f28afb2a48d8c848df47124d2ec15b19c"
   },
   "output_root": "results/aggregate",
-  "protocol_root": "/Users/manu/SecureResearchData/face-verification/protocols",
+  "protocol_root_variable": "FACE_PROTOCOL_ROOT",
   "schema_version": 1,
   "software_environment": {
     "dependencies": {

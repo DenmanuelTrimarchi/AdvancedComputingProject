@@ -3,11 +3,18 @@
 LFW-calibrated threshold on CPLFW — deliberately no separate CPLFW
 calibration step.
 
+Requires an explicit ``--image-variant {raw,aligned}`` — CPLFW ships two
+non-interchangeable image sets (the authors' raw, unconstrained images in
+``images.rar``, and a separately pre-cropped/aligned copy in
+``cp-aligned.zip``) and the result must never be ambiguous about which one
+was scored.
+
 Usage:
     python scripts/evaluate_cplfw.py \
-        --dataset-root /path/to/AU-OneDrive/datasets/cplfw \
-        --protocol-root /path/to/AU-OneDrive/protocols \
-        --model-root /path/to/AU-OneDrive/models \
+        --dataset-root /path/to/private-storage/cplfw_raw \
+        --protocol-root /path/to/private-storage/protocols \
+        --model-root /path/to/private-storage/models \
+        --image-variant raw \
         --threshold-artifact results/aggregate/calibrated_threshold.json \
         --output results/aggregate/cplfw_metrics.json
 """
@@ -20,13 +27,14 @@ from pathlib import Path
 from face_verification.artifacts import read_json_artifact, write_json_artifact
 from face_verification.calibration import require_frozen_threshold
 from face_verification.config import (
-    CPLFW_ARCHIVE_SHA256,
+    CPLFW_IMAGE_VARIANTS,
     MODEL_VERSION,
     PREPROCESSING_REVISION,
     SFACE_FILENAME,
     SFACE_SHA256,
     YUNET_FILENAME,
     YUNET_SHA256,
+    cplfw_provenance_fields,
 )
 from face_verification.detector import YuNetDetector
 from face_verification.embedder import SFaceEmbedder
@@ -38,13 +46,22 @@ PROTOCOL_FILENAME = "pairs_CPLFW.txt"
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dataset-root", required=True, type=Path)
     parser.add_argument("--protocol-root", required=True, type=Path)
     parser.add_argument("--model-root", required=True, type=Path)
+    parser.add_argument(
+        "--image-variant", required=True, choices=CPLFW_IMAGE_VARIANTS,
+        help="Which CPLFW image set --dataset-root points at: the authors' raw "
+             "images (images.rar) or the separately pre-cropped/aligned copy "
+             "(cp-aligned.zip). Recorded verbatim in the output so the result "
+             "can never be ambiguous about which variant was scored.",
+    )
     parser.add_argument("--threshold-artifact", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args(argv)
+
+    provenance_fields = cplfw_provenance_fields(args.image_variant)
 
     protocol_path = args.protocol_root / PROTOCOL_FILENAME
     threshold_artifact_sha256 = sha256_of_file(args.threshold_artifact)
@@ -62,10 +79,10 @@ def main(argv=None) -> int:
 
     payload = {
         "artifact_type": "cplfw_verification_metrics",
+        **provenance_fields,
         "protocol_file": PROTOCOL_FILENAME,
         "protocol_sha256": sha256_of_file(protocol_path),
         "evaluated_image_set_sha256": sha256_of_evaluated_image_set(evaluated_images, args.dataset_root),
-        "dataset_archive_sha256": CPLFW_ARCHIVE_SHA256,
         "threshold_source": str(args.threshold_artifact),
         "threshold_artifact_sha256": threshold_artifact_sha256,
         "threshold_status": threshold_payload.get("status"),

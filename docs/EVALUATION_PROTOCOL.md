@@ -1,8 +1,10 @@
 # Evaluation protocol
 
 Status: **executed.** `scripts/run_complete_experiment.py` ran against real
-LFW/CPLFW data on 27 July 2026, following the ethics/DPIA gate confirmation
-in `docs/ETHICS_AND_BIOMETRICS.md`. See
+LFW data and the raw (`images.rar`) CPLFW image set on 28 July 2026 (an
+earlier 27 July 2026 run used the pre-aligned `cp-aligned.zip` CPLFW copy —
+see `docs/DATASET_PROVENANCE.md`), following the ethics/DPIA gate
+confirmation in `docs/ETHICS_AND_BIOMETRICS.md`. See
 `results/aggregate/FINAL_EVALUATION_REPORT.md` for the results and
 `results/README.md` for the current status of each `results/aggregate/*.json`
 file.
@@ -17,10 +19,14 @@ exists to protect, and it is enforced in code
    `calibration.calibrate()` raises `CalibrationError` if asked to run on
    anything not labelled the `"validation"` split.
 2. **Develop** on `pairsDevTest.txt` (`scripts/evaluate_lfw.py --split dev`).
-   Candidate thresholds are evaluated, never recomputed, here. One threshold
-   is frozen using a documented rule (default: maximum balanced accuracy on
-   this split; pass `--operating-strategy` to `calibrate_lfw.py` to choose a
-   different rule up front).
+   Candidate thresholds are evaluated, never recomputed, here. Exactly one is
+   then frozen — automatically, with no CLI override — by a fixed
+   deterministic rule: maximum balanced accuracy on this split, ties broken
+   by lower development-split false match rate, then by candidate name (see
+   `face_verification.calibration.SELECTION_RULE`). The winning candidate's
+   name (e.g. `"balanced_accuracy"`, `"f1"`, `"eer"`, `"target_fmr_0.01"`) is
+   recorded as `operating_strategy` in the frozen artifact — it is an output
+   of this step, not an input to it.
 3. **Finalise** on `pairs.txt` (`scripts/evaluate_lfw.py --split final`) and
    on `pairs_CPLFW.txt` (`scripts/evaluate_cplfw.py`), using the already
    -frozen threshold artifact. `calibration.require_frozen_threshold()`
@@ -32,18 +38,23 @@ exists to protect, and it is enforced in code
 
 ## Experiment 1 — threshold calibration (LFW `pairsDevTrain.txt`)
 
-Produces a threshold for each of: maximum balanced accuracy, maximum F1,
-equal error rate, and target false-match rates of 0.001, 0.01 and 0.05
-(`src/face_verification/metrics.select_threshold`). All candidates are
-recorded in one artifact (`results/aggregate/calibrated_threshold.json`);
-one is selected as the operating threshold.
+Produces a candidate threshold for each of: maximum balanced accuracy,
+maximum F1, equal error rate, and target false-match rates of 0.001, 0.01
+and 0.05 (`src/face_verification/metrics.select_threshold`). All candidates
+are recorded in one artifact (`results/aggregate/calibrated_threshold.json`)
+with `status: "candidates"`. This stage never selects a winner — selection
+happens only in Experiment 2, against a different, held-out split.
 
 ## Experiment 2 — development validation (LFW `pairsDevTest.txt`)
 
-Evaluates the frozen candidate thresholds without changing them. Reports:
-accuracy, precision, recall, F1, ROC-AUC, false match rate, false non-match
-rate, true match rate, equal error rate, confusion matrix, face-extraction
-failure rate, and embedding-time statistics (see `results/aggregate/lfw_development_metrics.json`).
+Evaluates every Experiment-1 candidate threshold against `pairsDevTest.txt`
+and selects exactly one, by the fixed rule in the validation/held-out
+boundary section above. Only after this selection is the threshold artifact
+updated in place to `status: "frozen"`. Reports: accuracy, precision,
+recall, F1, ROC-AUC, false match rate, false non-match rate, true match
+rate, equal error rate, confusion matrix, face-extraction failure rate, and
+embedding-time statistics (see
+`results/aggregate/lfw_development_metrics.json`).
 
 ## Experiment 3 — final LFW evaluation (`pairs.txt`)
 

@@ -60,12 +60,15 @@ This is a benchmark-evaluation study, not a user study. No participants are
 recruited. No new photograph of any person is captured or requested by this
 codebase. The evaluation pipeline itself (`src/face_verification/`) makes no
 network calls and performs all inference from local files; it never uploads
-anything on its own. Storage of the dataset in Arden University OneDrive
-(the project's mandated, access-controlled institutional location — see
-`docs/DATA_MANAGEMENT.md`) happens through OneDrive's own sync client under
-the university's access controls, not through this codebase, and is
-distinct from uploading to a personal or unapproved cloud service, which
-remains prohibited.
+anything on its own. This project's data-management policy mandates storage
+in an access-controlled Arden University OneDrive folder (see
+`docs/DATA_MANAGEMENT.md`) — but that migration is not yet confirmed as of
+this evaluation (see `docs/USER_ACTIONS_REQUIRED.md`); the runs recorded so
+far used a private local directory outside the repository and outside any
+personal cloud service instead. Whichever location is used, storage happens
+through the storage provider's own sync client under institutional access
+controls, not through this codebase — and is always distinct from uploading
+to a personal or unapproved cloud service, which remains prohibited.
 
 ## No investigation of real people
 

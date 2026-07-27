@@ -25,20 +25,36 @@ Any change to any of the above is a new evaluation partition — see
 python3.11 -m venv .venv          # or the closest available 3.11/3.12/3.13
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[dev,review]'
+python -m pip install -e '.[dev,review,report]'
 pytest                             # synthetic-fixture test suite; no dataset needed
 
 python scripts/check_environment.py
 python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"
 python scripts/verify_lfw_dataset.py --dataset-root "$FACE_DATA_ROOT/lfw_funneled" --protocol-root "$FACE_PROTOCOL_ROOT"
-python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_DATA_ROOT/cplfw" --protocol-root "$FACE_PROTOCOL_ROOT"
+python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_CPLFW_RAW_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT"
 
 python scripts/run_complete_experiment.py \
     --dataset-root "$FACE_DATA_ROOT" \
     --protocol-root "$FACE_PROTOCOL_ROOT" \
     --model-root "$FACE_MODEL_ROOT" \
+    --cplfw-dataset-root "$FACE_CPLFW_RAW_ROOT" \
+    --cplfw-image-variant raw \
     --output-root results/aggregate
+
+python scripts/generate_report_figures.py \
+    --results-root results/aggregate \
+    --output-root results/figures
 ```
+
+`$FACE_CPLFW_RAW_ROOT` is a flat directory of the CPLFW authors' raw,
+unconstrained images (extracted from `images.rar`, then flattened with
+`scripts/prepare_cplfw_raw_images.py` — CPLFW's own extraction nests every
+image one level down alongside per-image landmark files). It is deliberately
+a separate path from `$FACE_DATA_ROOT/cplfw`, which — if populated at
+all — would hold the separately pre-cropped/aligned `cp-aligned.zip` copy
+instead; the two are non-interchangeable evaluation inputs, never
+interchangeable, hence the explicit `--cplfw-image-variant` on every command
+that touches CPLFW. See `docs/DATASET_PROVENANCE.md`.
 
 Every step above stops with a specific error rather than proceeding on
 missing or invalid input — there is no code path that fabricates a result

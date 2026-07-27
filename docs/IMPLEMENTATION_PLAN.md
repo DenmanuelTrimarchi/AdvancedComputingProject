@@ -86,7 +86,9 @@ enforced in code (`src/face_verification/calibration.py`,
    only `pairsDevTest.txt` and evaluates the calibrated candidate thresholds
    without changing them. One threshold is then frozen using a documented,
    non-interactive rule (maximum balanced accuracy on the dev split, ties
-   broken by lower EER).
+   broken by lower development-split false match rate, then by candidate
+   name, for full determinism — see
+   `face_verification.calibration.SELECTION_RULE`).
 3. **Final evaluation** (`scripts/evaluate_lfw.py --split final` and
    `scripts/evaluate_cplfw.py`) reads only `pairs.txt` / `pairs_CPLFW.txt` and
    the already-frozen threshold artifact. Any attempt to pass a threshold
