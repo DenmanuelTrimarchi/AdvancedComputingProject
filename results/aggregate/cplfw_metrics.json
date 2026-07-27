@@ -1,19 +1,59 @@
 {
+  "accuracy": 0.9386189258312021,
   "artifact_type": "cplfw_verification_metrics",
+  "confusion_matrix": {
+    "false_negative": 139,
+    "false_positive": 29,
+    "true_negative": 1401,
+    "true_positive": 1168
+  },
+  "created_at": "2026-07-27T03:43:40.682151+00:00",
+  "equal_error_rate": 0.0703902065799541,
+  "f1": 0.9329073482428114,
+  "failed_pairs": 3263,
+  "failure_breakdown": {
+    "multiple_faces_left": 92,
+    "multiple_faces_right": 42,
+    "zero_faces_left": 1380,
+    "zero_faces_right": 1749
+  },
+  "failure_rate": 0.5438333333333333,
+  "false_match_rate": 0.02027972027972028,
+  "false_non_match_rate": 0.1063504208110176,
+  "model_sha256": {
+    "sface": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79",
+    "yunet": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+  },
+  "model_version": "opencv-sface-2021dec-yunet-2023mar",
+  "note": "Frozen threshold calibrated on LFW pairsDevTrain.txt; not recalibrated for CPLFW. This measures cross-pose generalisation, not a separately-tuned CPLFW-specific result.",
+  "precision": 0.9757727652464494,
+  "preprocessing_revision": "opencv-yunet-sface-exif-bgr-l2-v1",
   "protocol_file": "pairs_CPLFW.txt",
-  "status": "not_run",
-  "accuracy": null,
-  "precision": null,
-  "recall": null,
-  "f1": null,
-  "false_match_rate": null,
-  "false_non_match_rate": null,
-  "roc_auc": null,
-  "equal_error_rate": null,
-  "confusion_matrix": null,
-  "failure_rate": null,
-  "note": "Would reuse the frozen LFW-calibrated threshold, not a separately-tuned CPLFW threshold.",
-  "claim": "No benchmark or biometric accuracy claim has been produced.",
-  "reason": "Real dataset and verified model binaries are absent; the ethics/DPIA/licence approval gate in docs/ETHICS_AND_BIOMETRICS.md is closed.",
-  "schema_version": 1
+  "recall": 0.8936495791889824,
+  "roc_auc": 0.9693201213476653,
+  "schema_version": 1,
+  "scored_pairs": 2737,
+  "software_environment": {
+    "dependencies": {
+      "Pillow": {
+        "expected": "12.3.0",
+        "installed": "12.3.0"
+      },
+      "numpy": {
+        "expected": "2.5.1",
+        "installed": "2.5.1"
+      },
+      "opencv-python-headless": {
+        "expected": "4.13.0.92",
+        "installed": "4.13.0.92"
+      }
+    },
+    "platform": "macOS-14.8.3-arm64-arm-64bit-Mach-O",
+    "processor": "arm",
+    "python_version": "3.13.0"
+  },
+  "threshold": 0.3630116835391414,
+  "threshold_source": "results/aggregate/calibrated_threshold.json",
+  "threshold_status": "frozen",
+  "total_pairs": 6000
 }

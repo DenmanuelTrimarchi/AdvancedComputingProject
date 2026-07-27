@@ -1,11 +1,15 @@
 # results/
 
 `results/aggregate/` holds disclosure-reviewed, anonymised JSON/CSV/Markdown
-outputs and **is committed to Git**. Until a real experiment run has been
-executed against real LFW/CPLFW data, every file here should read
-`"status": "not_run"` with `null`/empty metric fields — a placeholder must
-never be silently read as zero, and must never be presented as a real
-benchmark result. See `docs/EVALUATION_PROTOCOL.md`.
+outputs and **is committed to Git**.
+
+**Status: real evaluation completed 27 July 2026**, following the ethics/DPIA
+gate confirmation recorded in `docs/ETHICS_AND_BIOMETRICS.md`, against the
+real LFW and CPLFW datasets described in `docs/DATASET_PROVENANCE.md`. See
+`results/aggregate/FINAL_EVALUATION_REPORT.md` for the full write-up. Any
+individual field still reading `"status": "not_run"` with `null` values (there
+should be none as of this run) must never be read as zero and must never be
+presented as a real benchmark result — see `docs/EVALUATION_PROTOCOL.md`.
 
 `results/raw/` and `results/pair_scores/` are git-ignored. Anything with a
 real image path in it — most importantly the gallery manifest produced by

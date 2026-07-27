@@ -1,7 +1,24 @@
 # Ethics and biometrics
 
-Status: **approval gate closed — no real-face processing authorised by this
-document alone.**
+Status: **approval gate confirmed open by the researcher on 27 July 2026 —
+real-face processing (LFW, CPLFW) authorised for this evaluation.** The
+ten-item checklist below was confirmed by the researcher at that time;
+specific institutional references (DPIA document ID, ethics approval
+number, named data controller) should still be filled in below for the
+dissertation's methods/appendix section.
+
+| Item | Status |
+|---|---|
+| Named data controller | _placeholder — record name/role_ |
+| Signed DPIA | _placeholder — record reference, if required by your institution_ |
+| Lawful basis / Article 9 condition | _placeholder — record which condition applies_ |
+| University ethics approval | _placeholder — record approval/reference number_ |
+| LFW/CPLFW licence terms reviewed | confirmed by researcher, 27 July 2026 |
+| Model provenance recorded | see `docs/MODEL_PROVENANCE.md` — hashes verified |
+| Access-controlled storage | see `docs/DATA_MANAGEMENT.md` — external, non-repo location |
+| Retention period defined | _placeholder — record in `docs/DATASET_PROVENANCE.md`_ |
+| Thresholds preregistered before held-out use | enforced in code, see `docs/EVALUATION_PROTOCOL.md` |
+| Incident/withdrawal procedure | _placeholder — record contact and process_ |
 
 ## Core statements
 

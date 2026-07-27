@@ -165,10 +165,15 @@ results/aggregate/duplicate_gallery_metrics.json
 
 Every field states whether it reflects a real benchmark run (`"status":
 "frozen"` / a real score) or is a `"not_run"` placeholder — see
-`results/README.md`. As shipped, all five are `not_run`: real evaluation has
-not yet been executed, because the ethics/DPIA/licence gate in
-`docs/ETHICS_AND_BIOMETRICS.md` is not yet satisfied for this project and no
-real dataset has been supplied.
+`results/README.md`. **A real evaluation run against LFW and CPLFW completed
+27 July 2026**, following the ethics/DPIA gate confirmation recorded in
+`docs/ETHICS_AND_BIOMETRICS.md`: 99.09% accuracy on the final LFW protocol
+(EER 0.78%), 93.86% on CPLFW pairs with a detectable face (though 54.4% of
+CPLFW pairs failed face *detection* entirely — the dominant cross-pose
+finding), 96.58% duplicate detection with a 52.56% false-review rate in the
+1:N gallery experiment (evidence that a 1:1-calibrated threshold needs
+separate calibration for 1:N search). Full write-up:
+`results/aggregate/FINAL_EVALUATION_REPORT.md`.
 
 ## Limitations
 

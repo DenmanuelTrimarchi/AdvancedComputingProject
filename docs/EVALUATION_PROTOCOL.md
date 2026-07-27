@@ -1,9 +1,11 @@
 # Evaluation protocol
 
-Status: **preregistered design.** Whether real benchmark numbers exist yet
-depends on whether `scripts/run_complete_experiment.py` (or the individual
-experiment scripts) has actually been run against real LFW/CPLFW data — see
-`results/README.md` for the current status of `results/aggregate/*.json`.
+Status: **executed.** `scripts/run_complete_experiment.py` ran against real
+LFW/CPLFW data on 27 July 2026, following the ethics/DPIA gate confirmation
+in `docs/ETHICS_AND_BIOMETRICS.md`. See
+`results/aggregate/FINAL_EVALUATION_REPORT.md` for the results and
+`results/README.md` for the current status of each `results/aggregate/*.json`
+file.
 
 ## The validation / held-out boundary
 
