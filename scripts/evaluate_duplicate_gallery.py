@@ -14,13 +14,15 @@ Usage:
         --manifest results/raw/gallery_manifest.json \
         --model-root /secure/path/models \
         --threshold-artifact results/aggregate/calibrated_threshold.json \
-        --output results/aggregate/duplicate_gallery_metrics.json
+        --output results/aggregate/duplicate_gallery_metrics.json \
+        --review-db results/raw/review.sqlite   # optional: also populate local_review/app.py's database
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from face_verification.artifacts import read_json_artifact, write_json_artifact
@@ -62,6 +64,9 @@ def main(argv=None) -> int:
                          help="Named candidate from the artifact's 'candidates' map to use as the "
                               "duplicate-review threshold, instead of the artifact's default operating threshold.")
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--review-db", type=Path, default=None,
+                         help="If set, write every probe exceeding the duplicate-review threshold "
+                              "into this local SQLite database, for local_review/app.py to display.")
     args = parser.parse_args(argv)
 
     manifest = _load_manifest(args.manifest)
@@ -106,6 +111,24 @@ def main(argv=None) -> int:
         f"Wrote duplicate gallery metrics to {args.output} "
         f"(duplicate_detection_rate={summary['duplicate_detection_rate']:.4f})"
     )
+
+    if args.review_db:
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "local_review"))
+        from database import connect, upsert_case  # noqa: E402
+
+        flagged = [p for p in result.probe_results if p.exceeds_duplicate_threshold]
+        with connect(args.review_db) as connection:
+            for probe in flagged:
+                upsert_case(
+                    connection,
+                    case_id=f"{probe.sample_id}:{probe.top_candidate_identity_hash}",
+                    probe_sample_id=probe.sample_id,
+                    candidate_identity_hash=probe.top_candidate_identity_hash,
+                    similarity=probe.top_similarity,
+                    threshold=threshold,
+                )
+        print(f"Wrote {len(flagged)} review case(s) to {args.review_db}")
+
     return 0
 
 
