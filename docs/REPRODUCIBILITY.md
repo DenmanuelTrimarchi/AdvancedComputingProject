@@ -25,7 +25,7 @@ Any change to any of the above is a new evaluation partition — see
 python3.11 -m venv .venv          # or the closest available 3.11/3.12/3.13
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,review]'
 pytest                             # synthetic-fixture test suite; no dataset needed
 
 python scripts/check_environment.py

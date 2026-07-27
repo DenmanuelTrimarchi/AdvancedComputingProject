@@ -1,0 +1,38 @@
+{
+  "artifact_type": "run_manifest",
+  "created_at": "2026-07-27T12:07:56.743034+00:00",
+  "dataset_root": "/Users/manu/SecureResearchData/face-verification/datasets",
+  "frozen_threshold": 0.3630116835391414,
+  "frozen_threshold_candidate": "balanced_accuracy",
+  "gallery_manifest_path": "results/raw/gallery_manifest.json",
+  "model_root": "/Users/manu/SecureResearchData/face-verification/models",
+  "output_file_sha256": {
+    "calibrated_threshold.json": "f146ecab0e93e295cb727132cce6044730e6710df942c4e26383440b4ebbc1c2",
+    "cplfw_metrics.json": "f397ee604c3f6d092d7ead6fe8542c8e46c9d6394238e88e874a96903d8e3734",
+    "duplicate_gallery_metrics.json": "cf94ab75ac245cedabba97a4178f5b5ac9d9ea8fe9f167fa5426787d650c0790",
+    "lfw_development_metrics.json": "c6bcf069bb86952961358aea875f00a0de04ce103d47e6066fe9d74cd724844a",
+    "lfw_final_metrics.json": "c7ee95cadfff8765b7505df6e542d73589c47a0b1743fe13c4e618c1ae9e2b92"
+  },
+  "output_root": "results/aggregate",
+  "protocol_root": "/Users/manu/SecureResearchData/face-verification/protocols",
+  "schema_version": 1,
+  "software_environment": {
+    "dependencies": {
+      "Pillow": {
+        "expected": "12.3.0",
+        "installed": "12.3.0"
+      },
+      "numpy": {
+        "expected": "2.5.1",
+        "installed": "2.5.1"
+      },
+      "opencv-python-headless": {
+        "expected": "4.13.0.92",
+        "installed": "4.13.0.92"
+      }
+    },
+    "platform": "macOS-14.8.3-arm64-arm-64bit-Mach-O",
+    "processor": "arm",
+    "python_version": "3.13.0"
+  }
+}

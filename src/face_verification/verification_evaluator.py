@@ -3,10 +3,15 @@
 Face-extraction failures (zero or multiple detected faces, unreadable
 images) are recorded as their own explicit outcome category and reported
 alongside the accuracy metrics — never silently dropped from the pair count.
+Per-image embedding latency (detect + align + embed + normalise) is timed
+for every successfully processed image, so throughput can be reported
+alongside accuracy rather than only inferred from wall-clock script runtime.
 """
 
 from __future__ import annotations
 
+import statistics
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -33,6 +38,7 @@ class EvaluationResult:
     total_pairs: int
     scored_pairs: List[PairScore]
     failures: Dict[str, int] = field(default_factory=dict)
+    embedding_times_seconds: List[float] = field(default_factory=list)
 
     @property
     def valid_scores(self) -> List[float]:
@@ -52,13 +58,16 @@ def _embed_image(
     detector: YuNetDetector,
     embedder: SFaceEmbedder,
     cache: Dict[Path, np.ndarray],
+    embedding_times: List[float],
 ) -> np.ndarray:
     if path in cache:
         return cache[path]
+    start = time.perf_counter()
     loaded = load_image_bgr(path)
     face_row = detector.detect_single_face(loaded.bgr)
     raw_embedding = embedder.embed(loaded.bgr, face_row)
     normalized = l2_normalize(raw_embedding)
+    embedding_times.append(time.perf_counter() - start)
     cache[path] = normalized
     return normalized
 
@@ -67,13 +76,14 @@ def evaluate_pairs(pairs: List[Pair], *, detector: YuNetDetector, embedder: SFac
     scored: List[PairScore] = []
     failures: Dict[str, int] = {}
     cache: Dict[Path, np.ndarray] = {}
+    embedding_times: List[float] = []
 
     def record(code: str) -> None:
         failures[code] = failures.get(code, 0) + 1
 
     def embed_side(path: Path, side: str) -> "tuple[Optional[np.ndarray], Optional[str]]":
         try:
-            return _embed_image(path, detector, embedder, cache), None
+            return _embed_image(path, detector, embedder, cache, embedding_times), None
         except FaceCountError as exc:
             code = f"zero_faces_{side}" if exc.face_count == 0 else f"multiple_faces_{side}"
             return None, code
@@ -96,7 +106,9 @@ def evaluate_pairs(pairs: List[Pair], *, detector: YuNetDetector, embedder: SFac
         similarity = cosine_similarity(left_embedding, right_embedding)
         scored.append(PairScore(pair, similarity, None))
 
-    return EvaluationResult(total_pairs=len(pairs), scored_pairs=scored, failures=failures)
+    return EvaluationResult(
+        total_pairs=len(pairs), scored_pairs=scored, failures=failures, embedding_times_seconds=embedding_times
+    )
 
 
 def summarize_metrics(result: EvaluationResult, threshold: float) -> Dict[str, object]:
@@ -109,6 +121,9 @@ def summarize_metrics(result: EvaluationResult, threshold: float) -> Dict[str, o
     rates = metrics_module.rates_from_confusion(matrix)
     auc = metrics_module.roc_auc(scores, labels)
     eer = metrics_module.equal_error_rate(scores, labels)
+    roc_points = metrics_module.roc_points(scores, labels)
+
+    times_ms = [t * 1000.0 for t in result.embedding_times_seconds]
 
     return {
         "threshold": threshold,
@@ -126,4 +141,9 @@ def summarize_metrics(result: EvaluationResult, threshold: float) -> Dict[str, o
         "false_non_match_rate": rates["false_non_match_rate"],
         "roc_auc": auc,
         "equal_error_rate": eer["equal_error_rate"],
+        "roc_points": roc_points,
+        "embedding_time_mean_ms": statistics.fmean(times_ms) if times_ms else float("nan"),
+        "embedding_time_median_ms": statistics.median(times_ms) if times_ms else float("nan"),
+        "embedding_time_p95_ms": metrics_module.percentile(times_ms, 95) if times_ms else float("nan"),
+        "unique_images_embedded": len(times_ms),
     }

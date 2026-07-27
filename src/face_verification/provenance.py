@@ -13,7 +13,7 @@ import platform
 import sys
 from importlib import metadata as importlib_metadata
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Iterable, Optional
 
 from .config import EXPECTED_DEPENDENCY_VERSIONS
 
@@ -32,6 +32,16 @@ def sha256_of_file(path: Path, *, chunk_size: int = 1024 * 1024) -> str:
         for chunk in iter(lambda: handle.read(chunk_size), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def sha256_of_evaluated_image_set(paths: Iterable[Path], dataset_root: Path) -> str:
+    """Fingerprint of *which* images were evaluated, without re-hashing
+    gigabytes of image content on every run: SHA-256 of the sorted,
+    newline-joined list of image paths relative to ``dataset_root``. Two
+    runs with this same value evaluated the identical image set."""
+    dataset_root = Path(dataset_root).resolve()
+    relative = sorted({str(Path(p).resolve().relative_to(dataset_root)) for p in paths})
+    return hashlib.sha256("\n".join(relative).encode("utf-8")).hexdigest()
 
 
 def verify_model_file(path: Path, expected_sha256: str) -> str:

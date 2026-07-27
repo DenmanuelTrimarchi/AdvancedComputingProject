@@ -52,8 +52,9 @@ See `docs/RESEARCH_SCOPE.md` for the full scope statement, and
 
 Neither dataset is downloaded automatically by anything in this repository.
 See `docs/DATASET_PROVENANCE.md` for exact sources and checksums to record,
-and `docs/DATA_MANAGEMENT.md` for where to store them (never inside this
-repository, Dropbox, Google Drive, or another synced folder).
+and `docs/DATA_MANAGEMENT.md` for where to store them: exclusively within
+an access-controlled Arden University OneDrive folder, per this project's
+ethics form — never inside this repository or a personal cloud service.
 
 **Before downloading or processing any real face image, read
 `docs/ETHICS_AND_BIOMETRICS.md`.** Public availability of a dataset does not
@@ -82,14 +83,15 @@ python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"
 python3.11 -m venv .venv   # or the closest available 3.11/3.12/3.13
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,review]'   # 'review' pulls in Streamlit for local_review/app.py;
+                                            # omit it if you only need the core pipeline and tests
 pytest                      # synthetic-fixture test suite — no dataset needed
 ```
 
 Copy `.env.example` to `.env` and fill in `FACE_DATA_ROOT`,
 `FACE_PROTOCOL_ROOT`, `FACE_MODEL_ROOT` (and, if you use the optional
-embedding cache, `FACE_CACHE_ROOT`) with your own secure, non-repo storage
-location.
+embedding cache, `FACE_CACHE_ROOT`) with paths inside your access-controlled
+Arden University OneDrive research folder — see `docs/DATA_MANAGEMENT.md`.
 
 ## Running each experiment
 

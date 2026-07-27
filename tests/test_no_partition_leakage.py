@@ -26,7 +26,9 @@ def test_calibration_accepts_validation_only():
     scores = [0.9, 0.8, 0.3, 0.2]
     labels = [1, 1, 0, 0]
     result = calibrate(scores, labels, split="validation")
-    assert result.status == "frozen"
+    # Stage 1 (calibration) only ever produces candidates; only a later,
+    # dev-split selection step may mark a threshold "frozen" for held-out use.
+    assert result.status == "candidates"
 
 
 def test_frozen_threshold_cannot_be_used_from_a_non_frozen_artifact():

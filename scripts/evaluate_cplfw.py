@@ -5,9 +5,9 @@ calibration step.
 
 Usage:
     python scripts/evaluate_cplfw.py \
-        --dataset-root /secure/path/datasets/cplfw \
-        --protocol-root /secure/path/protocols \
-        --model-root /secure/path/models \
+        --dataset-root /path/to/AU-OneDrive/datasets/cplfw \
+        --protocol-root /path/to/AU-OneDrive/protocols \
+        --model-root /path/to/AU-OneDrive/models \
         --threshold-artifact results/aggregate/calibrated_threshold.json \
         --output results/aggregate/cplfw_metrics.json
 """
@@ -20,6 +20,7 @@ from pathlib import Path
 from face_verification.artifacts import read_json_artifact, write_json_artifact
 from face_verification.calibration import require_frozen_threshold
 from face_verification.config import (
+    CPLFW_ARCHIVE_SHA256,
     MODEL_VERSION,
     PREPROCESSING_REVISION,
     SFACE_FILENAME,
@@ -30,7 +31,7 @@ from face_verification.config import (
 from face_verification.detector import YuNetDetector
 from face_verification.embedder import SFaceEmbedder
 from face_verification.protocols import parse_cplfw_pairs
-from face_verification.provenance import software_environment_report
+from face_verification.provenance import sha256_of_evaluated_image_set, sha256_of_file, software_environment_report
 from face_verification.verification_evaluator import evaluate_pairs, summarize_metrics
 
 PROTOCOL_FILENAME = "pairs_CPLFW.txt"
@@ -45,10 +46,13 @@ def main(argv=None) -> int:
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args(argv)
 
+    protocol_path = args.protocol_root / PROTOCOL_FILENAME
+    threshold_artifact_sha256 = sha256_of_file(args.threshold_artifact)
     threshold_payload = read_json_artifact(args.threshold_artifact)
     threshold = require_frozen_threshold(threshold_payload, context=str(args.threshold_artifact))
 
-    pairs = parse_cplfw_pairs(args.protocol_root / PROTOCOL_FILENAME, args.dataset_root)
+    pairs = parse_cplfw_pairs(protocol_path, args.dataset_root)
+    evaluated_images = {p.left_path for p in pairs} | {p.right_path for p in pairs}
 
     detector = YuNetDetector(args.model_root / YUNET_FILENAME, YUNET_SHA256)
     embedder = SFaceEmbedder(args.model_root / SFACE_FILENAME, SFACE_SHA256)
@@ -59,12 +63,16 @@ def main(argv=None) -> int:
     payload = {
         "artifact_type": "cplfw_verification_metrics",
         "protocol_file": PROTOCOL_FILENAME,
+        "protocol_sha256": sha256_of_file(protocol_path),
+        "evaluated_image_set_sha256": sha256_of_evaluated_image_set(evaluated_images, args.dataset_root),
+        "dataset_archive_sha256": CPLFW_ARCHIVE_SHA256,
         "threshold_source": str(args.threshold_artifact),
+        "threshold_artifact_sha256": threshold_artifact_sha256,
         "threshold_status": threshold_payload.get("status"),
         "note": (
-            "Frozen threshold calibrated on LFW pairsDevTrain.txt; not recalibrated for "
-            "CPLFW. This measures cross-pose generalisation, not a separately-tuned "
-            "CPLFW-specific result."
+            "Frozen threshold calibrated on LFW pairsDevTrain.txt and selected on "
+            "pairsDevTest.txt; not recalibrated for CPLFW. This measures cross-pose "
+            "generalisation, not a separately-tuned CPLFW-specific result."
         ),
         **summary,
         "model_version": MODEL_VERSION,

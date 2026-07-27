@@ -50,6 +50,15 @@ HARD_MAX_IMAGE_PIXELS = 40_000_000
 
 DEFAULT_RANDOM_SEED = 20260727
 
+# Verified archive checksums for this project's specific dataset acquisition
+# (see docs/DATASET_PROVENANCE.md for the full acquisition record). These
+# describe *this project's* copies, not an upstream-published guarantee for
+# CPLFW (whose authors do not publish an official checksum).
+LFW_ARCHIVE_FILENAME = "lfwfunneled.tgz"
+LFW_ARCHIVE_MD5 = "1b42dfed7d15c9b2dd63d5e5840c86ad"
+CPLFW_ARCHIVE_FILENAME = "CPLFW.zip"
+CPLFW_ARCHIVE_SHA256 = "9a09dd1ebe1a000c52f69f365f5d564cd529f1fcf4f0479510231856f358f416"
+
 
 class ConfigurationError(RuntimeError):
     """Raised when required configuration is missing or invalid."""

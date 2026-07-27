@@ -19,6 +19,22 @@ class MetricsError(ValueError):
     pass
 
 
+def percentile(values: Sequence[float], pct: float) -> float:
+    """Linear-interpolation percentile (matches numpy's default method),
+    with no numpy/scipy statistics dependency beyond the array itself."""
+    ordered = sorted(values)
+    if not ordered:
+        return float("nan")
+    if len(ordered) == 1:
+        return float(ordered[0])
+    index = (pct / 100.0) * (len(ordered) - 1)
+    lower, upper = int(index), min(int(index) + 1, len(ordered) - 1)
+    if lower == upper:
+        return float(ordered[lower])
+    fraction = index - lower
+    return float(ordered[lower] + fraction * (ordered[upper] - ordered[lower]))
+
+
 @dataclass(frozen=True)
 class ConfusionMatrix:
     true_positive: int

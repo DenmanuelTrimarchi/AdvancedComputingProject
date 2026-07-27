@@ -12,12 +12,15 @@ human-review case (see docs/EVALUATION_PROTOCOL.md).
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass
+import statistics
+import time
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
+from . import metrics as metrics_module
 from .config import DEFAULT_RANDOM_SEED
 from .detector import FaceCountError, YuNetDetector
 from .embedder import SFaceEmbedder
@@ -113,6 +116,7 @@ class ProbeResult:
 class GalleryEvaluationResult:
     gallery_size: int
     probe_results: List[ProbeResult]
+    search_times_seconds: List[float] = field(default_factory=list)
 
 
 def _embed_entry(
@@ -148,12 +152,14 @@ def evaluate_gallery(
         raise GalleryError("No gallery entry could be embedded; cannot run the experiment.")
 
     results: List[ProbeResult] = []
+    search_times: List[float] = []
     for probe in probe_entries:
         probe_embedding, failure = _embed_entry(probe, detector, embedder)
         if probe_embedding is None:
             results.append(ProbeResult(probe.sample_id, probe.role, probe.identity_hash, None, None, None, None, failure))
             continue
 
+        search_start = time.perf_counter()
         similarities = sorted(
             (
                 (candidate_entry, cosine_similarity(probe_embedding, candidate_embedding))
@@ -161,6 +167,7 @@ def evaluate_gallery(
             ),
             key=lambda item: (-item[1], item[0].sample_id),
         )
+        search_times.append(time.perf_counter() - search_start)
         top_entry, top_similarity = similarities[0]
         rank1_correct = top_entry.identity_hash == probe.identity_hash if probe.role == "duplicate_probe" else None
 
@@ -177,7 +184,9 @@ def evaluate_gallery(
             )
         )
 
-    return GalleryEvaluationResult(gallery_size=len(gallery_embeddings), probe_results=results)
+    return GalleryEvaluationResult(
+        gallery_size=len(gallery_embeddings), probe_results=results, search_times_seconds=search_times
+    )
 
 
 def summarize_gallery_metrics(result: GalleryEvaluationResult) -> Dict[str, object]:
@@ -205,6 +214,8 @@ def summarize_gallery_metrics(result: GalleryEvaluationResult) -> Dict[str, obje
         1.0 - duplicate_detection_rate if duplicate_detection_rate == duplicate_detection_rate else float("nan")
     )
 
+    search_times_ms = [t * 1000.0 for t in result.search_times_seconds]
+
     return {
         "gallery_size": result.gallery_size,
         "duplicate_probe_count": len(duplicate_probes),
@@ -215,4 +226,6 @@ def summarize_gallery_metrics(result: GalleryEvaluationResult) -> Dict[str, obje
         "false_duplicate_review_rate": false_duplicate_review_rate,
         "rank1_identification_rate": rank1_identification_rate,
         "true_duplicate_miss_rate": true_duplicate_miss_rate,
+        "gallery_search_time_mean_ms": statistics.fmean(search_times_ms) if search_times_ms else float("nan"),
+        "gallery_search_time_p95_ms": metrics_module.percentile(search_times_ms, 95) if search_times_ms else float("nan"),
     }

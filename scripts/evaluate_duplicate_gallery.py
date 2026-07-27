@@ -28,6 +28,7 @@ from pathlib import Path
 from face_verification.artifacts import read_json_artifact, write_json_artifact
 from face_verification.calibration import require_frozen_threshold
 from face_verification.config import (
+    LFW_ARCHIVE_MD5,
     MODEL_VERSION,
     PREPROCESSING_REVISION,
     SFACE_FILENAME,
@@ -43,7 +44,7 @@ from face_verification.gallery_evaluator import (
     evaluate_gallery,
     summarize_gallery_metrics,
 )
-from face_verification.provenance import software_environment_report
+from face_verification.provenance import sha256_of_file, software_environment_report
 
 
 def _load_manifest(path: Path) -> GalleryManifest:
@@ -69,7 +70,9 @@ def main(argv=None) -> int:
                               "into this local SQLite database, for local_review/app.py to display.")
     args = parser.parse_args(argv)
 
+    manifest_sha256 = sha256_of_file(args.manifest)
     manifest = _load_manifest(args.manifest)
+    threshold_artifact_sha256 = sha256_of_file(args.threshold_artifact)
     threshold_payload = read_json_artifact(args.threshold_artifact)
 
     if args.threshold_strategy:
@@ -94,7 +97,10 @@ def main(argv=None) -> int:
         "artifact_type": "duplicate_gallery_metrics",
         "duplicate_review_threshold": threshold,
         "threshold_source": str(args.threshold_artifact),
+        "threshold_artifact_sha256": threshold_artifact_sha256,
         "threshold_strategy": args.threshold_strategy or threshold_payload.get("operating_strategy"),
+        "manifest_sha256": manifest_sha256,
+        "dataset_archive_md5": LFW_ARCHIVE_MD5,
         "seed": manifest.seed,
         "policy_note": (
             "A result above threshold opens a case for human review only. It is not evidence "

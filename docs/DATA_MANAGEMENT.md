@@ -2,13 +2,16 @@
 
 ## Storage location
 
-Real dataset images, protocol files and model binaries live **outside this
-Git repository**, at paths supplied via `.env` (`FACE_DATA_ROOT`,
+**All benchmark images, protocols, derived embeddings, temporary scores and
+research databases are stored exclusively within an access-controlled
+Arden University OneDrive folder, per this project's ethics form.** They
+are not stored in GitHub, personal drives, or personal (non-institutional)
+cloud services. Paths are supplied via `.env` (`FACE_DATA_ROOT`,
 `FACE_PROTOCOL_ROOT`, `FACE_MODEL_ROOT`, `FACE_CACHE_ROOT`) — see
-`.env.example`. A suggested layout:
+`.env.example`. A suggested layout inside your AU OneDrive research folder:
 
 ```text
-~/SecureResearchData/face-verification/
+<AU OneDrive>/face-verification/
 ├── datasets/
 │   ├── lfw_funneled/
 │   └── cplfw/
@@ -23,9 +26,10 @@ Git repository**, at paths supplied via `.env` (`FACE_DATA_ROOT`,
 └── cache/
 ```
 
-This location must **not** be inside this Git repository, Dropbox, Google
-Drive, iCloud Drive, or any other synced/cloud-backed folder, unless a
-revised data-management plan explicitly approves that location.
+This location must **not** be inside this Git repository, a personal
+drive, or any personal (non-institutional) cloud service such as Dropbox
+or a personal Google Drive/iCloud account — the AU OneDrive research
+folder is the one and only approved location per the ethics form.
 
 ## What is committed vs. what is not
 
@@ -63,9 +67,14 @@ dates in `docs/DATASET_PROVENANCE.md`.
 
 ## What leaves this machine
 
-Nothing dataset-related is uploaded anywhere by this codebase. There is no
-network call in the evaluation pipeline itself (`src/face_verification/`)
-— models and datasets are read from local disk only. The only network
-activity anywhere in this repository is the one-time, manual download of
-the two public OpenCV Zoo model files (never real face images) documented
-in `docs/MODEL_PROVENANCE.md`.
+Nothing dataset-related is uploaded anywhere *by this codebase*. There is
+no network call in the evaluation pipeline itself
+(`src/face_verification/`) — models and datasets are read only from the
+local, OneDrive-synced folder set via `.env`. Any transfer of real
+biometric data to Arden University OneDrive itself happens through
+OneDrive's own institutional sync client, under the university's own
+access controls, not through any code in this repository — this
+repository never uploads anything on its own. The only network activity
+this codebase itself performs is the one-time, manual download of the two
+public OpenCV Zoo model files (never real face images), documented in
+`docs/MODEL_PROVENANCE.md`.

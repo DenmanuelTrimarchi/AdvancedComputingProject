@@ -16,7 +16,8 @@ real image path in it — most importantly the gallery manifest produced by
 `scripts/create_gallery_manifest.py` — belongs there, never under
 `results/aggregate/`.
 
-Files produced by a full run of `scripts/run_complete_experiment.py`:
+Files produced by a full run of `scripts/run_complete_experiment.py` (the
+last five are generated automatically from the first five, not hand-written):
 
 ```text
 results/aggregate/calibrated_threshold.json
@@ -24,8 +25,9 @@ results/aggregate/lfw_development_metrics.json
 results/aggregate/lfw_final_metrics.json
 results/aggregate/cplfw_metrics.json
 results/aggregate/duplicate_gallery_metrics.json
+results/aggregate/run_manifest.json
+results/aggregate/metrics_summary.csv
+results/aggregate/confusion_matrices.csv
+results/aggregate/roc_points.csv
+results/aggregate/FINAL_EVALUATION_REPORT.md
 ```
-
-A hand-written `FINAL_EVALUATION_REPORT.md` summarising all of the above for
-the dissertation should also live in `results/aggregate/` once real numbers
-exist.

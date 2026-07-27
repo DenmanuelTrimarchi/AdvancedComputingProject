@@ -58,9 +58,14 @@ dissertation's methods/appendix section.
 
 This is a benchmark-evaluation study, not a user study. No participants are
 recruited. No new photograph of any person is captured or requested by this
-codebase. No dataset image is ever uploaded to a cloud service — the
-pipeline in `src/face_verification/` performs all inference from local
-files, with no network calls.
+codebase. The evaluation pipeline itself (`src/face_verification/`) makes no
+network calls and performs all inference from local files; it never uploads
+anything on its own. Storage of the dataset in Arden University OneDrive
+(the project's mandated, access-controlled institutional location — see
+`docs/DATA_MANAGEMENT.md`) happens through OneDrive's own sync client under
+the university's access controls, not through this codebase, and is
+distinct from uploading to a personal or unapproved cloud service, which
+remains prohibited.
 
 ## No investigation of real people
 
