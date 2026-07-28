@@ -1,24 +1,24 @@
 {
   "artifact_type": "report_evidence_manifest",
   "evidence_generated_outside_repository": true,
-  "generated_at": "2026-07-28T10:47:24.463647+00:00",
+  "generated_at": "2026-07-28T10:57:59.048482+00:00",
   "items": [
     {
       "contains_absolute_path": false,
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_01_roc_comparison.png",
-      "generated_at": "2026-07-28T10:47:01.285722+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:38.592611+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.1 Verification performance",
       "sha256": "a222c6268c4f929167cee8a03b47ec3eaefa23f9af42a0f9ede9c4d96304619c",
       "source_file_sha256": {
-        "metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974",
-        "roc_points.csv": "466aaeb510d2eac0283496e62c3f41e3c93e976fc3b9e6657a95fac674f599bb"
+        "results/aggregate/metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974",
+        "results/aggregate/roc_points.csv": "466aaeb510d2eac0283496e62c3f41e3c93e976fc3b9e6657a95fac674f599bb"
       },
       "source_files": [
-        "roc_points.csv",
-        "metrics_summary.csv"
+        "results/aggregate/roc_points.csv",
+        "results/aggregate/metrics_summary.csv"
       ],
       "suggested_caption": "ROC curves for the three verification protocols. Raw CPLFW sits below both LFW curves, quantifying the cost of extreme pose variation at a fixed operating threshold.",
       "title": "ROC Curves for LFW Development, Final LFW and Raw CPLFW",
@@ -29,17 +29,17 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_02_lfw_final_confusion_matrix.png",
-      "generated_at": "2026-07-28T10:47:01.484020+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:38.742516+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.2 Final LFW evaluation",
       "sha256": "10050b2069ceee4ffa029cf7587bb2717ad73a8d9568c7abbdbeebeaebeade2a",
       "source_file_sha256": {
-        "confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
-        "metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
+        "results/aggregate/confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
+        "results/aggregate/metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
       },
       "source_files": [
-        "confusion_matrices.csv",
-        "metrics_summary.csv"
+        "results/aggregate/confusion_matrices.csv",
+        "results/aggregate/metrics_summary.csv"
       ],
       "suggested_caption": "Confusion matrix for the final LFW protocol at the frozen threshold, showing the false-match/false-non-match balance the threshold was selected to achieve.",
       "title": "Final LFW Confusion Matrix at the Frozen Threshold",
@@ -50,17 +50,17 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_03_cplfw_confusion_matrix.png",
-      "generated_at": "2026-07-28T10:47:01.674413+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:38.892380+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.3 Cross-pose generalisation",
       "sha256": "434828c41dd95fd330b07d65daea025a00b6a9c69a477c02899802204af8f10d",
       "source_file_sha256": {
-        "confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
-        "metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
+        "results/aggregate/confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
+        "results/aggregate/metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
       },
       "source_files": [
-        "confusion_matrices.csv",
-        "metrics_summary.csv"
+        "results/aggregate/confusion_matrices.csv",
+        "results/aggregate/metrics_summary.csv"
       ],
       "suggested_caption": "Confusion matrix for raw CPLFW using the unchanged LFW-frozen threshold. Errors shift markedly towards false non-matches under cross-pose conditions.",
       "title": "Raw CPLFW Confusion Matrix Using the LFW-Frozen Threshold",
@@ -71,15 +71,15 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_04_extraction_failure_rates.png",
-      "generated_at": "2026-07-28T10:47:01.848756+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:39.045777+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.4 Face-extraction failures",
       "sha256": "73ca107515faaf15197aaf6b20735b9a0af9749da3a37454717e90fc32ec5899",
       "source_file_sha256": {
-        "metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
+        "results/aggregate/metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
       },
       "source_files": [
-        "metrics_summary.csv"
+        "results/aggregate/metrics_summary.csv"
       ],
       "suggested_caption": "Face-extraction failure rates by protocol. The raw CPLFW rate is roughly four times the LFW rate and is the dominant practical limitation identified by this evaluation.",
       "title": "Face-Extraction Failure Rates Across Benchmark Protocols",
@@ -90,15 +90,15 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_05_cplfw_failure_breakdown.png",
-      "generated_at": "2026-07-28T10:47:02.018180+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:39.186249+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.4 Face-extraction failures",
       "sha256": "498ff797c299b0d3706b80897bce4317c58cc7f29281fa82291015d4e0f87698",
       "source_file_sha256": {
-        "cplfw_metrics.json": "b146316059b9daed4cc2844742cacf9294071cc738d123521a18d31f4a79e4e8"
+        "results/aggregate/cplfw_metrics.json": "b146316059b9daed4cc2844742cacf9294071cc738d123521a18d31f4a79e4e8"
       },
       "source_files": [
-        "cplfw_metrics.json"
+        "results/aggregate/cplfw_metrics.json"
       ],
       "suggested_caption": "Breakdown of raw CPLFW extraction failures by category. Zero-face detections dominate, locating the difficulty in detection rather than in embedding comparison.",
       "title": "Raw CPLFW Face-Extraction Failure Categories",
@@ -109,15 +109,15 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_06_gallery_outcomes.png",
-      "generated_at": "2026-07-28T10:47:02.322325+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:39.315379+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.5 Duplicate-profile gallery",
       "sha256": "9d1c0d52f5d760da4cf08c6f05bad5cbb08225a7dd05409277ac7491404172fc",
       "source_file_sha256": {
-        "duplicate_gallery_metrics.json": "11920071aea06207b5e04aea7035c5faae13f22f42a9f6046d28a9f28b98f257"
+        "results/aggregate/duplicate_gallery_metrics.json": "11920071aea06207b5e04aea7035c5faae13f22f42a9f6046d28a9f28b98f257"
       },
       "source_files": [
-        "duplicate_gallery_metrics.json"
+        "results/aggregate/duplicate_gallery_metrics.json"
       ],
       "suggested_caption": "Outcomes of the 1:N duplicate-profile gallery experiment. High detection is accompanied by a false-review rate that makes the 1:1 threshold unsuitable for direct 1:N deployment.",
       "title": "1:N Duplicate-Profile Gallery Outcomes",
@@ -128,15 +128,15 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_07_threshold_candidate_comparison.png",
-      "generated_at": "2026-07-28T10:47:02.588405+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:39.535915+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.5 Threshold selection",
       "sha256": "c762d35c005cd7fddea2fe4cfe330195cc0c3f1c90542f1ebc06079468502a31",
       "source_file_sha256": {
-        "calibrated_threshold.json": "f8938311c33cf159774e679178ba94fda8fa57f410f77b616ddd6751a712de6f"
+        "results/aggregate/calibrated_threshold.json": "f8938311c33cf159774e679178ba94fda8fa57f410f77b616ddd6751a712de6f"
       },
       "source_files": [
-        "calibrated_threshold.json"
+        "results/aggregate/calibrated_threshold.json"
       ],
       "suggested_caption": "Development-split evaluation of every candidate threshold, with the frozen selection marked. Evidence that selection was deterministic and made before any held-out data was read.",
       "title": "Candidate Threshold Evaluation on pairsDevTest.txt",
@@ -147,17 +147,17 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_08_latency_comparison.png",
-      "generated_at": "2026-07-28T10:47:02.821159+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:39.739445+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.6 Processing latency",
       "sha256": "da9ba7cb82f1da7f8902235940af7922d2def71dffb5812dbd0c1337bb5ad37e",
       "source_file_sha256": {
-        "duplicate_gallery_metrics.json": "11920071aea06207b5e04aea7035c5faae13f22f42a9f6046d28a9f28b98f257",
-        "metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
+        "results/aggregate/duplicate_gallery_metrics.json": "11920071aea06207b5e04aea7035c5faae13f22f42a9f6046d28a9f28b98f257",
+        "results/aggregate/metrics_summary.csv": "57edffc5ea94287284d76b91142f7774e9f9d8eef6f351072f3f40dc40a2b974"
       },
       "source_files": [
-        "metrics_summary.csv",
-        "duplicate_gallery_metrics.json"
+        "results/aggregate/metrics_summary.csv",
+        "results/aggregate/duplicate_gallery_metrics.json"
       ],
       "suggested_caption": "Embedding latency per image and gallery-search latency per probe. Both are machine-dependent and are reported for feasibility context, not as a reproducibility guarantee.",
       "title": "Embedding and Gallery Search Latency",
@@ -168,15 +168,15 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_09_experiment_flow.png",
-      "generated_at": "2026-07-28T10:47:03.061562+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:39.939612+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.2 Experimental design",
       "sha256": "e7b9b15125bc991d300dcfa44e7bc395607dd3eb725837070bf5e28e90cacddb",
       "source_file_sha256": {
-        "calibrated_threshold.json": "f8938311c33cf159774e679178ba94fda8fa57f410f77b616ddd6751a712de6f"
+        "results/aggregate/calibrated_threshold.json": "f8938311c33cf159774e679178ba94fda8fa57f410f77b616ddd6751a712de6f"
       },
       "source_files": [
-        "calibrated_threshold.json"
+        "results/aggregate/calibrated_threshold.json"
       ],
       "suggested_caption": "The experimental workflow and the held-out boundary enforced in code. CPLFW reuses the LFW-frozen threshold and cannot recalibrate it.",
       "title": "Experimental Workflow and Held-Out Evaluation Boundary",
@@ -187,10 +187,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_01_environment_check.png",
-      "generated_at": "2026-07-28T10:47:03.357902+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:40.132684+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "17d5a3e2824286d2b8d6bb1ab211151abecce80bc105276a80b13ebaa8b5e9b0",
+      "sha256": "11139537524bea0e6d4f455f4d7cfd8ad57ffa7c4bd5d5547078b6f31d06cb43",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The pinned dependency contract verified at run time, not merely declared in pyproject.toml.",
@@ -202,10 +202,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_02_model_verification.png",
-      "generated_at": "2026-07-28T10:47:03.535255+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:40.270455+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "a1f4bdedb812f4aa4986334e9be01a8adec6198b25f101d5986bfa93aa48b9bf",
+      "sha256": "7163407ddd7d6bb0ca8da1b43449e4e8ae5f4dfd3225b9549f8fb8de2e0c2fc5",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Both ONNX models verified against their pinned SHA-256 values before any inference.",
@@ -217,10 +217,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_03_lfw_dataset_verification.png",
-      "generated_at": "2026-07-28T10:47:04.300536+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:40.903548+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "847831b17eb6de66525ccdd9f68fb5abe7b159c05f9ff78894eaee0401c00fe3",
+      "sha256": "7cedb10a987b7f9d02bf92c8b032664a6e0c30d3d85eec82a3abeeed186b8d9f",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "All three LFW protocol files parsed with every referenced image resolving.",
@@ -232,10 +232,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_04_cplfw_raw_dataset_verification.png",
-      "generated_at": "2026-07-28T10:47:04.817895+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:41.327429+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "18a7680a912cf79c038001d9021d7365964b3982d67633f62dc44326cbdb4607",
+      "sha256": "cb399b44fcd2d565c523e6bc370e0372b42d7840c8932848112492543c23af34",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "All 6,000 raw CPLFW pairs (3,000 matched, 3,000 mismatched) resolved against the authors' images.rar image set.",
@@ -247,10 +247,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_05_pytest_result.png",
-      "generated_at": "2026-07-28T10:47:23.894985+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:58.577158+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "0ef4aa2540f9d666351f9225a20758960415354126d160273445927f0425f438",
+      "sha256": "085a4da5589f052669a4af5193c8e74018b050ee94b455191d90b25f7086a7e5",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The synthetic-fixture test suite, which runs with no dataset or model file present.",
@@ -262,10 +262,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_06_privacy_scan.png",
-      "generated_at": "2026-07-28T10:47:24.039066+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:58.701280+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix C \u2014 Data governance evidence",
-      "sha256": "2b59660f86903dc2a958af2f9c7d573d2b7688887cb1f684229b48aae5ff2a8a",
+      "sha256": "771a3ecf0318b59db7eff4f1396b20a2b70b97bce79129e372de8c006475de46",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Committed aggregate outputs confirmed free of personal or absolute filesystem paths.",
@@ -277,10 +277,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_07_output_file_listing.png",
-      "generated_at": "2026-07-28T10:47:24.182436+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:58.815191+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "eebe31d8b0bc9ba1ccff473b0f60238e60eaaa0482f527487c92cdf2ac637106",
+      "sha256": "5ffa9126817b8e99dbae92384c4aa81f79f1804b81b295ce9b70ea3eafc8e85c",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Inventory confirming that all ten aggregate outputs and the evidence pack exist.",
@@ -292,10 +292,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_08_cplfw_variant_evidence.png",
-      "generated_at": "2026-07-28T10:47:24.281082+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:58.899057+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.4 Datasets",
-      "sha256": "d9faf16518578ebaf6b33ad1f2c39851871fae00aa2ac7329cd4087d372cddf2",
+      "sha256": "be5cafe927c2107576da3e3ca86dd65ac76e99cb30a88457f90e6bcd12877aa8",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The reported CPLFW result records the raw authors-distributed image set explicitly, removing the ambiguity present in the superseded aligned run.",
@@ -307,10 +307,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_09_threshold_freeze_evidence.png",
-      "generated_at": "2026-07-28T10:47:24.396106+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:58.993121+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.5 Threshold selection",
-      "sha256": "0983d516d7b197b5ae494fc74dc695f5776edf260a7192e71c33469d5898e236",
+      "sha256": "aae555341cdf95fd2ccce95d3dd5b06b906ead948b7f48c20faee391c650c0f6",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The threshold artifact records status \"frozen\", the protocol it was frozen from, that file's SHA-256, and the deterministic selection rule applied.",
@@ -322,10 +322,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_10_git_status.png",
-      "generated_at": "2026-07-28T10:47:24.462993+00:00",
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "generated_at": "2026-07-28T10:57:59.047903+00:00",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "2882308f929043517775bf2a2ff6ed10453cd8168d94102242c3fcaa3473ed6e",
+      "sha256": "7935c979e8074d8e8231a6bbf9850af662ba1caefa6a6b29d671ca0e28cef11c",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Repository state when this evidence pack was generated. A dirty working tree is reported as dirty and never presented as clean.",
@@ -338,7 +338,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_01_github_actions_pass.png",
       "generated_at": null,
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -354,7 +354,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_02_final_github_commit.png",
       "generated_at": null,
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -370,7 +370,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_03_streamlit_review_interface.png",
       "generated_at": null,
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Chapter 5 \u2014 Human-review decision policy",
       "sha256": null,
       "source_file_sha256": {},
@@ -386,7 +386,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_04_au_onedrive_storage_evidence.png",
       "generated_at": null,
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix C \u2014 Data governance evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -402,7 +402,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_05_ethics_approval_evidence.png",
       "generated_at": null,
-      "git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+      "git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
       "report_section": "Appendix C \u2014 Data governance evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -413,9 +413,9 @@
       "type": "manual_screenshot"
     }
   ],
-  "provenance_note": "Generated from source commit 21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa with a clean working tree. The evidence artefacts themselves are added by a subsequent commit; they are not part of the source commit named here.",
+  "provenance_note": "Generated from source commit a9ad07cda919e8e51927f47da0b0b1e6e132722f with a clean working tree. The evidence artefacts themselves are added by a subsequent commit; they are not part of the source commit named here.",
   "schema_version": 1,
-  "source_git_commit": "21e32fabc52e9329cad3e1b0e7d7eef0e2e6e6aa",
+  "source_git_commit": "a9ad07cda919e8e51927f47da0b0b1e6e132722f",
   "source_working_tree_clean_before_generation": true,
   "validation_commands_run": true
 }
