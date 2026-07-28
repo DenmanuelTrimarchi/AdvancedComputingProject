@@ -1,14 +1,14 @@
 {
   "artifact_type": "duplicate_gallery_metrics",
-  "created_at": "2026-07-27T23:41:13.376725+00:00",
+  "created_at": "2026-07-28T10:46:11.945740+00:00",
   "dataset_archive_md5": "1b42dfed7d15c9b2dd63d5e5840c86ad",
   "duplicate_detection_rate": 0.9658291457286432,
   "duplicate_probe_count": 1047,
   "duplicate_probe_failures": 52,
   "duplicate_review_threshold": 0.3630116835391414,
   "false_duplicate_review_rate": 0.5255750085822176,
-  "gallery_search_time_mean_ms": 5.137309606071822,
-  "gallery_search_time_p95_ms": 7.183641556184736,
+  "gallery_search_time_mean_ms": 5.253761860897918,
+  "gallery_search_time_p95_ms": 8.183427189942448,
   "gallery_size": 986,
   "manifest_sha256": "e2f6e510c1331697e87622af069e90a9385f72da4570e854d6e2fbc05de1c106",
   "model_sha256": {
@@ -40,7 +40,7 @@
     "processor": "arm",
     "python_version": "3.13.0"
   },
-  "threshold_artifact_sha256": "7f3efa80ea17e30585820633d2eaf18384d4e68ab7dccd26df4e8c1923def22b",
+  "threshold_artifact_sha256": "f8938311c33cf159774e679178ba94fda8fa57f410f77b616ddd6751a712de6f",
   "threshold_source": "results/aggregate/calibrated_threshold.json",
   "threshold_strategy": "balanced_accuracy",
   "true_duplicate_miss_rate": 0.0341708542713568,

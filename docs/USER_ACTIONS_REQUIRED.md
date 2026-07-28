@@ -25,6 +25,37 @@ complete. Treat every "TBC" as genuinely outstanding.
 | Original LFW/CPLFW acquisition date | **partially TBC** | Only the file-timestamp-on-receipt date (27 July 2026) is recoverable from local evidence; the researcher's actual original download date, if different, should be recorded by hand. |
 | **Storage migration to Arden University OneDrive** | **Outstanding** | No Arden University OneDrive folder was found under `~/Library/CloudStorage` on this machine as of 28 July 2026 (only a personal Google Drive folder was present). The dataset/model verification and evaluation runs recorded in this repository used a private, access-controlled local directory instead — outside the repository and outside any personal cloud-sync service, but not the institutionally-mandated location. Locate or provision the Arden OneDrive research folder, copy (do not move) the private datasets/protocols/models/cache into it, verify file counts and checksums after the copy, update the (gitignored, never-committed) local `.env` to point `FACE_DATA_ROOT` / `FACE_PROTOCOL_ROOT` / `FACE_MODEL_ROOT` at the new location, and re-run `scripts/run_complete_experiment.py` from there. Do not delete the original local files until the OneDrive copy is verified. |
 
+## Fill-in block
+
+Copy this block, complete it from your real institutional records, and paste
+it back here. Anything left as `TBC` is a **submission blocker**, not a
+completed item — it is reported as outstanding everywhere it appears.
+
+```text
+Named data controller:                  TBC
+University ethics approval/reference:   TBC
+DPIA reference or exemption confirmation: TBC
+Article 6 lawful basis:                 TBC
+Article 9 condition:                    TBC
+Retention period:                       TBC
+Planned deletion date:                  TBC
+Incident contact:                       TBC
+Incident procedure:                     TBC
+LFW terms formally reviewed by/date:    TBC
+CPLFW terms formally reviewed by/date:  TBC
+Original dataset acquisition date:      TBC
+```
+
+Two of these have partial local evidence already, and should be *confirmed*
+rather than researched from scratch:
+
+- **Original dataset acquisition date** — file timestamps on receipt give
+  27 July 2026. If you downloaded the archives earlier, that earlier date is
+  the correct one and only you can supply it.
+- **LFW/CPLFW terms reviewed** — `docs/DATASET_PROVENANCE.md` records your
+  informal confirmation on 27 July 2026; what remains is a formal sign-off
+  with a name and date.
+
 ## What this project will never do instead of you completing this list
 
 - Invent an ethics approval number, DPIA reference, lawful basis, Article 9

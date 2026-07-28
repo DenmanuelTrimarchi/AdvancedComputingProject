@@ -80,10 +80,12 @@ def _render_final_report(payloads: Dict[str, Dict[str, Any]], gallery_payload: D
         "provenance (`software_environment`, `model_sha256`, `protocol_sha256`, "
         "`evaluated_image_set_sha256`, `dataset_archive_md5`/`dataset_archive_sha256`).",
         "",
-        "## Experiment 1 — threshold calibration and selection",
+        "## Experiments 1–2 — threshold calibration and selection",
         "",
-        f"Stage 1 (`pairsDevTrain.txt`) generated candidate thresholds; Stage 2 "
-        f"(`pairsDevTest.txt`) selected and froze **{final.get('operating_strategy') or dev.get('selected_candidate', 'n/a')}** "
+        f"Experiment 1 (`pairsDevTrain.txt`) generated candidate thresholds and wrote them with "
+        f"status `\"candidates\"`; it never selects a winner. Experiment 2 (`pairsDevTest.txt`) "
+        f"evaluated every candidate and only then selected and froze "
+        f"**{final.get('operating_strategy') or dev.get('selected_candidate', 'n/a')}** "
         f"at threshold **{_fmt_num(final.get('threshold'), 6)}**, by the rule: "
         f"\"{dev.get('selection_rule', 'n/a')}\"",
         "",

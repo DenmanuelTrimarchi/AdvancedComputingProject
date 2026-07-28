@@ -639,8 +639,10 @@ def render_terminal(
     row -= 1.0
 
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    tree_state = "working tree: DIRTY (uncommitted changes present)" if dirty else "working tree: clean"
-    ax.text(0.012, row, f"generated: {stamp}   |   git commit: {commit[:12]}   |   {tree_state}",
+    tree_state = (
+        "source tree: DIRTY (uncommitted changes present)" if dirty else "source tree: clean"
+    )
+    ax.text(0.012, row, f"generated: {stamp}   |   source commit: {commit[:12]}   |   {tree_state}",
             color=TERMINAL_DIM, fontsize=8.2, va="top", **mono)
 
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -707,6 +709,11 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     redactions = build_redactions(args)
     commit, dirty = git_commit(), git_is_dirty()
+    # Writing the pack into the repository makes the tree dirty as a side
+    # effect of generation, which would then be reported as an unclean source
+    # state. Generating to an external directory keeps the source tree clean
+    # so the recorded provenance is meaningful.
+    generated_outside_repo = not output_root.resolve().is_relative_to(REPO_ROOT)
 
     threshold_path = results_root / "calibrated_threshold.json"
     cplfw_path = results_root / "cplfw_metrics.json"
@@ -981,38 +988,49 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     manual_items = [
         ("manual_01_github_actions_pass.png", "GitHub Actions CI run passing for the final commit",
-         "GitHub → the repository → Actions → the CI workflow run for the final commit",
-         "The workflow name, a green success tick, the commit SHA, and every job step listed.",
-         "Your GitHub username/avatar if you prefer, and any other private repository in the sidebar.",
+         "GitHub → AdvancedComputingProject → Actions → CI → the run for the final `main` commit",
+         "The repository name; the workflow name (CI); a green success status; the final commit SHA; "
+         "and the completed `test` job with its steps expanded.",
+         "Unrelated account information; any other repository in the sidebar; private email addresses.",
          "Appendix B — Reproducibility evidence",
          "Continuous integration passing for the submitted commit. CI runs the synthetic-fixture suite "
          "only; it never has access to real datasets or model binaries."),
         ("manual_02_final_github_commit.png", "Repository main page at the final commit",
-         "GitHub → the repository main page",
-         "Repository name, the final commit message and SHA, and the top-level file listing.",
-         "Nothing specific, provided no private repository is visible in the sidebar.",
+         "GitHub → AdvancedComputingProject → the repository main page, on branch `main`",
+         "That the branch is `main`; the final commit message and short SHA; and the file listing "
+         "including `scripts/generate_report_evidence.py`.",
+         "Unrelated repositories in the sidebar; private email addresses.",
          "Appendix B — Reproducibility evidence",
          "The public repository at the submitted commit, showing that no dataset, model binary or "
          "database file is tracked."),
         ("manual_03_streamlit_review_interface.png", "Local human-review interface",
-         "A terminal running the Streamlit command in README.md, then the browser at 127.0.0.1",
+         "A terminal running `streamlit run local_review/app.py --server.address=127.0.0.1 "
+         "-- --db results/raw/review.sqlite`, then the browser at 127.0.0.1",
          "The review UI showing opaque case identifiers and the reviewer decision controls.",
-         "Nothing — the interface shows only opaque identifiers by design. Confirm no real name or "
-         "face image is on screen before capturing.",
+         "Nothing should need redacting — the interface shows only opaque identifiers by design. "
+         "Confirm before capturing that no real face image, no real name and no private path is on "
+         "screen; if any is, stop and report it as a defect rather than cropping it out.",
          "Chapter 5 — Human-review decision policy",
          "The localhost-only review interface. Every case is identified by an opaque one-way hash; a "
          "similarity result opens a review case and never an automatic sanction."),
         ("manual_04_au_onedrive_storage_evidence.png", "Institutional storage location",
-         "The Arden University OneDrive research folder, with folder properties/details visible",
-         "The folder name, that it is the institutional (not personal) account, and the item count.",
-         "Every unrelated personal file and folder name; the full account email if you prefer.",
+         "The Arden University OneDrive research folder — **only after the migration is actually "
+         "done**; it is still outstanding (see docs/USER_ACTIONS_REQUIRED.md)",
+         "The university-controlled OneDrive identity/location; the project folder; and the "
+         "high-level folder structure (datasets/, protocols/, models/).",
+         "Face-image thumbnails; participant or identity names; unrelated university or personal "
+         "files; absolute local paths containing your account name. Switch the file browser out of "
+         "any thumbnail/preview mode before capturing.",
          "Appendix C — Data governance evidence",
          "Benchmark images, protocols and models held in access-controlled institutional storage, "
          "outside the repository and outside any personal cloud service."),
         ("manual_05_ethics_approval_evidence.png", "Ethics approval record",
-         "The university ethics approval page or approval document — only if disclosure is permitted",
-         "The approval reference number, the project title, and the approval date.",
-         "Reviewer names, signatures, and any personal contact details.",
+         "The university ethics approval page or approval document — **only if your institution "
+         "permits reproducing it** in a dissertation appendix",
+         "The institution; the approval status; the project title or reference; and the approval "
+         "date/reference number.",
+         "Reviewer names and signatures; personal contact details; any personal data not needed to "
+         "evidence the approval itself.",
          "Appendix C — Data governance evidence",
          "Institutional ethics approval covering this evaluation. Capture only if your institution "
          "permits reproducing the record in a dissertation appendix."),
@@ -1051,11 +1069,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     index = [
         "# Report evidence index", "",
         f"Generated by `scripts/generate_report_evidence.py` at "
-        f"{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')} from git commit `{commit[:12]}`"
-        f"{' (working tree DIRTY at generation time)' if dirty else ''}.", "",
-        "Every figure is derived only from `results/aggregate/*` — no raw image, embedding, identity or "
-        "absolute path is read or reproduced. Per-item hashes are in "
-        "`report_evidence_manifest.json`.", "",
+        f"{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')} from source commit "
+        f"`{commit[:12]}`"
+        + (
+            ", whose working tree was clean at generation time."
+            if not dirty
+            else ", whose working tree had UNCOMMITTED CHANGES at generation time — the source "
+                 "state is therefore not fully described by that commit alone."
+        ), "",
+        "The evidence files themselves are **not** part of that source commit: they are generated "
+        "from it and added by a subsequent commit. Every figure is derived only from "
+        "`results/aggregate/*` — no raw image, embedding, identity or absolute path is read or "
+        "reproduced. Per-item hashes are in `report_evidence_manifest.json`.", "",
         "| # | File | Title | Source | Report section | May be committed |",
         "|---|---|---|---|---|---|",
     ]
@@ -1093,8 +1118,25 @@ def main(argv: Optional[List[str]] = None) -> int:
             "artifact_type": "report_evidence_manifest",
             "schema_version": 1,
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "git_commit": commit,
-            "git_working_tree_dirty": dirty,
+            # Provenance of the *source* that produced this pack, stated so a
+            # reader cannot mistake it for a claim that the evidence files
+            # themselves existed at that commit. They do not: they are
+            # generated from a clean source tree and added by a later commit.
+            "source_git_commit": commit,
+            "source_working_tree_clean_before_generation": not dirty,
+            "evidence_generated_outside_repository": generated_outside_repo,
+            "provenance_note": (
+                "Generated from source commit "
+                f"{commit}"
+                + (
+                    " with a clean working tree"
+                    if not dirty
+                    else " with UNCOMMITTED CHANGES present, so the source state is not"
+                         " fully described by that commit alone"
+                )
+                + ". The evidence artefacts themselves are added by a subsequent commit; "
+                "they are not part of the source commit named here."
+            ),
             "validation_commands_run": bool(args.run_validation),
             "items": manifest,
         }, indent=2, sort_keys=True) + "\n",

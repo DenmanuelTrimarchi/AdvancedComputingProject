@@ -202,6 +202,37 @@ def test_fails_loudly_on_incomplete_aggregate_field(tmp_path: Path, synthetic_ag
     assert "false_duplicate_review_rate" in completed.stderr
 
 
+def test_manifest_records_source_provenance_not_a_false_containment_claim(
+    tmp_path: Path, synthetic_aggregate: Path
+):
+    """The pack is generated *from* a source commit and added by a later one.
+    The manifest must say that, and must never imply the evidence files
+    already existed at the commit it names."""
+    output_root = tmp_path / "evidence"
+    assert _generate(synthetic_aggregate, output_root).returncode == 0
+
+    manifest = json.loads((output_root / "report_evidence_manifest.json").read_text(encoding="utf-8"))
+
+    assert "source_git_commit" in manifest
+    assert "source_working_tree_clean_before_generation" in manifest
+    assert isinstance(manifest["source_working_tree_clean_before_generation"], bool)
+    assert "evidence_generated_outside_repository" in manifest
+
+    # The old field implied the evidence belonged to that commit.
+    assert "git_working_tree_dirty" not in manifest
+
+    note = manifest["provenance_note"]
+    assert "subsequent commit" in note, "the manifest must state the evidence is added later"
+
+
+def test_generating_outside_the_repository_is_recorded(tmp_path: Path, synthetic_aggregate: Path):
+    output_root = tmp_path / "evidence"  # tmp_path is outside the repo
+    assert _generate(synthetic_aggregate, output_root).returncode == 0
+
+    manifest = json.loads((output_root / "report_evidence_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["evidence_generated_outside_repository"] is True
+
+
 def test_generated_pack_contains_no_absolute_path(tmp_path: Path, synthetic_aggregate: Path):
     from face_verification.privacy import default_forbidden_path_substrings, find_path_leaks
 
