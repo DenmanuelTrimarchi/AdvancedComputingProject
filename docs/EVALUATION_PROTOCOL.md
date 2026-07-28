@@ -58,9 +58,10 @@ embedding-time statistics (see
 
 ## Experiment 3 — final LFW evaluation (`pairs.txt`)
 
-The untouched, official ten-fold LFW protocol (6,000 pairs). Uses the frozen
-threshold from Experiment 1 without recalibration. This is the headline LFW
-verification result.
+The untouched, official ten-fold LFW protocol (6,000 pairs). Uses the
+threshold selected and frozen in Experiment 2 without recalibration — the
+candidates Experiment 1 generated are never used directly. This is the
+headline LFW verification result.
 
 ## Experiment 4 — CPLFW generalisation
 
