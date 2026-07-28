@@ -3,9 +3,12 @@
 `results/aggregate/` holds disclosure-reviewed, anonymised JSON/CSV/Markdown
 outputs and **is committed to Git**.
 
-**Status: real evaluation completed 27 July 2026**, following the ethics/DPIA
-gate confirmation recorded in `docs/ETHICS_AND_BIOMETRICS.md`, against the
-real LFW and CPLFW datasets described in `docs/DATASET_PROVENANCE.md`. See
+**Status: real evaluation completed 28 July 2026** (rerun against the raw,
+authors-distributed CPLFW `images.rar` image set; an earlier 27 July 2026 run
+used the pre-aligned `cp-aligned.zip` copy — see `docs/DATASET_PROVENANCE.md`
+for why), following the ethics/DPIA gate confirmation recorded in
+`docs/ETHICS_AND_BIOMETRICS.md`, against the real LFW and CPLFW datasets
+described in `docs/DATASET_PROVENANCE.md`. See
 `results/aggregate/FINAL_EVALUATION_REPORT.md` for the full write-up. Any
 individual field still reading `"status": "not_run"` with `null` values (there
 should be none as of this run) must never be read as zero and must never be
@@ -15,6 +18,17 @@ presented as a real benchmark result — see `docs/EVALUATION_PROTOCOL.md`.
 real image path in it — most importantly the gallery manifest produced by
 `scripts/create_gallery_manifest.py` — belongs there, never under
 `results/aggregate/`.
+
+`results/report_evidence/` holds the report evidence pack — nine figures, ten
+rendered command-evidence images, an index and a SHA-256 manifest — generated
+from `results/aggregate/*` by `scripts/generate_report_evidence.py`. Committed,
+and aggregate-only: no raw image, embedding, identity or absolute path. Its
+`logs/` subdirectory is git-ignored (it is the raw local record behind the
+rendered images).
+
+`results/historical/` holds superseded results, kept only so a reader can see
+what changed and why — never a current finding. See
+`results/historical/README.md`.
 
 Files produced by a full run of `scripts/run_complete_experiment.py` (the
 last five are generated automatically from the first five, not hand-written):

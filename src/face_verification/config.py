@@ -59,6 +59,43 @@ LFW_ARCHIVE_MD5 = "1b42dfed7d15c9b2dd63d5e5840c86ad"
 CPLFW_ARCHIVE_FILENAME = "CPLFW.zip"
 CPLFW_ARCHIVE_SHA256 = "9a09dd1ebe1a000c52f69f365f5d564cd529f1fcf4f0479510231856f358f416"
 
+# Per-variant archives nested inside CPLFW_ARCHIVE_FILENAME. CPLFW ships both
+# the authors' raw, unconstrained images (``images.rar``) and a separately
+# pre-cropped/aligned copy (``cp-aligned.zip``); these are two distinct
+# experiment inputs, never interchangeable, hence a required
+# ``--image-variant`` argument on scripts/evaluate_cplfw.py rather than an
+# assumption baked into the dataset root path.
+CPLFW_RAW_ARCHIVE_FILENAME = "images.rar"
+CPLFW_RAW_ARCHIVE_SHA256 = "7baca61dda21341eaa642f229eedfbba1d0aaa2d22447d79e158920106831165"
+CPLFW_ALIGNED_ARCHIVE_FILENAME = "cp-aligned.zip"
+CPLFW_ALIGNED_ARCHIVE_SHA256 = "420adcc13f1ab9510d8f99af04dbfb1695645ff73942c2a1010c5c01fd8367e2"
+
+CPLFW_IMAGE_VARIANTS = ("raw", "aligned")
+
+
+def cplfw_provenance_fields(image_variant: str) -> dict:
+    """Result fields that make a CPLFW evaluation's image variant explicit
+    and never omittable. Raises ``ValueError`` for anything but 'raw'/
+    'aligned' — the two are non-interchangeable image sets and a result must
+    never be ambiguous, or wrong, about which one it scored."""
+    if image_variant == "raw":
+        archive_filename, archive_sha256 = CPLFW_RAW_ARCHIVE_FILENAME, CPLFW_RAW_ARCHIVE_SHA256
+        image_source = "authors-distributed images.rar"
+    elif image_variant == "aligned":
+        archive_filename, archive_sha256 = CPLFW_ALIGNED_ARCHIVE_FILENAME, CPLFW_ALIGNED_ARCHIVE_SHA256
+        image_source = "authors-distributed cp-aligned.zip"
+    else:
+        raise ValueError(
+            f"Unknown CPLFW image variant {image_variant!r}; expected one of {CPLFW_IMAGE_VARIANTS}"
+        )
+    return {
+        "dataset_image_variant": image_variant,
+        "dataset_image_source": image_source,
+        "dataset_archive_filename": archive_filename,
+        "dataset_archive_sha256": archive_sha256,
+        "dataset_root_description": "private research storage; path omitted",
+    }
+
 
 class ConfigurationError(RuntimeError):
     """Raised when required configuration is missing or invalid."""

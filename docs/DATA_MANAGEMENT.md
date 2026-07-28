@@ -31,6 +31,16 @@ drive, or any personal (non-institutional) cloud service such as Dropbox
 or a personal Google Drive/iCloud account — the AU OneDrive research
 folder is the one and only approved location per the ethics form.
 
+**Current status (28 July 2026): not yet migrated.** The dataset/model
+verification and evaluation runs recorded in this repository so far used a
+private, access-controlled local directory outside the repository and
+outside any personal cloud-sync service — it satisfies "not in Git, not a
+personal cloud account," but migration to the actual Arden University
+OneDrive folder has not yet been confirmed. See
+`docs/USER_ACTIONS_REQUIRED.md` for this outstanding action. Nothing below
+this note should be read as a claim that the OneDrive migration has already
+happened.
+
 ## What is committed vs. what is not
 
 | Committed to Git | Never committed |

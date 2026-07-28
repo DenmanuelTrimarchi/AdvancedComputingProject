@@ -1,0 +1,419 @@
+{
+  "artifact_type": "report_evidence_manifest",
+  "generated_at": "2026-07-28T08:10:44.939256+00:00",
+  "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+  "git_working_tree_dirty": true,
+  "items": [
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_01_roc_comparison.png",
+      "generated_at": "2026-07-28T08:10:26.040813+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.1 Verification performance",
+      "sha256": "a222c6268c4f929167cee8a03b47ec3eaefa23f9af42a0f9ede9c4d96304619c",
+      "source_file_sha256": {
+        "metrics_summary.csv": "a9cc76af762cedd5aa2bdd1476c539b5a2937b8c966a94e18a86ca770cd1824b",
+        "roc_points.csv": "466aaeb510d2eac0283496e62c3f41e3c93e976fc3b9e6657a95fac674f599bb"
+      },
+      "source_files": [
+        "roc_points.csv",
+        "metrics_summary.csv"
+      ],
+      "suggested_caption": "ROC curves for the three verification protocols. Raw CPLFW sits below both LFW curves, quantifying the cost of extreme pose variation at a fixed operating threshold.",
+      "title": "ROC Curves for LFW Development, Final LFW and Raw CPLFW",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_02_lfw_final_confusion_matrix.png",
+      "generated_at": "2026-07-28T08:10:26.216173+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.2 Final LFW evaluation",
+      "sha256": "10050b2069ceee4ffa029cf7587bb2717ad73a8d9568c7abbdbeebeaebeade2a",
+      "source_file_sha256": {
+        "confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
+        "metrics_summary.csv": "a9cc76af762cedd5aa2bdd1476c539b5a2937b8c966a94e18a86ca770cd1824b"
+      },
+      "source_files": [
+        "confusion_matrices.csv",
+        "metrics_summary.csv"
+      ],
+      "suggested_caption": "Confusion matrix for the final LFW protocol at the frozen threshold, showing the false-match/false-non-match balance the threshold was selected to achieve.",
+      "title": "Final LFW Confusion Matrix at the Frozen Threshold",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_03_cplfw_confusion_matrix.png",
+      "generated_at": "2026-07-28T08:10:26.401331+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.3 Cross-pose generalisation",
+      "sha256": "434828c41dd95fd330b07d65daea025a00b6a9c69a477c02899802204af8f10d",
+      "source_file_sha256": {
+        "confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
+        "metrics_summary.csv": "a9cc76af762cedd5aa2bdd1476c539b5a2937b8c966a94e18a86ca770cd1824b"
+      },
+      "source_files": [
+        "confusion_matrices.csv",
+        "metrics_summary.csv"
+      ],
+      "suggested_caption": "Confusion matrix for raw CPLFW using the unchanged LFW-frozen threshold. Errors shift markedly towards false non-matches under cross-pose conditions.",
+      "title": "Raw CPLFW Confusion Matrix Using the LFW-Frozen Threshold",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_04_extraction_failure_rates.png",
+      "generated_at": "2026-07-28T08:10:26.586202+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.4 Face-extraction failures",
+      "sha256": "73ca107515faaf15197aaf6b20735b9a0af9749da3a37454717e90fc32ec5899",
+      "source_file_sha256": {
+        "metrics_summary.csv": "a9cc76af762cedd5aa2bdd1476c539b5a2937b8c966a94e18a86ca770cd1824b"
+      },
+      "source_files": [
+        "metrics_summary.csv"
+      ],
+      "suggested_caption": "Face-extraction failure rates by protocol. The raw CPLFW rate is roughly four times the LFW rate and is the dominant practical limitation identified by this evaluation.",
+      "title": "Face-Extraction Failure Rates Across Benchmark Protocols",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_05_cplfw_failure_breakdown.png",
+      "generated_at": "2026-07-28T08:10:26.746935+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.4 Face-extraction failures",
+      "sha256": "498ff797c299b0d3706b80897bce4317c58cc7f29281fa82291015d4e0f87698",
+      "source_file_sha256": {
+        "cplfw_metrics.json": "19dcbb29a195af2058d185a34dc505fab354e8869fa6b1f41150fa95bb700cb8"
+      },
+      "source_files": [
+        "cplfw_metrics.json"
+      ],
+      "suggested_caption": "Breakdown of raw CPLFW extraction failures by category. Zero-face detections dominate, locating the difficulty in detection rather than in embedding comparison.",
+      "title": "Raw CPLFW Face-Extraction Failure Categories",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_06_gallery_outcomes.png",
+      "generated_at": "2026-07-28T08:10:26.900935+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.5 Duplicate-profile gallery",
+      "sha256": "9d1c0d52f5d760da4cf08c6f05bad5cbb08225a7dd05409277ac7491404172fc",
+      "source_file_sha256": {
+        "duplicate_gallery_metrics.json": "8a4112337c97ed43e9bdc07847cdd4b0cef1bffaaca6d5e26c6db2a4596481f2"
+      },
+      "source_files": [
+        "duplicate_gallery_metrics.json"
+      ],
+      "suggested_caption": "Outcomes of the 1:N duplicate-profile gallery experiment. High detection is accompanied by a false-review rate that makes the 1:1 threshold unsuitable for direct 1:N deployment.",
+      "title": "1:N Duplicate-Profile Gallery Outcomes",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_07_threshold_candidate_comparison.png",
+      "generated_at": "2026-07-28T08:10:27.170850+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 3 \u2014 Methodology, \u00a73.5 Threshold selection",
+      "sha256": "c762d35c005cd7fddea2fe4cfe330195cc0c3f1c90542f1ebc06079468502a31",
+      "source_file_sha256": {
+        "calibrated_threshold.json": "7f3efa80ea17e30585820633d2eaf18384d4e68ab7dccd26df4e8c1923def22b"
+      },
+      "source_files": [
+        "calibrated_threshold.json"
+      ],
+      "suggested_caption": "Development-split evaluation of every candidate threshold, with the frozen selection marked. Evidence that selection was deterministic and made before any held-out data was read.",
+      "title": "Candidate Threshold Evaluation on pairsDevTest.txt",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_08_latency_comparison.png",
+      "generated_at": "2026-07-28T08:10:27.415259+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 4 \u2014 Results, \u00a74.6 Processing latency",
+      "sha256": "a2347fa36d3d17e097023f4640827e3e0d09a4735944794d0041a495546f15d5",
+      "source_file_sha256": {
+        "duplicate_gallery_metrics.json": "8a4112337c97ed43e9bdc07847cdd4b0cef1bffaaca6d5e26c6db2a4596481f2",
+        "metrics_summary.csv": "a9cc76af762cedd5aa2bdd1476c539b5a2937b8c966a94e18a86ca770cd1824b"
+      },
+      "source_files": [
+        "metrics_summary.csv",
+        "duplicate_gallery_metrics.json"
+      ],
+      "suggested_caption": "Embedding latency per image and gallery-search latency per probe. Both are machine-dependent and are reported for feasibility context, not as a reproducibility guarantee.",
+      "title": "Embedding and Gallery Search Latency",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "figures/figure_09_experiment_flow.png",
+      "generated_at": "2026-07-28T08:10:27.646770+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 3 \u2014 Methodology, \u00a73.2 Experimental design",
+      "sha256": "e7b9b15125bc991d300dcfa44e7bc395607dd3eb725837070bf5e28e90cacddb",
+      "source_file_sha256": {
+        "calibrated_threshold.json": "7f3efa80ea17e30585820633d2eaf18384d4e68ab7dccd26df4e8c1923def22b"
+      },
+      "source_files": [
+        "calibrated_threshold.json"
+      ],
+      "suggested_caption": "The experimental workflow and the held-out boundary enforced in code. CPLFW reuses the LFW-frozen threshold and cannot recalibrate it.",
+      "title": "Experimental Workflow and Held-Out Evaluation Boundary",
+      "type": "figure"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_01_environment_check.png",
+      "generated_at": "2026-07-28T08:10:27.921608+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "c35e5ecdb1ba17be9e3b295a5ea6870224256e350287d64922146d5c4af14fc6",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "The pinned dependency contract verified at run time, not merely declared in pyproject.toml.",
+      "title": "Environment and dependency contract check",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_02_model_verification.png",
+      "generated_at": "2026-07-28T08:10:28.092603+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "44174e08d63a98fd2131f1c6dad18d607aed3ac96be29cf68c65163c0bfe0764",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "Both ONNX models verified against their pinned SHA-256 values before any inference.",
+      "title": "Pinned model hash verification",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_03_lfw_dataset_verification.png",
+      "generated_at": "2026-07-28T08:10:29.187875+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "2ff8031de33bce1eeb896cd7a324e6d0857a651a6a65b332dbdd0108d606dffe",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "All three LFW protocol files parsed with every referenced image resolving.",
+      "title": "LFW dataset and protocol verification",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_04_cplfw_raw_dataset_verification.png",
+      "generated_at": "2026-07-28T08:10:29.889603+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "7bb92b352c13ecec434ce030ef0142502c20c0a9b7f12ff5964ce40ea03e5da3",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "All 6,000 raw CPLFW pairs (3,000 matched, 3,000 mismatched) resolved against the authors' images.rar image set.",
+      "title": "Raw CPLFW dataset and protocol verification",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_05_pytest_result.png",
+      "generated_at": "2026-07-28T08:10:44.241102+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "c9bdf375c8681b4f9434f45b45071c9eab1e51c3b99207df170137817a71a682",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "The synthetic-fixture test suite, which runs with no dataset or model file present.",
+      "title": "Automated test suite",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_06_privacy_scan.png",
+      "generated_at": "2026-07-28T08:10:44.403903+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix C \u2014 Data governance evidence",
+      "sha256": "91e9933488c95c84c4f43191266b0667d6d9d587ce3337ddee9177fde0fa29aa",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "Committed aggregate outputs confirmed free of personal or absolute filesystem paths.",
+      "title": "Public-output privacy scan",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_07_output_file_listing.png",
+      "generated_at": "2026-07-28T08:10:44.549095+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "a2e8f9d863a2b512d3425f8077d45fa6bffc7ba02dab97674aeec4ffcfb547cc",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "Inventory confirming that all ten aggregate outputs and the evidence pack exist.",
+      "title": "Generated output inventory",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_08_cplfw_variant_evidence.png",
+      "generated_at": "2026-07-28T08:10:44.648330+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 3 \u2014 Methodology, \u00a73.4 Datasets",
+      "sha256": "e529a477488f2dffc4cdbe897c80f2d77e0e8c1685c6853e00d88f4552fa0456",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "The reported CPLFW result records the raw authors-distributed image set explicitly, removing the ambiguity present in the superseded aligned run.",
+      "title": "CPLFW image-variant provenance",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_09_threshold_freeze_evidence.png",
+      "generated_at": "2026-07-28T08:10:44.763397+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 3 \u2014 Methodology, \u00a73.5 Threshold selection",
+      "sha256": "ce8038c46ce048020b81ce66d9db4c7533ebcd047d0ef80bafd1914b7e2a3267",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "The threshold artifact records status \"frozen\", the protocol it was frozen from, that file's SHA-256, and the deterministic selection rule applied.",
+      "title": "Threshold freeze provenance",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/screenshot_10_git_status.png",
+      "generated_at": "2026-07-28T08:10:44.938639+00:00",
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": "810dab588cf0a63bb0d8571a967986468b3ef457c277270c575567cdcb0c53c3",
+      "source_file_sha256": {},
+      "source_files": [],
+      "suggested_caption": "Repository state when this evidence pack was generated. A dirty working tree is reported as dirty and never presented as clean.",
+      "title": "Repository state at generation time",
+      "type": "generated_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/manual_01_github_actions_pass.png",
+      "generated_at": null,
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": null,
+      "source_file_sha256": {},
+      "source_files": [],
+      "status": "awaiting manual capture by the researcher",
+      "suggested_caption": "Continuous integration passing for the submitted commit. CI runs the synthetic-fixture suite only; it never has access to real datasets or model binaries.",
+      "title": "GitHub Actions CI run passing for the final commit",
+      "type": "manual_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/manual_02_final_github_commit.png",
+      "generated_at": null,
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix B \u2014 Reproducibility evidence",
+      "sha256": null,
+      "source_file_sha256": {},
+      "source_files": [],
+      "status": "awaiting manual capture by the researcher",
+      "suggested_caption": "The public repository at the submitted commit, showing that no dataset, model binary or database file is tracked.",
+      "title": "Repository main page at the final commit",
+      "type": "manual_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/manual_03_streamlit_review_interface.png",
+      "generated_at": null,
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Chapter 5 \u2014 Human-review decision policy",
+      "sha256": null,
+      "source_file_sha256": {},
+      "source_files": [],
+      "status": "awaiting manual capture by the researcher",
+      "suggested_caption": "The localhost-only review interface. Every case is identified by an opaque one-way hash; a similarity result opens a review case and never an automatic sanction.",
+      "title": "Local human-review interface",
+      "type": "manual_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/manual_04_au_onedrive_storage_evidence.png",
+      "generated_at": null,
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix C \u2014 Data governance evidence",
+      "sha256": null,
+      "source_file_sha256": {},
+      "source_files": [],
+      "status": "awaiting manual capture by the researcher",
+      "suggested_caption": "Benchmark images, protocols and models held in access-controlled institutional storage, outside the repository and outside any personal cloud service.",
+      "title": "Institutional storage location",
+      "type": "manual_screenshot"
+    },
+    {
+      "contains_absolute_path": false,
+      "contains_identity_information": false,
+      "contains_real_face_image": false,
+      "filename": "screenshots/manual_05_ethics_approval_evidence.png",
+      "generated_at": null,
+      "git_commit": "737fbea567ef6250807e58a3c2ff307b84e08414",
+      "report_section": "Appendix C \u2014 Data governance evidence",
+      "sha256": null,
+      "source_file_sha256": {},
+      "source_files": [],
+      "status": "awaiting manual capture by the researcher",
+      "suggested_caption": "Institutional ethics approval covering this evaluation. Capture only if your institution permits reproducing the record in a dissertation appendix.",
+      "title": "Ethics approval record",
+      "type": "manual_screenshot"
+    }
+  ],
+  "schema_version": 1,
+  "validation_commands_run": true
+}

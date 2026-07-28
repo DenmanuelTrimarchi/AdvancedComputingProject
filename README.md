@@ -48,7 +48,11 @@ See `docs/RESEARCH_SCOPE.md` for the full scope statement, and
   (final evaluation).
 - **CPLFW** (Cross-Pose LFW) — secondary dataset, `pairs_CPLFW.txt`
   (cross-pose generalisation, evaluated with the LFW-frozen threshold, no
-  separate calibration).
+  separate calibration). CPLFW ships two non-interchangeable image sets —
+  the authors' raw, unconstrained images (`images.rar`) and a separately
+  pre-cropped/aligned copy (`cp-aligned.zip`) — so every CPLFW command
+  requires an explicit `--image-variant {raw,aligned}`; the reported result
+  uses `raw`.
 
 Neither dataset is downloaded automatically by anything in this repository.
 See `docs/DATASET_PROVENANCE.md` for exact sources and checksums to record,
@@ -83,8 +87,9 @@ python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"
 python3.11 -m venv .venv   # or the closest available 3.11/3.12/3.13
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[dev,review]'   # 'review' pulls in Streamlit for local_review/app.py;
-                                            # omit it if you only need the core pipeline and tests
+python -m pip install -e '.[dev,review,report]'   # 'review' pulls in Streamlit for local_review/app.py;
+                                                   # 'report' pulls in matplotlib for generate_report_evidence.py;
+                                                   # omit either extra if you only need the core pipeline and tests
 pytest                      # synthetic-fixture test suite — no dataset needed
 ```
 
@@ -99,7 +104,7 @@ Arden University OneDrive research folder — see `docs/DATA_MANAGEMENT.md`.
 python scripts/check_environment.py
 python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"
 python scripts/verify_lfw_dataset.py   --dataset-root "$FACE_DATA_ROOT/lfw_funneled" --protocol-root "$FACE_PROTOCOL_ROOT"
-python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_DATA_ROOT/cplfw"        --protocol-root "$FACE_PROTOCOL_ROOT"
+python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_CPLFW_RAW_ROOT"          --protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw
 
 # Experiment 1 — calibration (pairsDevTrain.txt only)
 python scripts/calibrate_lfw.py \
@@ -119,9 +124,13 @@ python scripts/evaluate_lfw.py --split final \
     --output results/aggregate/lfw_final_metrics.json
 
 # Experiment 4 — CPLFW cross-pose generalisation (same frozen threshold)
+# $FACE_CPLFW_RAW_ROOT is a flat directory of the authors' raw images,
+# produced by extracting images.rar and then flattening it with
+# scripts/prepare_cplfw_raw_dataset.py (see docs/DATASET_PROVENANCE.md).
 python scripts/evaluate_cplfw.py \
-    --dataset-root "$FACE_DATA_ROOT/cplfw" --protocol-root "$FACE_PROTOCOL_ROOT" \
-    --model-root "$FACE_MODEL_ROOT" --threshold-artifact results/aggregate/calibrated_threshold.json \
+    --dataset-root "$FACE_CPLFW_RAW_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT" \
+    --model-root "$FACE_MODEL_ROOT" --image-variant raw \
+    --threshold-artifact results/aggregate/calibrated_threshold.json \
     --output results/aggregate/cplfw_metrics.json
 
 # Experiment 5 — real 1:N duplicate-profile gallery
@@ -139,12 +148,44 @@ Or run all of the above (except the optional review UI) with one command:
 ```bash
 python scripts/run_complete_experiment.py \
     --dataset-root "$FACE_DATA_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT" \
-    --model-root "$FACE_MODEL_ROOT" --output-root results/aggregate
+    --model-root "$FACE_MODEL_ROOT" --cplfw-dataset-root "$FACE_CPLFW_RAW_ROOT" \
+    --cplfw-image-variant raw --output-root results/aggregate
 ```
 
 It stops with the underlying step's own error message — never a fabricated
 result — if any required dataset, protocol, or model file is missing or
-invalid.
+invalid. It also refuses to finish if any generated public output ends up
+containing a personal/absolute filesystem path (see
+`face_verification.privacy.find_path_leaks`).
+
+### Optional: report evidence pack (figures + validation evidence)
+
+```bash
+python -m pip install -e '.[dev,review,report]'   # adds matplotlib
+
+# Figures only, from the already-generated aggregate results:
+python scripts/generate_report_evidence.py \
+    --results-root results/aggregate --output-root results/report_evidence
+
+# Additionally run the read-only verification commands and render their
+# redacted output as evidence images:
+python scripts/generate_report_evidence.py \
+    --results-root results/aggregate --output-root results/report_evidence \
+    --run-validation \
+    --model-root "$FACE_MODEL_ROOT" \
+    --lfw-dataset-root "$FACE_DATA_ROOT/lfw_funneled" \
+    --cplfw-dataset-root "$FACE_CPLFW_RAW_ROOT" \
+    --protocol-root "$FACE_PROTOCOL_ROOT"
+```
+
+Generates nine PNG figures, ten rendered command-evidence images, an
+evidence index and a SHA-256 manifest — all derived only from the committed
+`results/aggregate/*` files, never from a raw image or an identity. Every
+rendered path is a redacted placeholder, and the generator fails rather than
+emit a pack containing a private absolute path. Five further screenshots
+(GitHub Actions, Streamlit, institutional storage, ethics record) cannot be
+produced locally and are **not** fabricated — see
+`results/report_evidence/manual_screenshots_required.md`.
 
 ### Optional: local review demonstration
 
@@ -163,19 +204,33 @@ results/aggregate/lfw_development_metrics.json
 results/aggregate/lfw_final_metrics.json
 results/aggregate/cplfw_metrics.json
 results/aggregate/duplicate_gallery_metrics.json
+results/aggregate/run_manifest.json
+results/aggregate/metrics_summary.csv
+results/aggregate/confusion_matrices.csv
+results/aggregate/roc_points.csv
+results/aggregate/FINAL_EVALUATION_REPORT.md
 ```
+
+`run_manifest.json`, the three CSVs, and `FINAL_EVALUATION_REPORT.md` are
+written once, at the end, by `scripts/run_complete_experiment.py` — they
+summarise/cross-reference the five metrics files above rather than
+containing independent numbers, and `run_manifest.json` never contains the
+absolute dataset/protocol/model paths, only the environment-variable names
+and a SHA-256 of every other output file.
 
 Every field states whether it reflects a real benchmark run (`"status":
 "frozen"` / a real score) or is a `"not_run"` placeholder — see
-`results/README.md`. **A real evaluation run against LFW and CPLFW completed
-27 July 2026**, following the ethics/DPIA gate confirmation recorded in
-`docs/ETHICS_AND_BIOMETRICS.md`: 99.09% accuracy on the final LFW protocol
-(EER 0.78%), 93.86% on CPLFW pairs with a detectable face (though 54.4% of
-CPLFW pairs failed face *detection* entirely — the dominant cross-pose
-finding), 96.58% duplicate detection with a 52.56% false-review rate in the
-1:N gallery experiment (evidence that a 1:1-calibrated threshold needs
-separate calibration for 1:N search). Full write-up:
-`results/aggregate/FINAL_EVALUATION_REPORT.md`.
+`results/README.md`. **A real evaluation run against LFW and the raw
+(`images.rar`) CPLFW image set completed 28 July 2026**, following the
+ethics/DPIA gate confirmation recorded in `docs/ETHICS_AND_BIOMETRICS.md`:
+99.09% accuracy on the final LFW protocol (EER 0.78%), 90.24% on CPLFW pairs
+with a detectable face (though 41.4% of CPLFW pairs failed face *detection*
+entirely — the dominant cross-pose finding, present even on the authors'
+raw, unconstrained images, not an artefact of pre-cropping — see
+`docs/DATASET_PROVENANCE.md`), 96.58% duplicate detection with a 52.56%
+false-review rate in the 1:N gallery experiment (evidence that a
+1:1-calibrated threshold needs separate calibration for 1:N search). Full
+write-up: `results/aggregate/FINAL_EVALUATION_REPORT.md`.
 
 ## Limitations
 

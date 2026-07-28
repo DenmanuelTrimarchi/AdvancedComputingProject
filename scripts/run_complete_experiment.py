@@ -16,9 +16,11 @@ is missing or invalid.
 
 Usage:
     python scripts/run_complete_experiment.py \
-        --dataset-root /path/to/AU-OneDrive/datasets \
-        --protocol-root /path/to/AU-OneDrive/protocols \
-        --model-root /path/to/AU-OneDrive/models \
+        --dataset-root /path/to/private-storage/datasets \
+        --protocol-root /path/to/private-storage/protocols \
+        --model-root /path/to/private-storage/models \
+        --cplfw-dataset-root /path/to/private-storage/cplfw_raw \
+        --cplfw-image-variant raw \
         --output-root results/aggregate
 """
 
@@ -37,6 +39,7 @@ from face_verification.artifacts import (
     write_json_artifact,
     write_markdown_artifact,
 )
+from face_verification.privacy import default_forbidden_path_substrings, find_path_leaks
 from face_verification.provenance import sha256_of_file, software_environment_report
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -155,7 +158,9 @@ def _render_final_report(payloads: Dict[str, Dict[str, Any]], gallery_payload: D
     return "\n".join(lines)
 
 
-def _write_aggregate_reports(output_root: Path, cli_args: argparse.Namespace, gallery_manifest_path: Path) -> None:
+def _write_aggregate_reports(
+    output_root: Path, cli_args: argparse.Namespace, gallery_manifest_path: Path, cplfw_image_variant: str
+) -> None:
     threshold_path = output_root / "calibrated_threshold.json"
     payloads: Dict[str, Dict[str, Any]] = {
         "lfw_development": read_json_artifact(output_root / "lfw_development_metrics.json"),
@@ -177,11 +182,13 @@ def _write_aggregate_reports(output_root: Path, cli_args: argparse.Namespace, ga
         output_root / "run_manifest.json",
         {
             "artifact_type": "run_manifest",
-            "dataset_root": str(cli_args.dataset_root),
-            "protocol_root": str(cli_args.protocol_root),
-            "model_root": str(cli_args.model_root),
+            "dataset_storage": "access-controlled private research storage; path omitted from public artifacts",
+            "dataset_root_variable": "FACE_DATA_ROOT",
+            "protocol_root_variable": "FACE_PROTOCOL_ROOT",
+            "model_root_variable": "FACE_MODEL_ROOT",
+            "cplfw_image_variant": cplfw_image_variant,
             "output_root": str(output_root),
-            "gallery_manifest_path": str(gallery_manifest_path),
+            "gallery_manifest": str(gallery_manifest_path),
             "frozen_threshold": threshold_payload.get("threshold"),
             "frozen_threshold_candidate": threshold_payload.get("operating_strategy"),
             "output_file_sha256": {name: sha256_of_file(path) for name, path in output_files.items()},
@@ -227,6 +234,13 @@ def _write_aggregate_reports(output_root: Path, cli_args: argparse.Namespace, ga
         output_root / "FINAL_EVALUATION_REPORT.md", _render_final_report(payloads, gallery_payload)
     )
 
+    leaks = find_path_leaks(output_root, forbidden_substrings=default_forbidden_path_substrings())
+    if leaks:
+        raise SystemExit(
+            "Refusing to finish: public aggregate output(s) contain a personal/absolute path:\n"
+            + "\n".join(f"  {leak}" for leak in leaks)
+        )
+
     print(
         f"Wrote run_manifest.json, metrics_summary.csv ({len(summary_rows)} rows), "
         f"confusion_matrices.csv ({len(confusion_rows)} rows), roc_points.csv ({len(roc_rows)} rows), "
@@ -244,13 +258,24 @@ def main(argv=None) -> int:
     parser.add_argument("--model-root", required=True, type=Path)
     parser.add_argument("--output-root", required=True, type=Path)
     parser.add_argument(
+        "--cplfw-dataset-root", type=Path, default=None,
+        help="CPLFW image root, if it lives outside --dataset-root/cplfw (e.g. a "
+             "raw extraction kept separate from the aligned copy). Defaults to "
+             "--dataset-root/cplfw.",
+    )
+    parser.add_argument(
+        "--cplfw-image-variant", required=True, choices=("raw", "aligned"),
+        help="Which CPLFW image set --cplfw-dataset-root points at. See "
+             "scripts/evaluate_cplfw.py.",
+    )
+    parser.add_argument(
         "--gallery-manifest", type=Path, default=Path("results/raw/gallery_manifest.json"),
         help="Where to write the private gallery manifest (must stay out of Git).",
     )
     args = parser.parse_args(argv)
 
     lfw_root = args.dataset_root / "lfw_funneled"
-    cplfw_root = args.dataset_root / "cplfw"
+    cplfw_root = args.cplfw_dataset_root if args.cplfw_dataset_root is not None else args.dataset_root / "cplfw"
     output_root = args.output_root
     output_root.mkdir(parents=True, exist_ok=True)
 
@@ -269,6 +294,7 @@ def main(argv=None) -> int:
     _run([
         str(SCRIPTS_DIR / "verify_cplfw_dataset.py"),
         "--dataset-root", str(cplfw_root), "--protocol-root", str(args.protocol_root),
+        "--image-variant", args.cplfw_image_variant,
     ])
 
     _run([
@@ -291,7 +317,8 @@ def main(argv=None) -> int:
     _run([
         str(SCRIPTS_DIR / "evaluate_cplfw.py"),
         "--dataset-root", str(cplfw_root), "--protocol-root", str(args.protocol_root),
-        "--model-root", str(args.model_root), "--threshold-artifact", str(threshold_artifact),
+        "--model-root", str(args.model_root), "--image-variant", args.cplfw_image_variant,
+        "--threshold-artifact", str(threshold_artifact),
         "--output", str(cplfw_metrics),
     ])
     _run([
@@ -305,7 +332,7 @@ def main(argv=None) -> int:
         "--threshold-artifact", str(threshold_artifact), "--output", str(duplicate_metrics),
     ])
 
-    _write_aggregate_reports(output_root, args, args.gallery_manifest)
+    _write_aggregate_reports(output_root, args, args.gallery_manifest, args.cplfw_image_variant)
 
     print(f"\nComplete. Aggregate results are in {output_root}")
     return 0

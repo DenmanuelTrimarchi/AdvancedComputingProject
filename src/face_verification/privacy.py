@@ -8,8 +8,9 @@ Used both by the artifact writers (defensively) and directly by
 from __future__ import annotations
 
 import hashlib
+import os
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, List, Mapping, Sequence
 
 OPAQUE_ID_SALT = "face-verification-opaque-id-v1"
 
@@ -62,3 +63,75 @@ def assert_no_leakage(record: Mapping[str, Any], *, context: str = "") -> None:
 
         if isinstance(value, Mapping):
             assert_no_leakage(value, context=label)
+
+
+_TEXT_ARTIFACT_SUFFIXES = (".json", ".csv", ".md", ".txt")
+_IMAGE_ARTIFACT_SUFFIXES = (".png",)
+
+# Storage-location names that identify this researcher's private layout even
+# when they appear without a leading absolute-path prefix (e.g. inside a
+# rendered evidence image's embedded metadata, or a relative-looking string).
+_PRIVATE_LOCATION_MARKERS = ("SecureResearchData", "Library/CloudStorage")
+
+
+def default_forbidden_path_substrings(*, env: Mapping[str, str] | None = None) -> List[str]:
+    """Substrings that must never appear in a public aggregate result: the
+    researcher's home directory, common absolute-path prefixes, known
+    private-storage location names, and the expanded value of every
+    private-storage location environment variable."""
+    source = os.environ if env is None else env
+    substrings = {"/Users/", "\\Users\\", "/home/", str(Path.home())}
+    substrings.update(_PRIVATE_LOCATION_MARKERS)
+    for variable in ("FACE_DATA_ROOT", "FACE_PROTOCOL_ROOT", "FACE_MODEL_ROOT", "FACE_CACHE_ROOT"):
+        value = source.get(variable)
+        if value:
+            substrings.add(value)
+    return sorted(s for s in substrings if s)
+
+
+def _png_text_metadata(path: Path) -> str:
+    """Every tEXt/iTXt/zTXt chunk in a PNG, concatenated. Matplotlib writes a
+    ``Software`` chunk by default and callers may add their own, so a
+    rendered figure can leak a path that never appears in the visible
+    pixels. Returns "" if the file is unreadable or Pillow is unavailable."""
+    try:
+        from PIL import Image
+
+        with Image.open(path) as image:
+            return "\n".join(f"{key}: {value}" for key, value in (image.info or {}).items() if isinstance(value, str))
+    except Exception:
+        return ""
+
+
+def find_path_leaks(root: Path, *, forbidden_substrings: Sequence[str]) -> List[str]:
+    """Recursively scan every JSON/CSV/Markdown/text file under ``root`` — and
+    the embedded text metadata of every PNG — for any forbidden substring
+    (e.g. an absolute filesystem path). Returns a list of
+    ``"file:line: forbidden substring"`` findings; an empty list means clean.
+    Never raises on unreadable/binary files — those are simply skipped."""
+    findings: List[str] = []
+    root = Path(root)
+    if not root.exists():
+        return findings
+    for path in sorted(root.rglob("*")):
+        if not path.is_file():
+            continue
+        suffix = path.suffix.lower()
+        if suffix in _TEXT_ARTIFACT_SUFFIXES:
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                continue
+            location = "{path}:{line}"
+        elif suffix in _IMAGE_ARTIFACT_SUFFIXES:
+            text = _png_text_metadata(path)
+            location = "{path} (embedded PNG metadata, entry {line})"
+        else:
+            continue
+
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            for needle in forbidden_substrings:
+                if needle and needle in line:
+                    where = location.format(path=path, line=line_number)
+                    findings.append(f"{where}: contains forbidden substring {needle!r}")
+    return findings

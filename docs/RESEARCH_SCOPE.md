@@ -39,8 +39,10 @@ contribution is:
 ## In scope
 
 - Local Python CLI scripts that detect a face, embed it, compare embeddings,
-  calibrate a threshold on a validation split, and evaluate that frozen
-  threshold on held-out LFW and CPLFW data.
+  generate candidate thresholds on `pairsDevTrain.txt`, select and freeze
+  exactly one of those candidates on `pairsDevTest.txt` by a fixed
+  deterministic rule, and evaluate that frozen threshold on held-out LFW
+  (`pairs.txt`) and CPLFW (`pairs_CPLFW.txt`) data without recalibration.
 - A real 1:N duplicate-profile gallery experiment built from real LFW images.
 - An optional, login-free, localhost-only Streamlit page for manually
   reviewing anonymised gallery cases from a local SQLite database.
