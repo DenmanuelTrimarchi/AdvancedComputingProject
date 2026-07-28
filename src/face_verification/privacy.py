@@ -92,14 +92,26 @@ def default_forbidden_path_substrings(*, env: Mapping[str, str] | None = None) -
 def _png_text_metadata(path: Path) -> str:
     """Every tEXt/iTXt/zTXt chunk in a PNG, concatenated. Matplotlib writes a
     ``Software`` chunk by default and callers may add their own, so a
-    rendered figure can leak a path that never appears in the visible
-    pixels. Returns "" if the file is unreadable or Pillow is unavailable."""
+    rendered figure can leak a path that never appears in the visible pixels.
+
+    A corrupt or truncated PNG yields "" — there is nothing to read, and the
+    file is not publishable evidence anyway. A *missing Pillow* is different:
+    it would make every PNG silently pass, turning this check into a no-op
+    that still reports "clean". Pillow is a pinned core dependency, so its
+    absence is raised rather than swallowed.
+    """
     try:
         from PIL import Image
+    except ImportError as exc:  # pragma: no cover - Pillow is a pinned dependency
+        raise PrivacyLeakError(
+            "Pillow is not installed, so PNG metadata cannot be scanned. Refusing to report a "
+            "clean result from a check that did not run."
+        ) from exc
 
+    try:
         with Image.open(path) as image:
             return "\n".join(f"{key}: {value}" for key, value in (image.info or {}).items() if isinstance(value, str))
-    except Exception:
+    except OSError:
         return ""
 
 

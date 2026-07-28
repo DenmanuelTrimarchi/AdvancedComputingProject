@@ -233,6 +233,24 @@ def test_generating_outside_the_repository_is_recorded(tmp_path: Path, synthetic
     assert manifest["evidence_generated_outside_repository"] is True
 
 
+def test_source_files_are_labelled_unambiguously(tmp_path: Path, synthetic_aggregate: Path):
+    """A bare basename is ambiguous provenance — the same filename occurs
+    under several roots. Sources inside the repo must be labelled
+    repo-relative; sources outside it fall back to a basename but must never
+    be an absolute path."""
+    output_root = tmp_path / "evidence"
+    assert _generate(synthetic_aggregate, output_root).returncode == 0
+
+    manifest = json.loads((output_root / "report_evidence_manifest.json").read_text(encoding="utf-8"))
+    for item in manifest["items"]:
+        for label in item["source_files"]:
+            assert not label.startswith("/"), f"absolute source label: {label}"
+            assert not label.startswith("~"), f"home-relative source label: {label}"
+        assert set(item["source_files"]) == set(item["source_file_sha256"]), (
+            f"{item['filename']}: source_files and source_file_sha256 disagree"
+        )
+
+
 def test_generated_pack_contains_no_absolute_path(tmp_path: Path, synthetic_aggregate: Path):
     from face_verification.privacy import default_forbidden_path_substrings, find_path_leaks
 

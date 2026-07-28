@@ -662,6 +662,21 @@ def run_command(argv: List[str]) -> Tuple[int, str]:
 # --------------------------------------------------------------------------
 
 
+def source_label(source: Path) -> str:
+    """Repo-relative label for a source artefact, never an absolute path.
+
+    ``source`` is resolved first: --results-root is normally passed as a
+    relative path, and a relative path is never ``is_relative_to`` an
+    absolute REPO_ROOT, so skipping the resolve silently degraded every
+    label to a bare filename — ambiguous provenance, since the same
+    basename can occur under several roots.
+    """
+    resolved = Path(source).resolve()
+    if resolved.is_relative_to(REPO_ROOT):
+        return str(resolved.relative_to(REPO_ROOT))
+    return resolved.name
+
+
 def build_manifest_entry(
     *, path: Path, kind: str, title: str, sources: List[Path], commit: str,
     section: str, caption: str, output_root: Path,
@@ -671,11 +686,9 @@ def build_manifest_entry(
         "type": kind,
         "title": title,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "source_files": [str(source.relative_to(REPO_ROOT)) if source.is_relative_to(REPO_ROOT) else source.name
-                         for source in sources],
+        "source_files": [source_label(source) for source in sources],
         "source_file_sha256": {
-            (str(source.relative_to(REPO_ROOT)) if source.is_relative_to(REPO_ROOT) else source.name): sha256_of(source)
-            for source in sources if source.is_file()
+            source_label(source): sha256_of(source) for source in sources if source.is_file()
         },
         "git_commit": commit,
         "contains_real_face_image": False,
@@ -794,7 +807,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         ))
         index_rows.append({
             "id": filename.split("_")[1], "filename": f"figures/{filename}", "title": title,
-            "source": ", ".join(s.name for s in sources), "section": section,
+            "source": ", ".join(source_label(s) for s in sources), "section": section,
             "caption": caption, "kind": "figure",
         })
 
