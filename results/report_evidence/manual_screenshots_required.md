@@ -8,11 +8,11 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Title.** GitHub Actions CI run passing for the final commit
 
-**Where to capture.** GitHub → the repository → Actions → the CI workflow run for the final commit
+**Where to capture.** GitHub → AdvancedComputingProject → Actions → CI → the run for the final `main` commit
 
-**Must be visible.** The workflow name, a green success tick, the commit SHA, and every job step listed.
+**Must be visible.** The repository name; the workflow name (CI); a green success status; the final commit SHA; and the completed `test` job with its steps expanded.
 
-**Must be redacted.** Your GitHub username/avatar if you prefer, and any other private repository in the sidebar.
+**Must be redacted.** Unrelated account information; any other repository in the sidebar; private email addresses.
 
 **Report section.** Appendix B — Reproducibility evidence
 
@@ -22,11 +22,11 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Title.** Repository main page at the final commit
 
-**Where to capture.** GitHub → the repository main page
+**Where to capture.** GitHub → AdvancedComputingProject → the repository main page, on branch `main`
 
-**Must be visible.** Repository name, the final commit message and SHA, and the top-level file listing.
+**Must be visible.** That the branch is `main`; the final commit message and short SHA; and the file listing including `scripts/generate_report_evidence.py`.
 
-**Must be redacted.** Nothing specific, provided no private repository is visible in the sidebar.
+**Must be redacted.** Unrelated repositories in the sidebar; private email addresses.
 
 **Report section.** Appendix B — Reproducibility evidence
 
@@ -36,11 +36,11 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Title.** Local human-review interface
 
-**Where to capture.** A terminal running the Streamlit command in README.md, then the browser at 127.0.0.1
+**Where to capture.** A terminal running `streamlit run local_review/app.py --server.address=127.0.0.1 -- --db results/raw/review.sqlite`, then the browser at 127.0.0.1
 
 **Must be visible.** The review UI showing opaque case identifiers and the reviewer decision controls.
 
-**Must be redacted.** Nothing — the interface shows only opaque identifiers by design. Confirm no real name or face image is on screen before capturing.
+**Must be redacted.** Nothing should need redacting — the interface shows only opaque identifiers by design. Confirm before capturing that no real face image, no real name and no private path is on screen; if any is, stop and report it as a defect rather than cropping it out.
 
 **Report section.** Chapter 5 — Human-review decision policy
 
@@ -50,11 +50,11 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Title.** Institutional storage location
 
-**Where to capture.** The Arden University OneDrive research folder, with folder properties/details visible
+**Where to capture.** The Arden University OneDrive research folder — **only after the migration is actually done**; it is still outstanding (see docs/USER_ACTIONS_REQUIRED.md)
 
-**Must be visible.** The folder name, that it is the institutional (not personal) account, and the item count.
+**Must be visible.** The university-controlled OneDrive identity/location; the project folder; and the high-level folder structure (datasets/, protocols/, models/).
 
-**Must be redacted.** Every unrelated personal file and folder name; the full account email if you prefer.
+**Must be redacted.** Face-image thumbnails; participant or identity names; unrelated university or personal files; absolute local paths containing your account name. Switch the file browser out of any thumbnail/preview mode before capturing.
 
 **Report section.** Appendix C — Data governance evidence
 
@@ -64,11 +64,11 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Title.** Ethics approval record
 
-**Where to capture.** The university ethics approval page or approval document — only if disclosure is permitted
+**Where to capture.** The university ethics approval page or approval document — **only if your institution permits reproducing it** in a dissertation appendix
 
-**Must be visible.** The approval reference number, the project title, and the approval date.
+**Must be visible.** The institution; the approval status; the project title or reference; and the approval date/reference number.
 
-**Must be redacted.** Reviewer names, signatures, and any personal contact details.
+**Must be redacted.** Reviewer names and signatures; personal contact details; any personal data not needed to evidence the approval itself.
 
 **Report section.** Appendix C — Data governance evidence
 
