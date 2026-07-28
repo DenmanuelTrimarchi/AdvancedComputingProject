@@ -158,16 +158,34 @@ invalid. It also refuses to finish if any generated public output ends up
 containing a personal/absolute filesystem path (see
 `face_verification.privacy.find_path_leaks`).
 
-### Optional: report-ready figures
+### Optional: report evidence pack (figures + validation evidence)
 
 ```bash
 python -m pip install -e '.[dev,review,report]'   # adds matplotlib
-python scripts/generate_report_figures.py \
-    --results-root results/aggregate --output-root results/figures
+
+# Figures only, from the already-generated aggregate results:
+python scripts/generate_report_evidence.py \
+    --results-root results/aggregate --output-root results/report_evidence
+
+# Additionally run the read-only verification commands and render their
+# redacted output as evidence images:
+python scripts/generate_report_evidence.py \
+    --results-root results/aggregate --output-root results/report_evidence \
+    --run-validation \
+    --model-root "$FACE_MODEL_ROOT" \
+    --lfw-dataset-root "$FACE_DATA_ROOT/lfw_funneled" \
+    --cplfw-dataset-root "$FACE_CPLFW_RAW_ROOT" \
+    --protocol-root "$FACE_PROTOCOL_ROOT"
 ```
 
-Generates seven PNG charts derived only from the committed `results/aggregate/*`
-files (never from raw images or identities) — see `results/figures/README.md`.
+Generates nine PNG figures, ten rendered command-evidence images, an
+evidence index and a SHA-256 manifest — all derived only from the committed
+`results/aggregate/*` files, never from a raw image or an identity. Every
+rendered path is a redacted placeholder, and the generator fails rather than
+emit a pack containing a private absolute path. Five further screenshots
+(GitHub Actions, Streamlit, institutional storage, ethics record) cannot be
+produced locally and are **not** fabricated — see
+`results/report_evidence/manual_screenshots_required.md`.
 
 ### Optional: local review demonstration
 

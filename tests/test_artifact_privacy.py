@@ -109,8 +109,20 @@ def test_find_path_leaks_is_clean_for_relative_paths_only(tmp_path: Path):
     assert findings == []
 
 
+def test_find_path_leaks_scans_text_logs(tmp_path: Path):
+    # Evidence logs are written as .txt, so they are in scope: a redaction
+    # miss in a log must fail the scan rather than pass silently.
+    (tmp_path / "environment_check.txt").write_text("/Users/researcher/secure", encoding="utf-8")
+
+    findings = find_path_leaks(tmp_path, forbidden_substrings=["/Users/"])
+    assert len(findings) == 1
+    assert "environment_check.txt" in findings[0]
+
+
 def test_find_path_leaks_ignores_non_result_file_types(tmp_path: Path):
-    (tmp_path / "notes.txt").write_text("/Users/researcher/secure", encoding="utf-8")
+    # Source files and binaries are not published artifacts and are out of scope.
+    (tmp_path / "helper.py").write_text('ROOT = "/Users/researcher/secure"', encoding="utf-8")
+    (tmp_path / "notes.rst").write_text("/Users/researcher/secure", encoding="utf-8")
 
     findings = find_path_leaks(tmp_path, forbidden_substrings=["/Users/"])
     assert findings == []

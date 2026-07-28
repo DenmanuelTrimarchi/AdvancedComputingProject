@@ -19,9 +19,16 @@ real image path in it — most importantly the gallery manifest produced by
 `scripts/create_gallery_manifest.py` — belongs there, never under
 `results/aggregate/`.
 
-`results/figures/` holds report-ready PNG charts generated from
-`results/aggregate/*` by `scripts/generate_report_figures.py` — see
-`results/figures/README.md`. Also committed; also aggregate-only.
+`results/report_evidence/` holds the report evidence pack — nine figures, ten
+rendered command-evidence images, an index and a SHA-256 manifest — generated
+from `results/aggregate/*` by `scripts/generate_report_evidence.py`. Committed,
+and aggregate-only: no raw image, embedding, identity or absolute path. Its
+`logs/` subdirectory is git-ignored (it is the raw local record behind the
+rendered images).
+
+`results/historical/` holds superseded results, kept only so a reader can see
+what changed and why — never a current finding. See
+`results/historical/README.md`.
 
 Files produced by a full run of `scripts/run_complete_experiment.py` (the
 last five are generated automatically from the first five, not hand-written):

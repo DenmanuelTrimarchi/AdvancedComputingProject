@@ -1,11 +1,20 @@
 # Ethics and biometrics
 
-Status: **approval gate confirmed open by the researcher on 27 July 2026 —
-real-face processing (LFW, CPLFW) authorised for this evaluation.** The
-ten-item checklist below was confirmed by the researcher at that time;
-specific institutional references (DPIA document ID, ethics approval
-number, named data controller) should still be filled in below for the
-dissertation's methods/appendix section.
+Status: **real benchmark processing was performed following the
+researcher's confirmation, on 27 July 2026, that the project's approval
+gate was open.** Institution-specific references (named data controller,
+ethics approval number, DPIA document ID, lawful basis, Article 9
+condition, retention period, incident contact) remain to be verified and
+entered from the final Arden approval record before submission — they are
+tracked in `docs/USER_ACTIONS_REQUIRED.md` and marked below as outstanding.
+
+To be precise about what that means, because the distinction matters for
+the methods chapter: the researcher's gate confirmation is what real
+processing proceeded on. It is **not** the same as this document already
+holding every institutional reference — it does not, and no reference
+below should be read as recorded until it is actually filled in. Nothing
+in this repository should be read as asserting that the outstanding items
+are complete.
 
 | Item | Status |
 |---|---|
@@ -50,9 +59,19 @@ dissertation's methods/appendix section.
   10. an incident/withdrawal procedure exists for this project (who to
       contact, and what happens to already-processed data, if a problem is
       found).
-- **Until all ten conditions above are satisfied, only deterministic
-  synthetic vectors and opaque fake identities may be used.** The automated
-  test suite under `tests/` does exactly this and nothing more.
+- **Anyone re-running this repository who has not obtained their own
+  equivalent institutional confirmation must use only deterministic
+  synthetic vectors and opaque fake identities.** The automated test suite
+  under `tests/` does exactly this and nothing more, which is why CI can run
+  the full suite with no dataset or model file present.
+- For *this* project's own run, the researcher confirmed on 27 July 2026
+  that the gate was open, and real processing proceeded on that basis. This
+  document cannot independently verify items 1–4 and 8–10 above, because
+  their institutional reference values have not yet been recorded here —
+  that transcription is the outstanding action tracked in
+  `docs/USER_ACTIONS_REQUIRED.md`. The gap is one of *evidence recorded in
+  this repository*, and it must be closed before submission rather than
+  papered over.
 
 ## No participants, no new collection
 

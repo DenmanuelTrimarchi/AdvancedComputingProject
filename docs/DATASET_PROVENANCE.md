@@ -19,7 +19,7 @@ cannot supply on its own — see `docs/ETHICS_AND_BIOMETRICS.md` and
 | Protocol files | `pairsDevTrain.txt`, `pairsDevTest.txt`, `pairs.txt` |
 | Protocol file MD5s | `pairsDevTrain.txt` = `4f27cbf15b2da4a85c1907eb4181ad21`; `pairsDevTest.txt` = `5132f7440eb68cf58910c8a45a2ac10b`; `pairs.txt` = `9f1ba174e4e1c508ff7cdf10ac338a7d` — all match the official/Torchvision-documented values |
 | Download date | 27 July 2026 (file timestamps on receipt; original download date by the researcher TBC) |
-| Downloaded by | researcher (name TBC) |
+| Downloaded by | Domingo Enmanuel Trimarchi (researcher) |
 | Terms reviewed | LFW's stated research-only terms — TBC formal confirmation |
 | Ethics/approval reference | TBC — see `docs/ETHICS_AND_BIOMETRICS.md` |
 | Local storage location | private, access-controlled local research storage, outside this repository and outside any personal cloud service — **not yet confirmed to be the Arden University OneDrive location this project's data-management policy requires; see `docs/USER_ACTIONS_REQUIRED.md`** |
@@ -42,7 +42,7 @@ consistently (do not mix original/funneled/deep-funneled images in one run).
 | Raw extraction result | `images.rar` extracted successfully with `unar` 1.10.8 into a nested `correct_points/` directory (images alongside per-image landmark `.txt` files), then flattened with `scripts/prepare_cplfw_raw_images.py`: 11,652 image files, 0 filename collisions |
 | Protocol verification (raw) | `scripts/verify_cplfw_dataset.py` against the flattened raw directory: **6,000 / 6,000 pairs parsed (3,000 matched, 3,000 mismatched), every referenced image resolved, no malformed rows** |
 | Download date | 27 July 2026 (file timestamps on receipt; original download date by the researcher TBC) |
-| Downloaded by | researcher (name TBC) |
+| Downloaded by | Domingo Enmanuel Trimarchi (researcher) |
 | Terms reviewed | TBC formal confirmation |
 | Ethics/approval reference | TBC — see `docs/ETHICS_AND_BIOMETRICS.md` |
 | Local storage location | private, access-controlled local research storage, outside this repository and outside any personal cloud service — **not yet confirmed to be the Arden University OneDrive location this project's data-management policy requires; see `docs/USER_ACTIONS_REQUIRED.md`** |

@@ -15,6 +15,10 @@ cache/
 *.db
 results/raw/
 results/pair_scores/
+# Raw local command logs behind the rendered evidence images. Redacted at
+# write time, but kept out of Git by default -- the committed evidence is the
+# PNG pack, the index and the manifest.
+results/report_evidence/logs/
 __pycache__/
 .pytest_cache/
 .coverage
@@ -30,5 +34,6 @@ dist/
 
 # Allow disclosure-reviewed aggregate results
 !results/aggregate/
-!results/figures/
+!results/historical/
+!results/report_evidence/
 !results/README.md

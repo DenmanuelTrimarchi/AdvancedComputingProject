@@ -43,4 +43,13 @@ jobs:
           fi
 
       - name: Confirm committed results contain no personal/absolute path
-        run: python scripts/check_public_results_privacy.py --results-root results/aggregate
+        run: |
+          python scripts/check_public_results_privacy.py --results-root results/aggregate
+          python scripts/check_public_results_privacy.py --results-root results/report_evidence
+          python scripts/check_public_results_privacy.py --results-root results/historical
+
+      - name: Confirm the report evidence pack regenerates from committed results
+        run: |
+          python scripts/generate_report_evidence.py \
+            --results-root results/aggregate \
+            --output-root "${RUNNER_TEMP}/report_evidence_check"
