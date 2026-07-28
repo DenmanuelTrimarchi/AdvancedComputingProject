@@ -31,7 +31,7 @@ pytest                             # synthetic-fixture test suite; no dataset ne
 python scripts/check_environment.py
 python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"
 python scripts/verify_lfw_dataset.py --dataset-root "$FACE_DATA_ROOT/lfw_funneled" --protocol-root "$FACE_PROTOCOL_ROOT"
-python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_CPLFW_RAW_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT"
+python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_CPLFW_RAW_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw
 
 python scripts/run_complete_experiment.py \
     --dataset-root "$FACE_DATA_ROOT" \
@@ -41,14 +41,14 @@ python scripts/run_complete_experiment.py \
     --cplfw-image-variant raw \
     --output-root results/aggregate
 
-python scripts/generate_report_figures.py \
+python scripts/generate_report_evidence.py \
     --results-root results/aggregate \
-    --output-root results/figures
+    --output-root results/report_evidence
 ```
 
 `$FACE_CPLFW_RAW_ROOT` is a flat directory of the CPLFW authors' raw,
 unconstrained images (extracted from `images.rar`, then flattened with
-`scripts/prepare_cplfw_raw_images.py` — CPLFW's own extraction nests every
+`scripts/prepare_cplfw_raw_dataset.py` — CPLFW's own extraction nests every
 image one level down alongside per-image landmark files). It is deliberately
 a separate path from `$FACE_DATA_ROOT/cplfw`, which — if populated at
 all — would hold the separately pre-cropped/aligned `cp-aligned.zip` copy

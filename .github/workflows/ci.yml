@@ -44,12 +44,50 @@ jobs:
 
       - name: Confirm committed results contain no personal/absolute path
         run: |
-          python scripts/check_public_results_privacy.py --results-root results/aggregate
-          python scripts/check_public_results_privacy.py --results-root results/report_evidence
-          python scripts/check_public_results_privacy.py --results-root results/historical
+          python scripts/check_public_outputs.py \
+            --paths results/aggregate results/report_evidence results/historical
 
       - name: Confirm the report evidence pack regenerates from committed results
         run: |
           python scripts/generate_report_evidence.py \
             --results-root results/aggregate \
             --output-root "${RUNNER_TEMP}/report_evidence_check"
+
+      - name: Validate the committed evidence manifest
+        run: |
+          python - <<'PY'
+          import json, hashlib, sys
+          from pathlib import Path
+
+          root = Path("results/report_evidence")
+          manifest = json.loads((root / "report_evidence_manifest.json").read_text())
+          index = (root / "REPORT_EVIDENCE_INDEX.md").read_text()
+
+          problems = []
+          for item in manifest["items"]:
+              name = item["filename"]
+              if name not in index:
+                  problems.append(f"{name}: in manifest but not in the evidence index")
+              if item["type"] == "manual_screenshot":
+                  # Must stay declared-pending, never fabricated.
+                  if item["sha256"] is not None or (root / name).exists():
+                      problems.append(f"{name}: manual screenshot must not be fabricated")
+                  continue
+              path = root / name
+              if not path.is_file():
+                  problems.append(f"{name}: recorded in the manifest but missing on disk")
+                  continue
+              actual = hashlib.sha256(path.read_bytes()).hexdigest()
+              if actual != item["sha256"]:
+                  problems.append(f"{name}: sha256 mismatch (committed artifact differs from its manifest entry)")
+              for flag in ("contains_real_face_image", "contains_identity_information", "contains_absolute_path"):
+                  if item[flag] is not False:
+                      problems.append(f"{name}: {flag} must be false")
+
+          if problems:
+              print("::error::evidence manifest validation failed")
+              for problem in problems:
+                  print(f"  {problem}")
+              sys.exit(1)
+          print(f"OK   {len(manifest['items'])} manifest entries validated against disk and the index")
+          PY

@@ -39,7 +39,7 @@ consistently (do not mix original/funneled/deep-funneled images in one run).
 | Raw image archive (**used for the reported result**) | `images.rar`, SHA-256 `7baca61dda21341eaa642f229eedfbba1d0aaa2d22447d79e158920106831165` — the authors' raw, unconstrained images, 250×250 px |
 | Aligned image archive (superseded, see note below) | `cp-aligned.zip`, SHA-256 `420adcc13f1ab9510d8f99af04dbfb1695645ff73942c2a1010c5c01fd8367e2` — a separately pre-cropped/aligned copy, 224×224 px |
 | Protocol file | `pairs_CPLFW.txt` (the authors' updated list; SHA-256 `f1da25fbbfa5ab076734a92293efe6df4be61f38513c4c56f5848b39b60658e6`; format confirmed directly against the real file — see `src/face_verification/protocols.py`) |
-| Raw extraction result | `images.rar` extracted successfully with `unar` 1.10.8 into a nested `correct_points/` directory (images alongside per-image landmark `.txt` files), then flattened with `scripts/prepare_cplfw_raw_images.py`: 11,652 image files, 0 filename collisions |
+| Raw extraction result | `images.rar` extracted successfully with `unar` 1.10.8 into a nested `correct_points/` directory (images alongside per-image landmark `.txt` files), then flattened with `scripts/prepare_cplfw_raw_dataset.py`: 11,652 image files, 0 filename collisions |
 | Protocol verification (raw) | `scripts/verify_cplfw_dataset.py` against the flattened raw directory: **6,000 / 6,000 pairs parsed (3,000 matched, 3,000 mismatched), every referenced image resolved, no malformed rows** |
 | Download date | 27 July 2026 (file timestamps on receipt; original download date by the researcher TBC) |
 | Downloaded by | Domingo Enmanuel Trimarchi (researcher) |

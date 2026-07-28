@@ -88,7 +88,7 @@ python3.11 -m venv .venv   # or the closest available 3.11/3.12/3.13
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e '.[dev,review,report]'   # 'review' pulls in Streamlit for local_review/app.py;
-                                                   # 'report' pulls in matplotlib for generate_report_figures.py;
+                                                   # 'report' pulls in matplotlib for generate_report_evidence.py;
                                                    # omit either extra if you only need the core pipeline and tests
 pytest                      # synthetic-fixture test suite — no dataset needed
 ```
@@ -104,7 +104,7 @@ Arden University OneDrive research folder — see `docs/DATA_MANAGEMENT.md`.
 python scripts/check_environment.py
 python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"
 python scripts/verify_lfw_dataset.py   --dataset-root "$FACE_DATA_ROOT/lfw_funneled" --protocol-root "$FACE_PROTOCOL_ROOT"
-python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_CPLFW_RAW_ROOT"          --protocol-root "$FACE_PROTOCOL_ROOT"
+python scripts/verify_cplfw_dataset.py --dataset-root "$FACE_CPLFW_RAW_ROOT"          --protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw
 
 # Experiment 1 — calibration (pairsDevTrain.txt only)
 python scripts/calibrate_lfw.py \
@@ -126,7 +126,7 @@ python scripts/evaluate_lfw.py --split final \
 # Experiment 4 — CPLFW cross-pose generalisation (same frozen threshold)
 # $FACE_CPLFW_RAW_ROOT is a flat directory of the authors' raw images,
 # produced by extracting images.rar and then flattening it with
-# scripts/prepare_cplfw_raw_images.py (see docs/DATASET_PROVENANCE.md).
+# scripts/prepare_cplfw_raw_dataset.py (see docs/DATASET_PROVENANCE.md).
 python scripts/evaluate_cplfw.py \
     --dataset-root "$FACE_CPLFW_RAW_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT" \
     --model-root "$FACE_MODEL_ROOT" --image-variant raw \

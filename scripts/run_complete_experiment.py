@@ -294,6 +294,7 @@ def main(argv=None) -> int:
     _run([
         str(SCRIPTS_DIR / "verify_cplfw_dataset.py"),
         "--dataset-root", str(cplfw_root), "--protocol-root", str(args.protocol_root),
+        "--image-variant", args.cplfw_image_variant,
     ])
 
     _run([

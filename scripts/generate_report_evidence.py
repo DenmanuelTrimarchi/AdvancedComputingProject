@@ -842,9 +842,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             spec("04", "screenshot_04_cplfw_raw_dataset_verification.png",
                  "Raw CPLFW dataset and protocol verification",
                  'python scripts/verify_cplfw_dataset.py --dataset-root "$CPLFW_RAW_ROOT" '
-                 '--protocol-root "$FACE_PROTOCOL_ROOT"',
+                 '--protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw',
                  [sys.executable, str(SCRIPTS_DIR / "verify_cplfw_dataset.py"),
-                  "--dataset-root", args.cplfw_dataset_root, "--protocol-root", args.protocol_root],
+                  "--dataset-root", args.cplfw_dataset_root, "--protocol-root", args.protocol_root,
+                  "--image-variant", "raw"],
                  "cplfw_raw_dataset_verification.txt", "Appendix B — Reproducibility evidence",
                  "All 6,000 raw CPLFW pairs (3,000 matched, 3,000 mismatched) resolved against the "
                  "authors' images.rar image set.")
@@ -862,9 +863,9 @@ def main(argv: Optional[List[str]] = None) -> int:
              "The synthetic-fixture test suite, which runs with no dataset or model file present.")
 
         spec("06", "screenshot_06_privacy_scan.png", "Public-output privacy scan",
-             "python scripts/check_public_results_privacy.py --results-root results/aggregate",
-             [sys.executable, str(SCRIPTS_DIR / "check_public_results_privacy.py"),
-              "--results-root", str(results_root)], "privacy_scan.txt",
+             "python scripts/check_public_outputs.py --paths results/aggregate results/report_evidence",
+             [sys.executable, str(SCRIPTS_DIR / "check_public_outputs.py"),
+              "--paths", str(results_root), str(output_root)], "privacy_scan.txt",
              "Appendix C — Data governance evidence",
              "Committed aggregate outputs confirmed free of personal or absolute filesystem paths.")
 

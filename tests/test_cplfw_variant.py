@@ -7,6 +7,7 @@ result's variant explicit and non-omittable — see
 
 from __future__ import annotations
 
+import ast
 import subprocess
 import sys
 from pathlib import Path
@@ -78,3 +79,65 @@ def test_cli_requires_image_variant():
     )
     assert completed.returncode != 0
     assert "--image-variant" in completed.stderr
+
+
+def test_cplfw_evaluation_performs_no_separate_calibration():
+    """CPLFW must consume a frozen threshold and never produce one. If this
+    script ever imported the calibration entry points, a CPLFW-specific
+    threshold could be fitted on the very data being reported.
+
+    Checked against the parsed AST rather than the raw text, so that prose
+    like "no separate CPLFW calibration step" in the module docstring does
+    not read as a violation.
+    """
+    tree = ast.parse(SCRIPT.read_text(encoding="utf-8"))
+
+    imported: set[str] = set()
+    called: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            imported.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.Import):
+            imported.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.Call):
+            target = node.func
+            if isinstance(target, ast.Name):
+                called.add(target.id)
+            elif isinstance(target, ast.Attribute):
+                called.add(target.attr)
+
+    assert "require_frozen_threshold" in imported, "CPLFW must demand an already-frozen threshold"
+    assert "require_frozen_threshold" in called, "CPLFW must actually enforce the frozen threshold"
+
+    for forbidden in ("calibrate", "select_final_threshold", "require_candidates"):
+        assert forbidden not in imported, (
+            f"scripts/evaluate_cplfw.py imports {forbidden!r} — CPLFW must never "
+            f"calibrate or re-select a threshold."
+        )
+        assert forbidden not in called, (
+            f"scripts/evaluate_cplfw.py calls {forbidden!r} — CPLFW must never "
+            f"calibrate or re-select a threshold."
+        )
+
+
+def test_verifier_requires_and_echoes_the_image_variant():
+    """A verification result that does not say which image set it checked is
+    not evidence of anything."""
+    verifier = SCRIPT.parent / "verify_cplfw_dataset.py"
+
+    missing = subprocess.run(
+        [sys.executable, str(verifier), "--dataset-root", "unused", "--protocol-root", "unused"],
+        capture_output=True, text=True,
+    )
+    assert missing.returncode != 0
+    assert "--image-variant" in missing.stderr
+
+    bad = subprocess.run(
+        [sys.executable, str(verifier), "--dataset-root", "unused",
+         "--protocol-root", "unused", "--image-variant", "112x112-cropped"],
+        capture_output=True, text=True,
+    )
+    assert bad.returncode != 0
+    assert "invalid choice" in bad.stderr
+
+    assert "dataset_image_variant" in verifier.read_text(encoding="utf-8")
