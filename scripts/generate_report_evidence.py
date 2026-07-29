@@ -1040,13 +1040,17 @@ def main(argv: Optional[List[str]] = None) -> int:
          "The localhost-only review interface. Every case is identified by an opaque one-way hash; a "
          "similarity result opens a review case and never an automatic sanction."),
         ("manual_04_au_onedrive_storage_evidence.png", "Institutional storage location",
-         "The Arden University OneDrive research folder — **only after the migration is actually "
-         "done**; it is still outstanding (see docs/USER_ACTIONS_REQUIRED.md)",
-         "The university-controlled OneDrive identity/location; the project folder; and the "
+         "The Arden University OneDrive research folder, navigated to the project's own "
+         "subfolder (not the OneDrive account root) — the migration is complete and verified, "
+         "see docs/USER_ACTIONS_REQUIRED.md for the checksum/file-count record",
+         "The university-controlled OneDrive identity/location; the project subfolder; and the "
          "high-level folder structure (datasets/, protocols/, models/).",
          "Face-image thumbnails; participant or identity names; unrelated university or personal "
-         "files; absolute local paths containing your account name. Switch the file browser out of "
-         "any thumbnail/preview mode before capturing.",
+         "files; absolute local paths containing your account name. Navigate *into* the project "
+         "subfolder before capturing rather than screenshotting the OneDrive account root — an "
+         "institutional OneDrive root commonly also holds unrelated personal documents (coursework, "
+         "assignments, or similar) that must never appear in a committed screenshot. Switch the file "
+         "browser out of any thumbnail/preview mode first.",
          "Appendix C — Data governance evidence",
          "Benchmark images, protocols and models held in access-controlled institutional storage, "
          "outside the repository and outside any personal cloud service."),

@@ -50,11 +50,11 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Title.** Institutional storage location
 
-**Where to capture.** The Arden University OneDrive research folder — **only after the migration is actually done**; it is still outstanding (see docs/USER_ACTIONS_REQUIRED.md)
+**Where to capture.** The Arden University OneDrive research folder, navigated to the project's own subfolder (not the OneDrive account root) — the migration is complete and verified, see docs/USER_ACTIONS_REQUIRED.md for the checksum/file-count record
 
-**Must be visible.** The university-controlled OneDrive identity/location; the project folder; and the high-level folder structure (datasets/, protocols/, models/).
+**Must be visible.** The university-controlled OneDrive identity/location; the project subfolder; and the high-level folder structure (datasets/, protocols/, models/).
 
-**Must be redacted.** Face-image thumbnails; participant or identity names; unrelated university or personal files; absolute local paths containing your account name. Switch the file browser out of any thumbnail/preview mode before capturing.
+**Must be redacted.** Face-image thumbnails; participant or identity names; unrelated university or personal files; absolute local paths containing your account name. Navigate *into* the project subfolder before capturing rather than screenshotting the OneDrive account root — an institutional OneDrive root commonly also holds unrelated personal documents (coursework, assignments, or similar) that must never appear in a committed screenshot. Switch the file browser out of any thumbnail/preview mode first.
 
 **Report section.** Appendix C — Data governance evidence
 

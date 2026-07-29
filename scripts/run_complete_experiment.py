@@ -237,7 +237,7 @@ def _write_aggregate_reports(
         output_root / "run_manifest.json",
         {
             "artifact_type": "run_manifest",
-            "dataset_storage": "access-controlled private research storage; path omitted from public artifacts",
+            "dataset_storage": "access-controlled institutional research storage; path omitted from public artifacts",
             "dataset_root_variable": "FACE_DATA_ROOT",
             "protocol_root_variable": "FACE_PROTOCOL_ROOT",
             "model_root_variable": "FACE_MODEL_ROOT",

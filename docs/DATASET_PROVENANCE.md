@@ -4,10 +4,42 @@ Status: **acquired and checksum-verified for LFW; acquired and
 raw-protocol-verified for CPLFW (no official archive checksum is published
 by the authors to check against, so the SHA-256 values below are recorded
 for this project's own reproducibility only, not compared against an
-upstream-published value).** This document last verified 28 July 2026.
-Fields still marked `TBC` require an institutional reference this document
-cannot supply on its own — see `docs/ETHICS_AND_BIOMETRICS.md` and
+upstream-published value); migrated to institutional storage and re-verified
+there.** This document last verified 29 July 2026. Fields still marked
+`TBC` require an institutional reference this document cannot supply on
+its own — see `docs/ETHICS_AND_BIOMETRICS.md` and
 `docs/USER_ACTIONS_REQUIRED.md`.
+
+## Storage migration to Arden University OneDrive
+
+Completed 29 July 2026. The datasets, protocols, pinned models and the raw
+CPLFW image set were **copied** (originals retained, not deleted) from
+private local storage into the researcher's Arden University OneDrive
+account — an institutional Microsoft 365 tenant, confirmed by the macOS
+mount identity rather than assumed from a folder name.
+
+Verification performed before treating the migration as complete:
+
+- **File counts.** Every one of the four roots (LFW images, protocols,
+  models, raw CPLFW images) had an identical file count at the destination
+  as at the source: 24,902 files in total.
+- **Checksums.** A full `SHA-256` inventory was generated before and after
+  the copy for all 24,902 files and compared; every hash matched exactly.
+- **Structural verification.** `scripts/verify_models.py`,
+  `scripts/verify_lfw_dataset.py` and `scripts/verify_cplfw_dataset.py` all
+  passed against the OneDrive-backed paths (model hashes pinned; all LFW
+  protocol files parse; all 6,000 raw CPLFW pairs resolve).
+- **Full pipeline re-run.** `scripts/run_complete_experiment.py` was
+  re-run end to end from the OneDrive-backed paths. Every headline metric
+  reproduced exactly against the prior local-storage run: LFW final
+  accuracy 99.09%, raw CPLFW accuracy 90.24% on 3,515/6,000 scored pairs,
+  gallery duplicate detection rate 96.58%.
+
+Absolute OneDrive paths are intentionally omitted from this and every
+other committed document; the local, gitignored `.env` supplies them (see
+`.env.example` for the variable names) and
+`scripts/check_public_outputs.py` fails loudly if one ever leaks into a
+committed artefact.
 
 ## LFW (Labeled Faces in the Wild)
 
@@ -22,7 +54,7 @@ cannot supply on its own — see `docs/ETHICS_AND_BIOMETRICS.md` and
 | Downloaded by | Domingo Enmanuel Trimarchi (researcher) |
 | Terms reviewed | LFW's stated research-only terms — TBC formal confirmation |
 | Ethics/approval reference | TBC — see `docs/ETHICS_AND_BIOMETRICS.md` |
-| Local storage location | private, access-controlled local research storage, outside this repository and outside any personal cloud service — **not yet confirmed to be the Arden University OneDrive location this project's data-management policy requires; see `docs/USER_ACTIONS_REQUIRED.md`** |
+| Local storage location | the researcher's Arden University OneDrive research folder (institutional Microsoft 365 account) — migrated and checksum-verified 29 July 2026; see `docs/USER_ACTIONS_REQUIRED.md` for the verification record |
 | Planned deletion date | TBC — set per your institution's retention policy |
 
 If the official server is unavailable, a Kaggle mirror (`jessicali9530/lfw-dataset`)
@@ -45,7 +77,7 @@ consistently (do not mix original/funneled/deep-funneled images in one run).
 | Downloaded by | Domingo Enmanuel Trimarchi (researcher) |
 | Terms reviewed | TBC formal confirmation |
 | Ethics/approval reference | TBC — see `docs/ETHICS_AND_BIOMETRICS.md` |
-| Local storage location | private, access-controlled local research storage, outside this repository and outside any personal cloud service — **not yet confirmed to be the Arden University OneDrive location this project's data-management policy requires; see `docs/USER_ACTIONS_REQUIRED.md`** |
+| Local storage location | the researcher's Arden University OneDrive research folder (institutional Microsoft 365 account) — migrated and checksum-verified 29 July 2026; see `docs/USER_ACTIONS_REQUIRED.md` for the verification record |
 | Planned deletion date | TBC |
 
 **History.** An earlier evaluation reported in this repository used

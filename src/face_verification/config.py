@@ -93,7 +93,7 @@ def cplfw_provenance_fields(image_variant: str) -> dict:
         "dataset_image_source": image_source,
         "dataset_archive_filename": archive_filename,
         "dataset_archive_sha256": archive_sha256,
-        "dataset_root_description": "private research storage; path omitted",
+        "dataset_root_description": "access-controlled institutional research storage; path omitted",
     }
 
 
