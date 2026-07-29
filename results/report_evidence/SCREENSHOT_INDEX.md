@@ -29,7 +29,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Local macOS execution environment confirming the pinned Python and dependency contract used for the experiment.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 1cdf4ea5c63c56d9909d1e8ca4c33751d634fe82eb98e7d2dbe663103c7cf39c
+- **SHA-256.** 0cbfa103aa297176c25c727669e2f2f54e904b90b7f535964ffe2ae529052205
 
 ### 02 — screenshot_02_model_hash_verification.png
 
@@ -38,25 +38,25 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** YuNet and SFace ONNX files verified against the pinned SHA-256 values before inference.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 27fe2f1c82387ead8b0d376468dc1270e678e8a0e36712a3b01fe2d7e48cafbf
+- **SHA-256.** b1970a4b18ba9841fabf4bd73e6e01ff708be443d93b9942d5c7d83e9de00667
 
 ### 03 — screenshot_03_lfw_dataset_verification.png
 
 - **Title.** LFW dataset and protocol verification
-- **Purpose / source.** `python scripts/verify_lfw_dataset.py ...`
+- **Purpose / source.** `python scripts/verify_lfw_dataset.py --dataset-root "$FACE_DATA_ROOT/lfw_funneled" --protocol-root "$FACE_PROTOCOL_ROOT"`
 - **Suggested caption.** Verification that the LFW development and final pair protocols resolved against the configured institutional dataset.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 60f4156a4ebf51906984aa69863c46a0c35e90f4471ae9f1cf8370f090e5dcb8
+- **SHA-256.** e473bd9e463c86256010672d5d355c99bdb7acd4d847852cf830e25ba7d67b1a
 
 ### 04 — screenshot_04_cplfw_raw_dataset_verification.png
 
 - **Title.** Raw CPLFW dataset and protocol verification
-- **Purpose / source.** `python scripts/verify_cplfw_dataset.py ...`
+- **Purpose / source.** `python scripts/verify_cplfw_dataset.py --dataset-root "$CPLFW_RAW_ROOT" --protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw`
 - **Suggested caption.** Verification that all 6,000 raw CPLFW protocol pairs resolved against the authors-distributed image set.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 726e2c509e86c9b0c4276b93d240f3f4a1d9da4cb8135561565c2142b8d5904b
+- **SHA-256.** 4aea984b6cdc650cf0b92753d9a084592ce468e920925cd8951b1a6039809522
 
 ### 05 — screenshot_05_local_test_suite_passed.png
 
@@ -65,7 +65,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** The complete synthetic-fixture test suite executed locally on macOS without access to private benchmark images or model binaries.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 8bdc588bb3dca99ab0d474c12247831e4e5e4c5f5831da643f2cd9cccd0fb148
+- **SHA-256.** 07bd3ed52c93dbbbd2a8c2ef92e87ca67a6b104dbe172ab3f0de5e132e883db5
 
 ### 06 — screenshot_06_local_complete_run.png
 
@@ -74,7 +74,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Successful end-to-end local execution of the five-experiment pipeline using the institutional OneDrive-backed datasets, protocols and pinned models.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 2774bb033aa29c6ddec5283d58b564fca81e6963d18bd22446140c3270e655ee
+- **SHA-256.** b5348d80ce27ff2a85c0b8774f10ffcdf8a1d0fbaf6e08c214c38e892cd1bf58
 
 ### 07 — screenshot_07_threshold_freeze_evidence.png
 
@@ -83,7 +83,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Threshold provenance confirming that candidate selection occurred on the development protocol before final LFW and CPLFW evaluation.
 - **Report section.** Chapter 3 — Methodology, Threshold selection
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 07968256796b799acfa6b41807d4efa6b70a20acbd34ec60794643c2eeb63d5f
+- **SHA-256.** 62cbf73bd0a428fffc14a866865a028ad20f952263b0b832c7034343517b02ce
 
 ### 08 — screenshot_08_cplfw_raw_variant_evidence.png
 
@@ -92,7 +92,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Provenance record confirming that the reported CPLFW experiment used the raw, unconstrained image variant rather than the pre-aligned copy.
 - **Report section.** Chapter 3 — Methodology, Datasets
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** a4f62c85a4ed5915672e8aa195d0f8eff16992aa8a10dbd792a66aba416dde9e
+- **SHA-256.** 8f5ffa581c9110f6fa083686d58f0c4c173a1402d5ea7b1c55523685594eb2f7
 
 ### 09 — screenshot_09_generated_output_inventory.png
 
@@ -101,7 +101,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Inventory of the aggregate outputs generated by the complete local experiment.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 54d8543d38ef19edbd7c83ba4345c7964c0cb92a3e101495e6d4b9e51731f6ab
+- **SHA-256.** f57e662eaf105edfb756fa1747e3dad0495e92f3365dcf2f4b3f824b5d35f9a3
 
 ### 10 — screenshot_10_public_output_privacy_scan.png
 
@@ -110,7 +110,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Privacy validation confirming that public aggregate outputs contain no private path, identity information or biometric image.
 - **Report section.** Appendix C — Data governance evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** 551db04172c353f9deea25b0a31fb7efb027b0c40d897c4d310ef55617937b56
+- **SHA-256.** 19f9d81b1754c3afa0bc5533cbf9aaaeb6b8e38bf76041d0f58d732c780c9af2
 
 ### 11 — screenshot_11_local_git_state.png
 
@@ -119,7 +119,7 @@ All 15 screenshots, generated (01-11) and manual (12-15), in report order. GitHu
 - **Suggested caption.** Local source-control state used to generate the aggregate results and evidence pack.
 - **Report section.** Appendix B — Reproducibility evidence
 - **Privacy check.** Confirmed: contains_real_face_image, contains_identity_information and contains_absolute_path are all false in the manifest.
-- **SHA-256.** e965de977746b1af6e85ce4ad02e5f012e6c8f654c6e9a9575c96a763ff3f499
+- **SHA-256.** 406b50d9b8256f694285dfe3b5c04f255943f6b6adb97727d14a84c6ac90d25c
 
 ### 12 — screenshot_12_streamlit_human_review_interface.png
 

@@ -81,12 +81,15 @@ codebase. The evaluation pipeline itself (`src/face_verification/`) makes no
 network calls and performs all inference from local files; it never uploads
 anything on its own. This project's data-management policy mandates storage
 in an access-controlled Arden University OneDrive folder (see
-`docs/DATA_MANAGEMENT.md`) — that migration was completed and verified on
-29 July 2026 (see `docs/USER_ACTIONS_REQUIRED.md` for the file-count and
-checksum verification record), and the final reported experiment was
-re-run from the OneDrive-backed paths. Storage happens through OneDrive's
-own institutional sync client under the university's access controls, not
-through this codebase — this is always distinct from uploading to a
+`docs/DATA_MANAGEMENT.md`). That migration was completed and verified on
+29 July 2026, then **reverted the same day** after the OneDrive files
+proved operationally unreliable (dehydrated to cloud-only placeholders
+that could not be forced to re-download — see
+`docs/USER_ACTIONS_REQUIRED.md` for the full diagnostic record). Storage
+currently sits in a private, `.gitignore`-excluded subdirectory of the
+project's own working directory, which is not the ethics-form-mandated
+institutional location and is tracked as an outstanding action. It is,
+however, never tracked by Git, and remains distinct from uploading to a
 personal or unapproved cloud service, which remains prohibited.
 
 ## No investigation of real people

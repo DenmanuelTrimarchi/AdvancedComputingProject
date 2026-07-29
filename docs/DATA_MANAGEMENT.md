@@ -31,18 +31,24 @@ drive, or any personal (non-institutional) cloud service such as Dropbox
 or a personal Google Drive/iCloud account — the AU OneDrive research
 folder is the one and only approved location per the ethics form.
 
-**Current status (29 July 2026): migrated and verified.** The datasets,
-protocols, pinned models and the raw CPLFW image set have been copied into
-the researcher's Arden University OneDrive account and verified —
-identical file counts and SHA-256 checksums before and after the copy, and
-a passing re-run of `scripts/verify_models.py`, `scripts/verify_lfw_dataset.py`
-and `scripts/verify_cplfw_dataset.py` against the OneDrive-backed paths.
-The final benchmark evaluation was re-run from those paths; every headline
-metric reproduced exactly. See `docs/USER_ACTIONS_REQUIRED.md` for the full
-verification record and `docs/DATASET_PROVENANCE.md` for the migration
-date and method. Absolute OneDrive paths are intentionally omitted from
-this and every other committed document — see `.env.example` for the
-variable names the local, gitignored `.env` supplies.
+**Current status (29 July 2026): migrated, then reverted — outstanding
+again.** The datasets, protocols, pinned models and the raw CPLFW image set
+were copied into the researcher's Arden University OneDrive account and
+verified (identical file counts and SHA-256 checksums, and a passing
+re-run of `scripts/verify_models.py`, `scripts/verify_lfw_dataset.py` and
+`scripts/verify_cplfw_dataset.py` against the OneDrive-backed paths) — but
+the OneDrive files subsequently proved operationally unreliable
+(dehydrated to cloud-only placeholders that could not be forced to
+re-download; see `docs/USER_ACTIONS_REQUIRED.md` for the full diagnostic
+record). Storage was reverted to a private, `.gitignore`-excluded
+subdirectory of the project's own working directory (`datasets/`), which
+is never tracked by Git but is **not** the ethics-form-mandated
+institutional location described above. This gap is tracked as an
+outstanding action in `docs/USER_ACTIONS_REQUIRED.md`. See
+`docs/DATASET_PROVENANCE.md` for the full timeline. Absolute local
+filesystem paths are intentionally omitted from this and every other
+committed document — see `.env.example` for the variable names the local,
+gitignored `.env` supplies.
 
 ## What is committed vs. what is not
 
