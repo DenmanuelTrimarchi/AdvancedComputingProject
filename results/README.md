@@ -19,12 +19,15 @@ real image path in it — most importantly the gallery manifest produced by
 `scripts/create_gallery_manifest.py` — belongs there, never under
 `results/aggregate/`.
 
-`results/report_evidence/` holds the report evidence pack — nine figures, ten
-rendered command-evidence images, an index and a SHA-256 manifest — generated
-from `results/aggregate/*` by `scripts/generate_report_evidence.py`. Committed,
+`results/report_evidence/` holds the report evidence pack — nine figures,
+eleven rendered command-evidence images (screenshots 01-11), four further
+manual screenshots (12-15, never fabricated), `REPORT_EVIDENCE_INDEX.md`,
+`SCREENSHOT_INDEX.md` and a SHA-256 manifest — generated from
+`results/aggregate/*` by `scripts/generate_report_evidence.py`. Committed,
 and aggregate-only: no raw image, embedding, identity or absolute path. Its
 `logs/` subdirectory is git-ignored (it is the raw local record behind the
-rendered images).
+rendered images). GitHub Actions is not among the screenshots — validation
+is local (see `docs/REPRODUCIBILITY.md`).
 
 `results/historical/` holds superseded results, kept only so a reader can see
 what changed and why — never a current finding. See

@@ -1,3 +1,9 @@
+# ARCHIVED REFERENCE ONLY
+# This workflow is not active.
+# The canonical project validation is performed locally on the researcher's
+# macOS computer because the private datasets and pinned model files remain in
+# the approved institutional OneDrive location and are not available to GitHub.
+
 name: CI
 
 # Runs the synthetic-fixture unit test suite only. Real LFW/CPLFW datasets

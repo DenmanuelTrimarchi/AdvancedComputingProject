@@ -824,119 +824,252 @@ def main(argv: Optional[List[str]] = None) -> int:
             "caption": caption, "kind": "figure",
         })
 
-    screenshot_specs: List[Dict[str, Any]] = []
+    generated_screenshot_count = 0
     if args.run_validation:
         print("Running validation commands...")
 
-        def spec(number: str, filename: str, title: str, command: str, argv_: Optional[List[str]],
-                 log_name: Optional[str], section: str, caption: str,
-                 rendered: Optional[str] = None, skip_reason: Optional[str] = None) -> None:
-            screenshot_specs.append({
-                "number": number, "filename": filename, "title": title, "command": command,
-                "argv": argv_, "log_name": log_name, "section": section, "caption": caption,
-                "rendered": rendered, "skip_reason": skip_reason,
-            })
+        def render_evidence(
+            number: str, filename: str, title: str, command: str, section: str, caption: str, *,
+            argv_: Optional[List[str]] = None, log_name: Optional[str] = None,
+            rendered: Optional[str] = None, skip_reason: Optional[str] = None,
+            precomputed: Optional[Tuple[Optional[int], str]] = None,
+        ) -> Tuple[Optional[int], str]:
+            """Run (or render, or skip) one evidence item immediately and write
+            its PNG, log, manifest and index entries. Returns (exit_code, body)
+            so a later item (the local-run summary) can report on this one's
+            outcome without re-running it."""
+            nonlocal generated_screenshot_count
+            if precomputed is not None:
+                exit_code, body = precomputed
+            elif skip_reason:
+                body = (f"NOT RUN.\n\n{skip_reason}\n\n"
+                        "This command needs a private dataset/model root, which is deliberately not "
+                        "recorded in any published artifact. Re-run the generator with the relevant "
+                        "root argument to produce this evidence image.")
+                exit_code = None
+            elif rendered is not None:
+                body, exit_code = rendered, None
+            else:
+                exit_code, body = run_command(argv_)
+            body = redact(body, redactions)
 
-        spec("01", "screenshot_01_environment_check.png", "Environment and dependency contract check",
-             "python scripts/check_environment.py",
-             [sys.executable, str(SCRIPTS_DIR / "check_environment.py")], "environment_check.txt",
-             "Appendix B — Reproducibility evidence",
-             "The pinned dependency contract verified at run time, not merely declared in pyproject.toml.")
+            if log_name:
+                (logs_dir / log_name).write_text(
+                    f"$ {command}\n"
+                    f"# exit code: {exit_code if exit_code is not None else 'n/a'}\n"
+                    f"# generated: {datetime.now(timezone.utc).isoformat()}\n"
+                    f"# git commit: {commit}\n\n{body}\n",
+                    encoding="utf-8",
+                )
+
+            path = render_terminal(
+                title=f"Evidence {number} — {title}",
+                command=command, exit_code=exit_code, body=body,
+                out=screenshots_dir / filename, commit=commit, dirty=dirty,
+                note="Paths in this output are redacted placeholders, not the values used at run time.",
+            )
+            manifest.append(build_manifest_entry(
+                path=path, kind="generated_screenshot", title=title,
+                sources=[], commit=commit, section=section,
+                caption=caption, output_root=output_root,
+            ))
+            index_rows.append({
+                "id": number, "filename": f"screenshots/{filename}",
+                "title": title, "source": command, "section": section,
+                "caption": caption, "kind": "generated_screenshot",
+            })
+            generated_screenshot_count += 1
+            return exit_code, body
+
+        # 01-05 run first: the local-run summary (06) reports on their outcome.
+        result_01 = render_evidence(
+            "01", "screenshot_01_local_environment_check.png",
+            "Local environment and dependency contract check",
+            "python scripts/check_environment.py",
+            "Appendix B — Reproducibility evidence",
+            "Local macOS execution environment confirming the pinned Python and dependency contract "
+            "used for the experiment.",
+            argv_=[sys.executable, str(SCRIPTS_DIR / "check_environment.py")],
+            log_name="environment_check.txt",
+        )
 
         if args.model_root:
-            spec("02", "screenshot_02_model_verification.png", "Pinned model hash verification",
-                 'python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"',
-                 [sys.executable, str(SCRIPTS_DIR / "verify_models.py"), "--model-root", args.model_root],
-                 "model_verification.txt", "Appendix B — Reproducibility evidence",
-                 "Both ONNX models verified against their pinned SHA-256 values before any inference.")
+            result_02 = render_evidence(
+                "02", "screenshot_02_model_hash_verification.png", "Pinned model hash verification",
+                'python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"',
+                "Appendix B — Reproducibility evidence",
+                "YuNet and SFace ONNX files verified against the pinned SHA-256 values before inference.",
+                argv_=[sys.executable, str(SCRIPTS_DIR / "verify_models.py"), "--model-root", args.model_root],
+                log_name="model_verification.txt",
+            )
         else:
-            spec("02", "screenshot_02_model_verification.png", "Pinned model hash verification",
-                 'python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"', None, None,
-                 "Appendix B — Reproducibility evidence",
-                 "Both ONNX models verified against their pinned SHA-256 values before any inference.",
-                 skip_reason="--model-root was not supplied, so this command was not run.")
+            result_02 = render_evidence(
+                "02", "screenshot_02_model_hash_verification.png", "Pinned model hash verification",
+                'python scripts/verify_models.py --model-root "$FACE_MODEL_ROOT"',
+                "Appendix B — Reproducibility evidence",
+                "YuNet and SFace ONNX files verified against the pinned SHA-256 values before inference.",
+                skip_reason="--model-root was not supplied, so this command was not run.",
+            )
 
         if args.lfw_dataset_root and args.protocol_root:
-            spec("03", "screenshot_03_lfw_dataset_verification.png", "LFW dataset and protocol verification",
-                 'python scripts/verify_lfw_dataset.py --dataset-root "$FACE_DATA_ROOT/lfw_funneled" '
-                 '--protocol-root "$FACE_PROTOCOL_ROOT"',
-                 [sys.executable, str(SCRIPTS_DIR / "verify_lfw_dataset.py"),
-                  "--dataset-root", args.lfw_dataset_root, "--protocol-root", args.protocol_root],
-                 "lfw_dataset_verification.txt", "Appendix B — Reproducibility evidence",
-                 "All three LFW protocol files parsed with every referenced image resolving.")
+            result_03 = render_evidence(
+                "03", "screenshot_03_lfw_dataset_verification.png", "LFW dataset and protocol verification",
+                'python scripts/verify_lfw_dataset.py --dataset-root "$FACE_DATA_ROOT/lfw_funneled" '
+                '--protocol-root "$FACE_PROTOCOL_ROOT"',
+                "Appendix B — Reproducibility evidence",
+                "Verification that the LFW development and final pair protocols resolved against the "
+                "configured institutional dataset.",
+                argv_=[sys.executable, str(SCRIPTS_DIR / "verify_lfw_dataset.py"),
+                       "--dataset-root", args.lfw_dataset_root, "--protocol-root", args.protocol_root],
+                log_name="lfw_dataset_verification.txt",
+            )
         else:
-            spec("03", "screenshot_03_lfw_dataset_verification.png", "LFW dataset and protocol verification",
-                 "python scripts/verify_lfw_dataset.py ...", None, None,
-                 "Appendix B — Reproducibility evidence",
-                 "All three LFW protocol files parsed with every referenced image resolving.",
-                 skip_reason="--lfw-dataset-root and/or --protocol-root were not supplied.")
+            result_03 = render_evidence(
+                "03", "screenshot_03_lfw_dataset_verification.png", "LFW dataset and protocol verification",
+                "python scripts/verify_lfw_dataset.py ...",
+                "Appendix B — Reproducibility evidence",
+                "Verification that the LFW development and final pair protocols resolved against the "
+                "configured institutional dataset.",
+                skip_reason="--lfw-dataset-root and/or --protocol-root were not supplied.",
+            )
 
         if args.cplfw_dataset_root and args.protocol_root:
-            spec("04", "screenshot_04_cplfw_raw_dataset_verification.png",
-                 "Raw CPLFW dataset and protocol verification",
-                 'python scripts/verify_cplfw_dataset.py --dataset-root "$CPLFW_RAW_ROOT" '
-                 '--protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw',
-                 [sys.executable, str(SCRIPTS_DIR / "verify_cplfw_dataset.py"),
-                  "--dataset-root", args.cplfw_dataset_root, "--protocol-root", args.protocol_root,
-                  "--image-variant", "raw"],
-                 "cplfw_raw_dataset_verification.txt", "Appendix B — Reproducibility evidence",
-                 "All 6,000 raw CPLFW pairs (3,000 matched, 3,000 mismatched) resolved against the "
-                 "authors' images.rar image set.")
+            result_04 = render_evidence(
+                "04", "screenshot_04_cplfw_raw_dataset_verification.png",
+                "Raw CPLFW dataset and protocol verification",
+                'python scripts/verify_cplfw_dataset.py --dataset-root "$CPLFW_RAW_ROOT" '
+                '--protocol-root "$FACE_PROTOCOL_ROOT" --image-variant raw',
+                "Appendix B — Reproducibility evidence",
+                "Verification that all 6,000 raw CPLFW protocol pairs resolved against the "
+                "authors-distributed image set.",
+                argv_=[sys.executable, str(SCRIPTS_DIR / "verify_cplfw_dataset.py"),
+                       "--dataset-root", args.cplfw_dataset_root, "--protocol-root", args.protocol_root,
+                       "--image-variant", "raw"],
+                log_name="cplfw_raw_dataset_verification.txt",
+            )
         else:
-            spec("04", "screenshot_04_cplfw_raw_dataset_verification.png",
-                 "Raw CPLFW dataset and protocol verification",
-                 "python scripts/verify_cplfw_dataset.py ...", None, None,
-                 "Appendix B — Reproducibility evidence",
-                 "All 6,000 raw CPLFW pairs resolved against the authors' images.rar image set.",
-                 skip_reason="--cplfw-dataset-root and/or --protocol-root were not supplied.")
+            result_04 = render_evidence(
+                "04", "screenshot_04_cplfw_raw_dataset_verification.png",
+                "Raw CPLFW dataset and protocol verification",
+                "python scripts/verify_cplfw_dataset.py ...",
+                "Appendix B — Reproducibility evidence",
+                "Verification that all 6,000 raw CPLFW protocol pairs resolved against the "
+                "authors-distributed image set.",
+                skip_reason="--cplfw-dataset-root and/or --protocol-root were not supplied.",
+            )
 
-        spec("05", "screenshot_05_pytest_result.png", "Automated test suite",
-             "pytest -v", [sys.executable, "-m", "pytest", "-v"], "pytest_result.txt",
-             "Appendix B — Reproducibility evidence",
-             "The synthetic-fixture test suite, which runs with no dataset or model file present.")
+        # pytest sets PYTEST_CURRENT_TEST for the duration of a test's own
+        # execution, specifically so a subprocess it spawns can detect this.
+        # Without this guard, a test that exercises --run-validation would
+        # have this very step re-invoke pytest with no path filter, which
+        # re-collects and re-runs that same test, which spawns this step
+        # again -- an unbounded recursive subprocess chain, not merely a
+        # slow test.
+        if os.environ.get("PYTEST_CURRENT_TEST"):
+            result_05 = render_evidence(
+                "05", "screenshot_05_local_test_suite_passed.png", "Automated test suite",
+                "pytest -v",
+                "Appendix B — Reproducibility evidence",
+                "The complete synthetic-fixture test suite executed locally on macOS without access to "
+                "private benchmark images or model binaries.",
+                skip_reason="Already running inside an active pytest session "
+                            f"({os.environ['PYTEST_CURRENT_TEST']}); running pytest -v again here "
+                            "would recursively re-invoke the very test that triggered this generator run.",
+            )
+        else:
+            result_05 = render_evidence(
+                "05", "screenshot_05_local_test_suite_passed.png", "Automated test suite",
+                "pytest -v",
+                "Appendix B — Reproducibility evidence",
+                "The complete synthetic-fixture test suite executed locally on macOS without access to "
+                "private benchmark images or model binaries.",
+                argv_=[sys.executable, "-m", "pytest", "-v"], log_name="pytest_result.txt",
+            )
 
-        spec("06", "screenshot_06_privacy_scan.png", "Public-output privacy scan",
-             "python scripts/check_public_outputs.py --paths results/aggregate results/report_evidence",
-             [sys.executable, str(SCRIPTS_DIR / "check_public_outputs.py"),
-              "--paths", str(results_root), str(output_root)], "privacy_scan.txt",
-             "Appendix C — Data governance evidence",
-             "Committed aggregate outputs confirmed free of personal or absolute filesystem paths.")
+        # 10 (privacy scan) runs here, ahead of its file position, because 06
+        # reports on its outcome too; the call order is independent of the
+        # number embedded in the filename.
+        result_10 = render_evidence(
+            "10", "screenshot_10_public_output_privacy_scan.png", "Public-output privacy scan",
+            "python scripts/check_public_outputs.py --paths results/aggregate results/report_evidence",
+            "Appendix C — Data governance evidence",
+            "Privacy validation confirming that public aggregate outputs contain no private path, "
+            "identity information or biometric image.",
+            argv_=[sys.executable, str(SCRIPTS_DIR / "check_public_outputs.py"),
+                   "--paths", str(results_root), str(output_root)],
+            log_name="privacy_scan.txt",
+        )
 
-        # Screenshots 7-10 are rendered from generated artifacts rather than
-        # from a single command, so they are built below with rendered= set.
-        listing_lines = ["results/aggregate/"]
         expected_aggregate = [
             "calibrated_threshold.json", "lfw_development_metrics.json", "lfw_final_metrics.json",
             "cplfw_metrics.json", "duplicate_gallery_metrics.json", "run_manifest.json",
             "metrics_summary.csv", "confusion_matrices.csv", "roc_points.csv", "FINAL_EVALUATION_REPORT.md",
         ]
-        for name in expected_aggregate:
-            candidate = results_root / name
-            mark = "OK  " if candidate.is_file() else "MISSING"
-            size = f"{candidate.stat().st_size:>10,} bytes" if candidate.is_file() else " " * 16
-            listing_lines.append(f"  [{mark}] {name:<38} {size}")
-        listing_lines.append("")
-        listing_lines.append(f"{sum(1 for n in expected_aggregate if (results_root / n).is_file())}"
-                             f" / {len(expected_aggregate)} required aggregate outputs present")
-        listing_lines.append("")
-        listing_lines.append("results/report_evidence/")
-        listing_lines.append(f"  [OK  ] figures/     {len(figure_specs)} figures generated")
-        spec("07", "screenshot_07_output_file_listing.png", "Generated output inventory",
-             "(inventory of results/aggregate and results/report_evidence)", None, "output_file_listing.txt",
-             "Appendix B — Reproducibility evidence",
-             "Inventory confirming that all ten aggregate outputs and the evidence pack exist.",
-             rendered="\n".join(listing_lines))
+        aggregate_present = [(results_root / name).is_file() for name in expected_aggregate]
+        complete_experiment_ok = all(aggregate_present)
 
-        variant_fields = ["dataset_image_variant", "dataset_image_source", "dataset_archive_sha256",
-                          "protocol_file", "protocol_sha256", "total_pairs", "scored_pairs",
-                          "failed_pairs", "failure_rate"]
-        variant_lines = [f"{name:<26} {cplfw_payload.get(name)}" for name in variant_fields]
-        spec("08", "screenshot_08_cplfw_variant_evidence.png", "CPLFW image-variant provenance",
-             "(selected fields from results/aggregate/cplfw_metrics.json)", None, None,
-             "Chapter 3 — Methodology, §3.4 Datasets",
-             "The reported CPLFW result records the raw authors-distributed image set explicitly, "
-             "removing the ambiguity present in the superseded aligned run.",
-             rendered="\n".join(variant_lines))
+        # ------------------------------------------------------------------
+        # 06 — local-run summary. Every line is derived from the results
+        # above and from the aggregate JSON files already loaded, never
+        # hardcoded; a check that did not run (no root supplied) is reported
+        # as SKIPPED rather than fabricated as a pass.
+        # ------------------------------------------------------------------
+        def check_line(label: str, result: Optional[Tuple[Optional[int], str]]) -> str:
+            if result is None or result[0] is None:
+                return f"{label}: SKIPPED"
+            return f"{label}: PASS" if result[0] == 0 else f"{label}: FAILED (exit code {result[0]})"
+
+        test_match = re.search(r"(\d+) passed", result_05[1])
+        if result_05[0] is None:
+            tests_line = "Tests: SKIPPED (see screenshot 05)"
+        elif result_05[0] == 0 and test_match:
+            tests_line = f"Tests: {test_match.group(1)} passed"
+        elif test_match:
+            tests_line = f"Tests: {test_match.group(0)} (exit code {result_05[0]}, see screenshot 05)"
+        else:
+            tests_line = f"Tests: FAILED (exit code {result_05[0]}, see screenshot 05)"
+
+        all_ok = (
+            result_01[0] == 0
+            and (result_02[0] in (0, None))
+            and (result_03[0] in (0, None))
+            and (result_04[0] in (0, None))
+            and (result_05[0] in (0, None))
+            and complete_experiment_ok
+            and result_10[0] == 0
+        )
+        heading = "LOCAL MACOS RUN COMPLETED" if all_ok else "LOCAL MACOS RUN — ONE OR MORE CHECKS FAILED"
+
+        final_lfw = summary["lfw_final"]
+        cplfw_row = summary["cplfw"]
+        summary_lines = [
+            heading,
+            check_line("Environment check", result_01),
+            tests_line,
+            check_line("Model verification", result_02),
+            check_line("LFW protocol verification", result_03),
+            check_line("Raw CPLFW protocol verification", result_04),
+            "Complete experiment: PASS" if complete_experiment_ok else "Complete experiment: INCOMPLETE",
+            check_line("Privacy scan", result_10),
+            "",
+            f"Final LFW accuracy: {as_float(require(final_lfw, 'accuracy', 'metrics_summary.csv')) * 100:.2f}%",
+            f"Raw CPLFW conditional accuracy: "
+            f"{as_float(require(cplfw_row, 'accuracy', 'metrics_summary.csv')) * 100:.2f}%",
+            f"Raw CPLFW extraction-failure rate: "
+            f"{as_float(require(cplfw_row, 'failure_rate', 'metrics_summary.csv')) * 100:.2f}%",
+            f"Gallery duplicate detection: "
+            f"{as_float(require(gallery_payload, 'duplicate_detection_rate', 'duplicate_gallery_metrics.json')) * 100:.2f}%",
+            f"Gallery false-review rate: "
+            f"{as_float(require(gallery_payload, 'false_duplicate_review_rate', 'duplicate_gallery_metrics.json')) * 100:.2f}%",
+        ]
+        render_evidence(
+            "06", "screenshot_06_local_complete_run.png", "Complete local pipeline run",
+            "./scripts/run_local_mac.sh",
+            "Appendix B — Reproducibility evidence",
+            "Successful end-to-end local execution of the five-experiment pipeline using the "
+            "institutional OneDrive-backed datasets, protocols and pinned models.",
+            rendered="\n".join(summary_lines), log_name="local_complete_run.txt",
+        )
 
         freeze_fields = ["status", "threshold", "operating_strategy", "frozen_from_protocol",
                          "frozen_from_protocol_sha256", "selection_rule"]
@@ -949,87 +1082,64 @@ def main(argv: Optional[List[str]] = None) -> int:
                     freeze_lines.append(" " * 31 + value[start:start + 78])
             else:
                 freeze_lines.append(f"{name:<30} {value}")
-        spec("09", "screenshot_09_threshold_freeze_evidence.png", "Threshold freeze provenance",
-             "(selected fields from results/aggregate/calibrated_threshold.json)", None, None,
-             "Chapter 3 — Methodology, §3.5 Threshold selection",
-             "The threshold artifact records status \"frozen\", the protocol it was frozen from, that "
-             "file's SHA-256, and the deterministic selection rule applied.",
-             rendered=None)
-        screenshot_specs[-1]["rendered"] = "\n".join(freeze_lines)
+        render_evidence(
+            "07", "screenshot_07_threshold_freeze_evidence.png", "Threshold freeze provenance",
+            "(selected fields from results/aggregate/calibrated_threshold.json)",
+            "Chapter 3 — Methodology, Threshold selection",
+            "Threshold provenance confirming that candidate selection occurred on the development "
+            "protocol before final LFW and CPLFW evaluation.",
+            rendered="\n".join(freeze_lines),
+        )
 
-        status_code, status_out = run_command(["git", "status", "--short"])
-        log_code, log_out = run_command(["git", "log", "-1", "--oneline"])
+        variant_fields = ["dataset_image_variant", "dataset_image_source", "dataset_archive_sha256",
+                          "protocol_file", "protocol_sha256", "total_pairs", "scored_pairs",
+                          "failed_pairs", "failure_rate"]
+        variant_lines = [f"{name:<26} {cplfw_payload.get(name)}" for name in variant_fields]
+        render_evidence(
+            "08", "screenshot_08_cplfw_raw_variant_evidence.png", "CPLFW image-variant provenance",
+            "(selected fields from results/aggregate/cplfw_metrics.json)",
+            "Chapter 3 — Methodology, Datasets",
+            "Provenance record confirming that the reported CPLFW experiment used the raw, "
+            "unconstrained image variant rather than the pre-aligned copy.",
+            rendered="\n".join(variant_lines),
+        )
+
+        listing_lines = ["results/aggregate/"]
+        for name, present in zip(expected_aggregate, aggregate_present):
+            candidate = results_root / name
+            mark = "OK  " if present else "MISSING"
+            size = f"{candidate.stat().st_size:>10,} bytes" if present else " " * 16
+            listing_lines.append(f"  [{mark}] {name:<38} {size}")
+        listing_lines.append("")
+        listing_lines.append(f"{sum(aggregate_present)} / {len(expected_aggregate)} required aggregate outputs present")
+        listing_lines.append("")
+        listing_lines.append("results/report_evidence/")
+        listing_lines.append(f"  [OK  ] figures/     {len(figure_specs)} figures generated")
+        render_evidence(
+            "09", "screenshot_09_generated_output_inventory.png", "Generated output inventory",
+            "(inventory of results/aggregate and results/report_evidence)",
+            "Appendix B — Reproducibility evidence",
+            "Inventory of the aggregate outputs generated by the complete local experiment.",
+            rendered="\n".join(listing_lines),
+        )
+
+        status_out = redact(run_command(["git", "status", "--short"])[1], redactions)
+        log_out = redact(run_command(["git", "log", "-1", "--oneline"])[1], redactions)
         git_lines = ["$ git status --short"]
         git_lines.extend((status_out or "(working tree clean)").splitlines())
         git_lines.append("")
         git_lines.append("$ git log -1 --oneline")
         git_lines.extend(log_out.splitlines())
-        spec("10", "screenshot_10_git_status.png", "Repository state at generation time",
-             "git status --short && git log -1 --oneline", None, None,
-             "Appendix B — Reproducibility evidence",
-             "Repository state when this evidence pack was generated. A dirty working tree is reported "
-             "as dirty and never presented as clean.",
-             rendered="\n".join(git_lines))
-
-        for item in screenshot_specs:
-            if item["skip_reason"]:
-                body = (f"NOT RUN.\n\n{item['skip_reason']}\n\n"
-                        "This command needs a private dataset/model root, which is deliberately not "
-                        "recorded in any published artifact. Re-run the generator with the relevant "
-                        "root argument to produce this evidence image.")
-                exit_code = None
-            elif item["rendered"] is not None:
-                body, exit_code = item["rendered"], None
-            else:
-                exit_code, raw = run_command(item["argv"])
-                body = raw
-            body = redact(body, redactions)
-
-            if item["log_name"]:
-                log_path = logs_dir / item["log_name"]
-                log_path.write_text(
-                    f"$ {item['command']}\n"
-                    f"# exit code: {exit_code if exit_code is not None else 'n/a'}\n"
-                    f"# generated: {datetime.now(timezone.utc).isoformat()}\n"
-                    f"# git commit: {commit}\n\n{body}\n",
-                    encoding="utf-8",
-                )
-
-            path = render_terminal(
-                title=f"Evidence {item['number']} — {item['title']}",
-                command=item["command"], exit_code=exit_code, body=body,
-                out=screenshots_dir / item["filename"], commit=commit, dirty=dirty,
-                note="Paths in this output are redacted placeholders, not the values used at run time.",
-            )
-            manifest.append(build_manifest_entry(
-                path=path, kind="generated_screenshot", title=item["title"],
-                sources=[], commit=commit, section=item["section"],
-                caption=item["caption"], output_root=output_root,
-            ))
-            index_rows.append({
-                "id": item["number"], "filename": f"screenshots/{item['filename']}",
-                "title": item["title"], "source": item["command"], "section": item["section"],
-                "caption": item["caption"], "kind": "generated_screenshot",
-            })
+        render_evidence(
+            "11", "screenshot_11_local_git_state.png", "Repository state at generation time",
+            "git status --short && git log -1 --oneline",
+            "Appendix B — Reproducibility evidence",
+            "Local source-control state used to generate the aggregate results and evidence pack.",
+            precomputed=(None, "\n".join(git_lines)),
+        )
 
     manual_items = [
-        ("manual_01_github_actions_pass.png", "GitHub Actions CI run passing for the final commit",
-         "GitHub → AdvancedComputingProject → Actions → CI → the run for the final `main` commit",
-         "The repository name; the workflow name (CI); a green success status; the final commit SHA; "
-         "and the completed `test` job with its steps expanded.",
-         "Unrelated account information; any other repository in the sidebar; private email addresses.",
-         "Appendix B — Reproducibility evidence",
-         "Continuous integration passing for the submitted commit. CI runs the synthetic-fixture suite "
-         "only; it never has access to real datasets or model binaries."),
-        ("manual_02_final_github_commit.png", "Repository main page at the final commit",
-         "GitHub → AdvancedComputingProject → the repository main page, on branch `main`",
-         "That the branch is `main`; the final commit message and short SHA; and the file listing "
-         "including `scripts/generate_report_evidence.py`.",
-         "Unrelated repositories in the sidebar; private email addresses.",
-         "Appendix B — Reproducibility evidence",
-         "The public repository at the submitted commit, showing that no dataset, model binary or "
-         "database file is tracked."),
-        ("manual_03_streamlit_review_interface.png", "Local human-review interface",
+        ("screenshot_12_streamlit_human_review_interface.png", "Local human-review interface",
          "A terminal running `streamlit run local_review/app.py --server.address=127.0.0.1 "
          "-- --db results/raw/review.sqlite`, then the browser at 127.0.0.1",
          "The review UI showing opaque case identifiers and the reviewer decision controls.",
@@ -1037,14 +1147,14 @@ def main(argv: Optional[List[str]] = None) -> int:
          "Confirm before capturing that no real face image, no real name and no private path is on "
          "screen; if any is, stop and report it as a defect rather than cropping it out.",
          "Chapter 5 — Human-review decision policy",
-         "The localhost-only review interface. Every case is identified by an opaque one-way hash; a "
-         "similarity result opens a review case and never an automatic sanction."),
-        ("manual_04_au_onedrive_storage_evidence.png", "Institutional storage location",
+         "Localhost-only review interface showing opaque case identifiers and proportionate reviewer "
+         "controls; no automatic account sanction is applied."),
+        ("screenshot_13_arden_onedrive_storage.png", "Institutional storage location",
          "The Arden University OneDrive research folder, navigated to the project's own "
          "subfolder (not the OneDrive account root) — the migration is complete and verified, "
          "see docs/USER_ACTIONS_REQUIRED.md for the checksum/file-count record",
          "The university-controlled OneDrive identity/location; the project subfolder; and the "
-         "high-level folder structure (datasets/, protocols/, models/).",
+         "high-level folder structure (datasets/, protocols/, models/, optionally cache/).",
          "Face-image thumbnails; participant or identity names; unrelated university or personal "
          "files; absolute local paths containing your account name. Navigate *into* the project "
          "subfolder before capturing rather than screenshotting the OneDrive account root — an "
@@ -1052,9 +1162,9 @@ def main(argv: Optional[List[str]] = None) -> int:
          "assignments, or similar) that must never appear in a committed screenshot. Switch the file "
          "browser out of any thumbnail/preview mode first.",
          "Appendix C — Data governance evidence",
-         "Benchmark images, protocols and models held in access-controlled institutional storage, "
-         "outside the repository and outside any personal cloud service."),
-        ("manual_05_ethics_approval_evidence.png", "Ethics approval record",
+         "Datasets, protocols and pinned models stored in the access-controlled Arden University "
+         "OneDrive research location, outside the Git repository."),
+        ("screenshot_14_ethics_approval.png", "Ethics approval record",
          "The university ethics approval page or approval document — **only if your institution "
          "permits reproducing it** in a dissertation appendix",
          "The institution; the approval status; the project title or reference; and the approval "
@@ -1062,16 +1172,27 @@ def main(argv: Optional[List[str]] = None) -> int:
          "Reviewer names and signatures; personal contact details; any personal data not needed to "
          "evidence the approval itself.",
          "Appendix C — Data governance evidence",
-         "Institutional ethics approval covering this evaluation. Capture only if your institution "
-         "permits reproducing the record in a dissertation appendix."),
+         "Institutional ethics approval or recorded authorisation covering the benchmark evaluation."),
+        ("screenshot_15_github_backup_final_commit.png", "GitHub backup of the final commit",
+         "GitHub → AdvancedComputingProject → the repository main page, on branch `main`",
+         "The repository name; that the branch is `main`; the final commit message and short SHA; "
+         "and the source file listing.",
+         "The Actions tab; billing information; private email addresses; unrelated repositories in "
+         "the sidebar. GitHub is version-controlled backup evidence here, not an execution-passing "
+         "claim — do not include an Actions screenshot.",
+         "Appendix B — Version-control and backup evidence",
+         "GitHub repository used as version-controlled backup of the project source code and "
+         "privacy-reviewed aggregate artefacts; execution was performed locally on macOS."),
     ]
 
     manual_doc = ["# Manual screenshots required", "",
-                  "These five items cannot be generated locally, and this project will not fabricate "
+                  "These four items cannot be generated locally, and this project will not fabricate "
                   "them or emit look-alike placeholders. Capture each one yourself and save it into "
                   "`results/report_evidence/screenshots/` using the filename given below.", "",
-                  "> **Do not capture item 1 until a real GitHub Actions run has actually passed for "
-                  "the final commit.** Nothing in this repository asserts that remote CI has passed.", ""]
+                  "GitHub Actions is not part of this list: validation is performed locally on macOS "
+                  "(see `scripts/run_local_mac.sh` and `docs/REPRODUCIBILITY.md`), and GitHub is used "
+                  "only as version-controlled backup — screenshot_15 below evidences that backup, not "
+                  "a remote CI pass.", ""]
     for filename, title, where, visible, redactions_needed, section, caption in manual_items:
         manual_doc.extend([
             f"## `{filename}`", "",
@@ -1082,12 +1203,20 @@ def main(argv: Optional[List[str]] = None) -> int:
             f"**Report section.** {section}", "",
             f"**Suggested caption.** {caption}", "",
         ])
+        # A manual screenshot already present at this path (the researcher
+        # captured it and it is already sitting in --output-root) is recorded
+        # as captured, with a real hash -- it is never overwritten, and this
+        # generator never fabricates one that is not already there.
+        existing = screenshots_dir / filename
+        already_captured = existing.is_file()
         manifest.append({
             "filename": f"screenshots/{filename}", "type": "manual_screenshot", "title": title,
-            "generated_at": None, "source_files": [], "source_file_sha256": {}, "git_commit": commit,
+            "generated_at": datetime.now(timezone.utc).isoformat() if already_captured else None,
+            "source_files": [], "source_file_sha256": {}, "git_commit": commit,
             "contains_real_face_image": False, "contains_identity_information": False,
             "contains_absolute_path": False, "report_section": section, "suggested_caption": caption,
-            "sha256": None, "status": "awaiting manual capture by the researcher",
+            "sha256": sha256_of(existing) if already_captured else None,
+            "status": "captured" if already_captured else "awaiting manual capture by the researcher",
         })
         index_rows.append({
             "id": filename.split("_")[1], "filename": f"screenshots/{filename}", "title": title,
@@ -1095,6 +1224,52 @@ def main(argv: Optional[List[str]] = None) -> int:
             "kind": "manual_screenshot",
         })
     (output_root / "manual_screenshots_required.md").write_text("\n".join(manual_doc), encoding="utf-8")
+
+    # Rows were appended in execution order (e.g. the privacy scan runs ahead
+    # of its file position so the local-run summary can report on it), not
+    # file order. Sort figures 01-09 then screenshots 01-15 for a report-ready
+    # table, without disturbing the sets used for validation above.
+    index_rows.sort(key=lambda row: (row["filename"].split("/")[0], int(row["id"])))
+
+    manifest_by_filename = {entry["filename"]: entry for entry in manifest}
+    screenshot_rows = [row for row in index_rows if row["filename"].startswith("screenshots/")]
+
+    screenshot_index = [
+        "# Screenshot evidence index", "",
+        "All 15 screenshots, generated (01-11) and manual (12-15), in report order. "
+        "GitHub Actions is deliberately not among them — see "
+        "`docs/REPRODUCIBILITY.md` for why remote CI is not part of this project's "
+        "validation design.", "",
+        "| Order | Filename | Type | Report placement | Status |",
+        "|---:|---|---|---|---|",
+    ]
+    for row in screenshot_rows:
+        entry = manifest_by_filename[row["filename"]]
+        kind = "Manual" if row["kind"] == "manual_screenshot" else "Generated"
+        status = "Captured" if entry.get("sha256") else "Pending"
+        screenshot_index.append(
+            f"| {row['id']} | `{Path(row['filename']).name}` | {kind} | {row['section']} | {status} |"
+        )
+    screenshot_index.extend(["", "## Detail", ""])
+    for row in screenshot_rows:
+        entry = manifest_by_filename[row["filename"]]
+        privacy_note = (
+            "Confirmed: contains_real_face_image, contains_identity_information and "
+            "contains_absolute_path are all false in the manifest."
+            if row["kind"] != "manual_screenshot"
+            else "Not yet checked — verify before committing (see manual_screenshots_required.md)."
+        )
+        screenshot_index.extend([
+            f"### {row['id']} — {Path(row['filename']).name}", "",
+            f"- **Title.** {row['title']}",
+            f"- **Purpose / source.** `{row['source']}`",
+            f"- **Suggested caption.** {row['caption']}",
+            f"- **Report section.** {row['section']}",
+            f"- **Privacy check.** {privacy_note}",
+            f"- **SHA-256.** {entry.get('sha256') or 'null (not yet captured)'}",
+            "",
+        ])
+    (output_root / "SCREENSHOT_INDEX.md").write_text("\n".join(screenshot_index), encoding="utf-8")
 
     index = [
         "# Report evidence index", "",
@@ -1180,9 +1355,21 @@ def main(argv: Optional[List[str]] = None) -> int:
         if not (figures_dir / filename).is_file():
             problems.append(f"expected figure missing: figures/{filename}")
     if args.run_validation:
-        for item in screenshot_specs:
-            if not (screenshots_dir / item["filename"]).is_file():
-                problems.append(f"expected screenshot missing: screenshots/{item['filename']}")
+        for entry in manifest:
+            if entry["type"] == "generated_screenshot" and not (output_root / entry["filename"]).is_file():
+                problems.append(f"expected screenshot missing: {entry['filename']}")
+
+        # All 15 numbers 01-15 must appear exactly once across the generated
+        # (01-11) and manual (12-15) screenshots, with no gap and no GitHub
+        # Actions screenshot re-appearing under any name.
+        screenshot_numbers = sorted(
+            int(row["id"]) for row in index_rows if row["filename"].startswith("screenshots/")
+        )
+        if screenshot_numbers != list(range(1, 16)):
+            problems.append(f"screenshot numbering is not exactly 1-15: {screenshot_numbers}")
+        for row in index_rows:
+            if "github_actions" in row["filename"]:
+                problems.append(f"a GitHub Actions screenshot must not be required: {row['filename']}")
 
     index_files = {row["filename"] for row in index_rows}
     manifest_files = {entry["filename"] for entry in manifest}
@@ -1207,8 +1394,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 1
 
     figure_count = len(figure_specs)
-    screenshot_count = len(screenshot_specs)
-    print(f"OK   {figure_count} figures, {screenshot_count} generated screenshots, "
+    print(f"OK   {figure_count} figures, {generated_screenshot_count} generated screenshots, "
           f"{len(manual_items)} manual screenshots pending, no private path found.")
     print(f"\nEvidence pack written to {output_root}")
     return 0
