@@ -99,6 +99,18 @@ enforced in code (`src/face_verification/calibration.py`,
    appears in the calibration pair file, and enforces that no image occupies
    more than one manifest role (gallery / duplicate probe / unknown probe).
 
+## Validation is local, not GitHub Actions
+
+The complete benchmark evaluation and validation suite are executed
+locally on the researcher's macOS computer using datasets, protocols and
+pinned models stored in the approved Arden University OneDrive research
+location. GitHub is used only for version-controlled backup of source
+code, aggregate metrics and privacy-reviewed evidence. Remote GitHub
+Actions execution is not part of the validation design because the
+private benchmark data and model binaries are intentionally unavailable
+to GitHub — see `scripts/run_local_mac.sh` and
+`docs/REPRODUCIBILITY.md`.
+
 ## Confirmation: no code from AdvancedComputingProjectYes is required
 
 This repository does not import, vendor, or depend on any file from

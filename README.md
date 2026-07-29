@@ -160,6 +160,10 @@ containing a personal/absolute filesystem path (see
 
 ### Optional: report evidence pack (figures + validation evidence)
 
+The single repeatable command is `./scripts/run_local_mac.sh` (see
+`docs/REPRODUCIBILITY.md`), which includes evidence generation as its last
+step. To run evidence generation alone:
+
 ```bash
 python -m pip install -e '.[dev,review,report]'   # adds matplotlib
 
@@ -178,14 +182,19 @@ python scripts/generate_report_evidence.py \
     --protocol-root "$FACE_PROTOCOL_ROOT"
 ```
 
-Generates nine PNG figures, ten rendered command-evidence images, an
-evidence index and a SHA-256 manifest — all derived only from the committed
-`results/aggregate/*` files, never from a raw image or an identity. Every
-rendered path is a redacted placeholder, and the generator fails rather than
-emit a pack containing a private absolute path. Five further screenshots
-(GitHub Actions, Streamlit, institutional storage, ethics record) cannot be
-produced locally and are **not** fabricated — see
-`results/report_evidence/manual_screenshots_required.md`.
+Generates nine PNG figures, eleven rendered command-evidence images
+(including a local-run summary, `screenshot_06_local_complete_run.png`), an
+evidence index (`REPORT_EVIDENCE_INDEX.md`), a screenshot-specific index
+(`SCREENSHOT_INDEX.md`) and a SHA-256 manifest — all derived only from the
+committed `results/aggregate/*` files, never from a raw image or an
+identity. Every rendered path is a redacted placeholder, and the generator
+fails rather than emit a pack containing a private absolute path. Four
+further screenshots (numbered 12-15: Streamlit, institutional storage,
+ethics record, GitHub backup) cannot be produced locally and are **not**
+fabricated — see `results/report_evidence/manual_screenshots_required.md`.
+GitHub Actions is deliberately not among them: see
+`docs/REPRODUCIBILITY.md` for why remote CI is not part of this project's
+validation design.
 
 ### Optional: local review demonstration
 

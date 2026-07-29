@@ -1,5 +1,19 @@
 # Reproducibility
 
+## Canonical execution: local macOS, not GitHub Actions
+
+The complete benchmark evaluation and validation suite are executed
+locally on the researcher's macOS computer using datasets, protocols and
+pinned models stored in the approved Arden University OneDrive research
+location. GitHub is used only for version-controlled backup of source
+code, aggregate metrics and privacy-reviewed evidence. Remote GitHub
+Actions execution is not part of the validation design because the
+private benchmark data and model binaries are intentionally unavailable
+to GitHub — see `docs/archive/github_actions_ci_reference.yml` for the
+archived (inactive) workflow this repository used to run remotely against
+synthetic fixtures only, and `scripts/run_local_mac.sh` for the single
+repeatable local runner that supersedes it.
+
 ## What is pinned
 
 - Python interpreter version (recorded per run by
@@ -20,6 +34,18 @@ Any change to any of the above is a new evaluation partition — see
 `docs/MODEL_PROVENANCE.md`'s change-control note.
 
 ## Steps to reproduce a full run
+
+The single repeatable command is:
+
+```bash
+./scripts/run_local_mac.sh
+```
+
+It runs every step below in order — dependency check, test suite, model
+and dataset verification, the complete experiment, the public-output
+privacy scan, and evidence regeneration — and stops immediately on the
+first failure. The steps are also listed individually here so each one can
+be run, or debugged, on its own.
 
 ```bash
 python3.11 -m venv .venv          # or the closest available 3.11/3.12/3.13

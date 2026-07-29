@@ -60,7 +60,13 @@ rather than researched from scratch:
 
 - Invent an ethics approval number, DPIA reference, lawful basis, Article 9
   condition, retention date, or incident contact.
-- Claim GitHub Actions passed remotely unless a real remote run is visible
-  (see `.github/workflows/ci.yml` and `docs/REPRODUCIBILITY.md`).
 - Describe the Arden University OneDrive migration as complete before it
   is verified.
+- Require, or claim, a remote GitHub Actions run. Validation is performed
+  locally on macOS (see `scripts/run_local_mac.sh` and
+  `docs/REPRODUCIBILITY.md`) because the private benchmark data and model
+  binaries are intentionally never available to GitHub; the former CI
+  workflow is retained only as an inactive reference at
+  `docs/archive/github_actions_ci_reference.yml`. GitHub itself is used
+  only as version-controlled backup of source code and privacy-reviewed
+  aggregate evidence — a remote run is not a submission blocker.
