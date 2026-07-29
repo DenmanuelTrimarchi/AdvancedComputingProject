@@ -49,8 +49,40 @@ class EvaluationResult:
         return [1 if s.pair.same_identity else 0 for s in self.scored_pairs if s.similarity is not None]
 
     @property
+    def scored_pair_count(self) -> int:
+        # Only pairs yielding one valid face on both sides carry a similarity score.
+        return len(self.valid_scores)
+
+    @property
+    def failed_pairs(self) -> int:
+        # Failed pairs stay within the protocol total; they simply have no score.
+        return self.total_pairs - self.scored_pair_count
+
+    @property
     def failure_rate(self) -> float:
-        return sum(self.failures.values()) / self.total_pairs if self.total_pairs else float("nan")
+        # Stored as a fraction of the full protocol; reports render the percentage.
+        return self.failed_pairs / self.total_pairs if self.total_pairs else float("nan")
+
+    def validate_accounting(self) -> None:
+        """Confirm that every protocol pair is accounted for exactly once.
+
+        Guards the reported denominator: the failure rate is only meaningful
+        if no pair has been silently discarded, and if the per-category
+        breakdown describes precisely the pairs that failed.
+        """
+        if self.scored_pair_count + self.failed_pairs != self.total_pairs:
+            raise ValueError(
+                f"Scored ({self.scored_pair_count}) and failed ({self.failed_pairs}) pairs must sum "
+                f"to the protocol total ({self.total_pairs})."
+            )
+        # evaluate_pairs records exactly one terminal category per failed pair,
+        # so the breakdown is a partition of the failures, not a tally per image.
+        categorised = sum(self.failures.values())
+        if categorised != self.failed_pairs:
+            raise ValueError(
+                f"Failure breakdown totals {categorised} but {self.failed_pairs} pairs failed; "
+                f"every failed pair must carry exactly one extraction-failure category."
+            )
 
 
 def _embed_image(
@@ -91,6 +123,12 @@ def evaluate_pairs(pairs: List[Pair], *, detector: YuNetDetector, embedder: SFac
             return None, f"image_error_{side}:{exc}"
 
     for pair in pairs:
+        # Sides are attempted left first and the pair is abandoned on the first
+        # terminal failure, so each failed pair records exactly one category.
+        # Consequently a "_right" category means the right image failed *after*
+        # the left had already yielded one valid face: where both sides would
+        # fail, only the left is ever counted. The four categories therefore
+        # partition the failed pairs; they are not per-image failure tallies.
         left_embedding, left_failure = embed_side(pair.left_path, "left")
         if left_embedding is None:
             record(left_failure.split(":")[0])
@@ -117,6 +155,9 @@ def summarize_metrics(result: EvaluationResult, threshold: float) -> Dict[str, o
     if not scores:
         raise ValueError("No pairs were successfully scored; cannot compute metrics.")
 
+    # Refuse to publish a failure rate whose denominator does not reconcile.
+    result.validate_accounting()
+
     matrix = metrics_module.confusion_matrix(scores, labels, threshold)
     rates = metrics_module.rates_from_confusion(matrix)
     auc = metrics_module.roc_auc(scores, labels)
@@ -128,8 +169,9 @@ def summarize_metrics(result: EvaluationResult, threshold: float) -> Dict[str, o
     return {
         "threshold": threshold,
         "total_pairs": result.total_pairs,
-        "scored_pairs": len(scores),
-        "failed_pairs": result.total_pairs - len(scores),
+        # Score-based metrics below are conditional on these scored pairs alone.
+        "scored_pairs": result.scored_pair_count,
+        "failed_pairs": result.failed_pairs,
         "failure_rate": result.failure_rate,
         "failure_breakdown": dict(result.failures),
         "confusion_matrix": matrix.as_dict(),

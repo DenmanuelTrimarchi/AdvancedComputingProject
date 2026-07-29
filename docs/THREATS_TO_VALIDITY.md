@@ -14,7 +14,21 @@
   failure rate but not to accuracy/EER/AUC. If failures correlate with
   identity, pose, or image quality in a non-random way, the reported
   accuracy is conditioned on "images the detector could process," not all
-  images in the protocol.
+  images in the protocol. **This is the single largest caveat on the raw
+  CPLFW result**: of 6,000 protocol pairs, 3,515 produced valid similarity
+  scores and 2,485 failed extraction, a rate of 41.42% (2,485 ÷ 6,000).
+  Accuracy, precision, recall, F1-score, ROC-AUC and EER for CPLFW are
+  conditional on those 3,515 pairs alone. Because extreme pose is precisely
+  what defeats the detector, the failures are almost certainly *not* random
+  with respect to the difficulty being measured — the surviving pairs are
+  plausibly the easier ones, so the conditional CPLFW accuracy should be
+  read as an optimistic bound, not as the pipeline's performance on
+  cross-pose imagery generally.
+- **The side-specific failure categories are not symmetric measures.**
+  Extraction stops at the first failing side (left is attempted first), so
+  `zero_faces_right` counts only pairs whose left image had already
+  succeeded. Right-side counts are therefore a lower bound, and the
+  left/right split must not be read as evidence that one side is harder.
 - **Single detector confidence operating point.** YuNet's own
   score/NMS thresholds (0.9 / 0.3) are fixed constants, not calibrated
   per-experiment; a different detector operating point could change which

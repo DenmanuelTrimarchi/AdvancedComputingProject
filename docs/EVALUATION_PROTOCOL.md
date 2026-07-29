@@ -100,6 +100,63 @@ reported as an explicit failure rate alongside the accuracy metrics — they
 are never quietly excluded from the pair/probe count the way a naive
 implementation might drop them.
 
+On the raw CPLFW protocol this is the dominant finding. Of the 6,000 raw
+CPLFW protocol pairs, 3,515 produced valid similarity scores and 2,485
+failed during face extraction. The extraction-failure rate was therefore
+**41.42%** (2,485 ÷ 6,000). These failed pairs were retained in the protocol
+total and reported separately rather than being silently discarded.
+
+The 2,485 failures comprised 974 zero-face detections on the left image,
+1,347 zero-face detections on the right image, 115 multiple-face detections
+on the left image and 49 multiple-face detections on the right image.
+
+Accuracy, precision, recall, F1-score, ROC-AUC and EER are conditional on
+the 3,515 pairs for which both images produced exactly one valid face. An
+extraction failure is **not** a verification error: no similarity score was
+ever produced for those pairs, so they can be neither correct nor incorrect.
+
+### Reading the side-specific categories
+
+`evaluate_pairs` attempts the left image first and abandons the pair at its
+first terminal failure, so **each failed pair carries exactly one category**
+and the four categories sum to 2,485 exactly. They are a partition of the
+failed pairs, not a tally of failures per image.
+
+The consequence matters for interpretation: `zero_faces_right` means the
+right-hand image yielded no detectable face *after the left-hand image had
+already passed the extraction checks*. Where both images of a pair would
+have failed, only the left-hand category is recorded. The left/right counts
+are therefore not directly comparable as a measure of which side is harder,
+and the right-side counts are a lower bound on how often that side fails.
+
+### Failure-rate traceability
+
+Every figure above is derived at run time from the pair counts; none is
+transcribed by hand.
+
+- Pair extraction and failure classification:
+  `src/face_verification/verification_evaluator.py` → `evaluate_pairs`
+  (its inner `embed_side` and `record` helpers assign the category)
+- Failure counts and rate:
+  `src/face_verification/verification_evaluator.py` →
+  `EvaluationResult.scored_pair_count`, `EvaluationResult.failed_pairs`,
+  `EvaluationResult.failure_rate`, guarded by
+  `EvaluationResult.validate_accounting`
+- Aggregate metric assembly:
+  `src/face_verification/verification_evaluator.py` → `summarize_metrics`
+- CPLFW result construction:
+  `scripts/evaluate_cplfw.py` → `main`
+- Final report rendering:
+  `scripts/run_complete_experiment.py` → `_render_final_report` and
+  `_render_failure_breakdown`
+- Report figures:
+  `scripts/generate_report_evidence.py` → `figure_04_failure_rates` and
+  `figure_05_cplfw_breakdown`
+
+The JSON artifacts store `failure_rate` as a decimal fraction
+(`0.4141666666666667`); the percentage is computed only when rendering
+human-readable text.
+
 ## Synthetic vs. real evidence
 
 Every artifact this pipeline writes states plainly, via its

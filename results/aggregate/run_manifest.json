@@ -1,7 +1,7 @@
 {
   "artifact_type": "run_manifest",
   "cplfw_image_variant": "raw",
-  "created_at": "2026-07-28T10:46:12.007257+00:00",
+  "created_at": "2026-07-29T00:37:26.426176+00:00",
   "dataset_root_variable": "FACE_DATA_ROOT",
   "dataset_storage": "access-controlled private research storage; path omitted from public artifacts",
   "frozen_threshold": 0.3630116835391414,
@@ -9,11 +9,11 @@
   "gallery_manifest": "results/raw/gallery_manifest.json",
   "model_root_variable": "FACE_MODEL_ROOT",
   "output_file_sha256": {
-    "calibrated_threshold.json": "f8938311c33cf159774e679178ba94fda8fa57f410f77b616ddd6751a712de6f",
-    "cplfw_metrics.json": "b146316059b9daed4cc2844742cacf9294071cc738d123521a18d31f4a79e4e8",
-    "duplicate_gallery_metrics.json": "11920071aea06207b5e04aea7035c5faae13f22f42a9f6046d28a9f28b98f257",
-    "lfw_development_metrics.json": "4a6db634c6f967ac91bfa8fa63f4acdb1d601c0c306b10ad83cc3f42c4215355",
-    "lfw_final_metrics.json": "d15201a4c69536b74262776ee6e7141acc1345bc6b8bf2d0b7dc32c3fa9c299e"
+    "calibrated_threshold.json": "2c49f6811a9bc25b55f068e8918f8de5d51d1aabb9887960ca761562130458d5",
+    "cplfw_metrics.json": "e886c19e5835c1c09d223491be7570b6ce629b2a5288c321ad8e5e11f8e7675b",
+    "duplicate_gallery_metrics.json": "cc3dc8a465f36dd1dc9eb7b37465706e71fd7088ee616b6f80e71d026edf7316",
+    "lfw_development_metrics.json": "f383772e6acee14188c0400368937c71e2fdee76761a24cbda57bcfcfbe3bfa7",
+    "lfw_final_metrics.json": "a82d4e624b2a957628044f014e4fe31425f39ed0359488c68120a61eb546c9f2"
   },
   "output_root": "results/aggregate",
   "protocol_root_variable": "FACE_PROTOCOL_ROOT",

@@ -312,6 +312,7 @@ def figure_03_cplfw_confusion(conf: Dict[str, Dict[str, str]], summary: Dict[str
 
 
 def figure_04_failure_rates(summary: Dict[str, Dict[str, str]], out: Path) -> Path:
+    # Failures are plotted against the full protocol count, not the scored pairs.
     labels = [label for _, label in EXPERIMENTS]
     rates, annotations = [], []
     for key, _ in EXPERIMENTS:
@@ -332,16 +333,24 @@ def figure_04_failure_rates(summary: Dict[str, Dict[str, str]], out: Path) -> Pa
     ax.set_ylim(0, max(rates) * 1.3)
     ax.set_title("Face-Extraction Failure Rates Across Benchmark Protocols", fontsize=12, pad=12)
     style_axes(ax)
+    # Quote the raw CPLFW counts so the plotted rate is checkable by arithmetic.
+    cplfw_row = summary["cplfw"]
+    cplfw_total = int(as_float(require(cplfw_row, "total_pairs", "metrics_summary.csv")))
+    cplfw_scored = int(as_float(require(cplfw_row, "scored_pairs", "metrics_summary.csv")))
     footnote(
         fig,
-        "A pair fails extraction when the detector finds zero faces, or more than one face, on either "
-        "side. Failed pairs are excluded from accuracy metrics and reported here instead — the raw CPLFW "
-        "failure rate is the dominant cross-pose finding of this evaluation.",
+        f"A pair fails extraction when the detector finds zero faces, or more than one face, on either "
+        f"side. {cplfw_total - cplfw_scored:,} of {cplfw_total:,} raw CPLFW pairs failed face "
+        f"extraction. Failed pairs are excluded from the score-based metrics but retained in the "
+        f"protocol total and reported here — the raw CPLFW rate is the dominant cross-pose finding of "
+        f"this evaluation. An extraction failure is not a verification error: no similarity score was "
+        f"produced for those pairs.",
     )
     return save(fig, out)
 
 
 def figure_05_cplfw_breakdown(cplfw: Dict[str, Any], out: Path) -> Path:
+    # Category counts are read straight from cplfw_metrics.json, never hardcoded.
     breakdown = require(cplfw, "failure_breakdown", "cplfw_metrics.json")
     order = ["zero_faces_left", "zero_faces_right", "multiple_faces_left", "multiple_faces_right"]
     labels = ["Zero faces\n(left image)", "Zero faces\n(right image)",
@@ -358,11 +367,15 @@ def figure_05_cplfw_breakdown(cplfw: Dict[str, Any], out: Path) -> Path:
     ax.set_ylim(0, max(values) * 1.18)
     ax.set_title("Raw CPLFW Face-Extraction Failure Categories", fontsize=12, pad=12)
     style_axes(ax)
+    # The categories partition the failed pairs, so the bars sum to failed_pairs
+    # exactly; see verification_evaluator.evaluate_pairs for the left-first rule.
     footnote(
         fig,
-        f"Counts are per-side occurrences across {total:,} failed pairs, so they sum to more than the "
-        "failed-pair count when both sides of a pair fail. Zero-face detections dominate, which locates "
-        "the cross-pose difficulty in detection rather than in embedding comparison.",
+        f"The four categories partition the {total:,} failed pairs and sum to that total exactly: "
+        f"sides are attempted left first and a pair is abandoned at its first terminal failure, so "
+        f"each failure is counted once. A right-side category therefore means the left image had "
+        f"already yielded one valid face. Zero-face detections dominate, which locates the cross-pose "
+        f"difficulty in detection rather than in embedding comparison.",
     )
     return save(fig, out)
 
