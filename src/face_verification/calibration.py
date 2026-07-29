@@ -115,6 +115,8 @@ def select_final_threshold(
         matrix = metrics_module.confusion_matrix(dev_scores, dev_labels, threshold)
         rates = metrics_module.rates_from_confusion(matrix)
         tmr, fmr = rates["true_match_rate"], rates["false_match_rate"]
+        # Self-comparison is the NaN test; an unscorable candidate sorts last
+        # rather than winning the selection by accident.
         balanced_accuracy = (tmr + (1.0 - fmr)) / 2.0 if tmr == tmr and fmr == fmr else float("-inf")
         per_candidate_dev_metrics[name] = {**rates, "threshold": threshold, "balanced_accuracy": balanced_accuracy}
 

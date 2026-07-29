@@ -99,6 +99,8 @@ def rates_from_confusion(matrix: ConfusionMatrix) -> Dict[str, float]:
         else float("nan")
     )
     recall = matrix.true_positive / positives if positives > 0 else float("nan")
+    # A self-comparison is the NaN test here: an undefined rate must propagate
+    # as NaN rather than silently contribute a zero to the derived metric.
     f1 = (
         2 * precision * recall / (precision + recall)
         if precision == precision and recall == recall and (precision + recall) > 0
