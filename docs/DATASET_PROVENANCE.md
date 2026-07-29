@@ -4,40 +4,41 @@ Status: **acquired and checksum-verified for LFW; acquired and
 raw-protocol-verified for CPLFW (no official archive checksum is published
 by the authors to check against, so the SHA-256 values below are recorded
 for this project's own reproducibility only, not compared against an
-upstream-published value); migrated to institutional storage and re-verified
-there.** This document last verified 29 July 2026. Fields still marked
-`TBC` require an institutional reference this document cannot supply on
-its own — see `docs/ETHICS_AND_BIOMETRICS.md` and
-`docs/USER_ACTIONS_REQUIRED.md`.
+upstream-published value).** Institutional (Arden University OneDrive)
+storage was attempted and briefly verified, then reverted — see below.
+This document last verified 29 July 2026. Fields still marked `TBC`
+require an institutional reference this document cannot supply on its own
+— see `docs/ETHICS_AND_BIOMETRICS.md` and `docs/USER_ACTIONS_REQUIRED.md`.
 
-## Storage migration to Arden University OneDrive
+## Storage migration to Arden University OneDrive — attempted, then reverted
 
-Completed 29 July 2026. The datasets, protocols, pinned models and the raw
-CPLFW image set were **copied** (originals retained, not deleted) from
+Completed and checksum-verified on 29 July 2026 (24,902 files copied from
 private local storage into the researcher's Arden University OneDrive
-account — an institutional Microsoft 365 tenant, confirmed by the macOS
-mount identity rather than assumed from a folder name.
+account; every file count and SHA-256 matched; `verify_models.py`,
+`verify_lfw_dataset.py` and `verify_cplfw_dataset.py` all passed against
+the OneDrive-backed paths; a full pipeline re-run reproduced every
+headline metric exactly).
 
-Verification performed before treating the migration as complete:
+**Reverted the same day.** The OneDrive-backed files subsequently proved
+operationally unreliable: macOS's Files-On-Demand feature dehydrated them
+to cloud-only placeholders, and neither a direct file read nor a
+Finder-level materialisation attempt could force a re-download
+(`fileproviderctl evaluate` showed `isUploaded: 1` / `isDownloaded: 0`; a
+Finder duplicate attempt failed with a genuine OneDrive error, `-15266`,
+and a `fileproviderctl dump` showed the account's own sync engine
+backlogged with unrelated pending operations). The researcher directed
+reverting storage to a private, `.gitignore`-excluded subdirectory of the
+project's own working directory (`datasets/`).
 
-- **File counts.** Every one of the four roots (LFW images, protocols,
-  models, raw CPLFW images) had an identical file count at the destination
-  as at the source: 24,902 files in total.
-- **Checksums.** A full `SHA-256` inventory was generated before and after
-  the copy for all 24,902 files and compared; every hash matched exactly.
-- **Structural verification.** `scripts/verify_models.py`,
-  `scripts/verify_lfw_dataset.py` and `scripts/verify_cplfw_dataset.py` all
-  passed against the OneDrive-backed paths (model hashes pinned; all LFW
-  protocol files parse; all 6,000 raw CPLFW pairs resolve).
-- **Full pipeline re-run.** `scripts/run_complete_experiment.py` was
-  re-run end to end from the OneDrive-backed paths. Every headline metric
-  reproduced exactly against the prior local-storage run: LFW final
-  accuracy 99.09%, raw CPLFW accuracy 90.24% on 3,515/6,000 scored pairs,
-  gallery duplicate detection rate 96.58%.
+**This does not satisfy the ethics-form-mandated Arden OneDrive storage
+requirement** — see `docs/USER_ACTIONS_REQUIRED.md`, which tracks it as
+outstanding again. It is, however, isolated from Git: nothing under
+`datasets/` is or has ever been tracked by version control
+(`git ls-files datasets/` returns nothing).
 
-Absolute OneDrive paths are intentionally omitted from this and every
-other committed document; the local, gitignored `.env` supplies them (see
-`.env.example` for the variable names) and
+Absolute local filesystem paths are intentionally omitted from this and
+every other committed document; the local, gitignored `.env` supplies them
+(see `.env.example` for the variable names) and
 `scripts/check_public_outputs.py` fails loudly if one ever leaks into a
 committed artefact.
 
@@ -54,7 +55,7 @@ committed artefact.
 | Downloaded by | Domingo Enmanuel Trimarchi (researcher) |
 | Terms reviewed | LFW's stated research-only terms — TBC formal confirmation |
 | Ethics/approval reference | TBC — see `docs/ETHICS_AND_BIOMETRICS.md` |
-| Local storage location | the researcher's Arden University OneDrive research folder (institutional Microsoft 365 account) — migrated and checksum-verified 29 July 2026; see `docs/USER_ACTIONS_REQUIRED.md` for the verification record |
+| Local storage location | a private, `.gitignore`-excluded subdirectory of the project's own working directory (`datasets/`), never tracked by Git — reverted from a briefly-verified Arden University OneDrive migration after the OneDrive files proved operationally unreliable; **does not satisfy the ethics-form-mandated institutional storage requirement**, see `docs/USER_ACTIONS_REQUIRED.md` |
 | Planned deletion date | TBC — set per your institution's retention policy |
 
 If the official server is unavailable, a Kaggle mirror (`jessicali9530/lfw-dataset`)
@@ -77,7 +78,7 @@ consistently (do not mix original/funneled/deep-funneled images in one run).
 | Downloaded by | Domingo Enmanuel Trimarchi (researcher) |
 | Terms reviewed | TBC formal confirmation |
 | Ethics/approval reference | TBC — see `docs/ETHICS_AND_BIOMETRICS.md` |
-| Local storage location | the researcher's Arden University OneDrive research folder (institutional Microsoft 365 account) — migrated and checksum-verified 29 July 2026; see `docs/USER_ACTIONS_REQUIRED.md` for the verification record |
+| Local storage location | a private, `.gitignore`-excluded subdirectory of the project's own working directory (`datasets/`), never tracked by Git — reverted from a briefly-verified Arden University OneDrive migration after the OneDrive files proved operationally unreliable; **does not satisfy the ethics-form-mandated institutional storage requirement**, see `docs/USER_ACTIONS_REQUIRED.md` |
 | Planned deletion date | TBC |
 
 **History.** An earlier evaluation reported in this repository used
