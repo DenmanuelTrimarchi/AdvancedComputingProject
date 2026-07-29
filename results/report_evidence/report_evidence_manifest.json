@@ -1,19 +1,19 @@
 {
   "artifact_type": "report_evidence_manifest",
   "evidence_generated_outside_repository": true,
-  "generated_at": "2026-07-29T00:38:40.009840+00:00",
+  "generated_at": "2026-07-29T04:19:13.758686+00:00",
   "items": [
     {
       "contains_absolute_path": false,
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_01_roc_comparison.png",
-      "generated_at": "2026-07-29T00:38:16.402417+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:49.063632+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.1 Verification performance",
       "sha256": "a222c6268c4f929167cee8a03b47ec3eaefa23f9af42a0f9ede9c4d96304619c",
       "source_file_sha256": {
-        "results/aggregate/metrics_summary.csv": "4ad4cc6f38bc596c7ef098523e3d6a3ea92274ee8116616985ecbc92a64634d8",
+        "results/aggregate/metrics_summary.csv": "13123d6432f2bf695ac78feaf1a0476ad65d5c7756e5729e5e7ee04d24247cde",
         "results/aggregate/roc_points.csv": "466aaeb510d2eac0283496e62c3f41e3c93e976fc3b9e6657a95fac674f599bb"
       },
       "source_files": [
@@ -29,13 +29,13 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_02_lfw_final_confusion_matrix.png",
-      "generated_at": "2026-07-29T00:38:16.564745+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:49.226432+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.2 Final LFW evaluation",
       "sha256": "10050b2069ceee4ffa029cf7587bb2717ad73a8d9568c7abbdbeebeaebeade2a",
       "source_file_sha256": {
         "results/aggregate/confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
-        "results/aggregate/metrics_summary.csv": "4ad4cc6f38bc596c7ef098523e3d6a3ea92274ee8116616985ecbc92a64634d8"
+        "results/aggregate/metrics_summary.csv": "13123d6432f2bf695ac78feaf1a0476ad65d5c7756e5729e5e7ee04d24247cde"
       },
       "source_files": [
         "results/aggregate/confusion_matrices.csv",
@@ -50,13 +50,13 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_03_cplfw_confusion_matrix.png",
-      "generated_at": "2026-07-29T00:38:16.724020+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:49.382069+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.3 Cross-pose generalisation",
       "sha256": "434828c41dd95fd330b07d65daea025a00b6a9c69a477c02899802204af8f10d",
       "source_file_sha256": {
         "results/aggregate/confusion_matrices.csv": "3e3ef93f4bfcff415df8cc5bbe0da65d48fbda0901c765145fb3a40dc262553f",
-        "results/aggregate/metrics_summary.csv": "4ad4cc6f38bc596c7ef098523e3d6a3ea92274ee8116616985ecbc92a64634d8"
+        "results/aggregate/metrics_summary.csv": "13123d6432f2bf695ac78feaf1a0476ad65d5c7756e5729e5e7ee04d24247cde"
       },
       "source_files": [
         "results/aggregate/confusion_matrices.csv",
@@ -71,12 +71,12 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_04_extraction_failure_rates.png",
-      "generated_at": "2026-07-29T00:38:16.962480+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:49.618421+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.4 Face-extraction failures",
       "sha256": "4b2bcc5fc0f3795fe0370ca0b70224da9d412e4a4d699c4c6b5305543b0dd256",
       "source_file_sha256": {
-        "results/aggregate/metrics_summary.csv": "4ad4cc6f38bc596c7ef098523e3d6a3ea92274ee8116616985ecbc92a64634d8"
+        "results/aggregate/metrics_summary.csv": "13123d6432f2bf695ac78feaf1a0476ad65d5c7756e5729e5e7ee04d24247cde"
       },
       "source_files": [
         "results/aggregate/metrics_summary.csv"
@@ -90,12 +90,12 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_05_cplfw_failure_breakdown.png",
-      "generated_at": "2026-07-29T00:38:17.167136+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:49.819762+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.4 Face-extraction failures",
       "sha256": "0d7038817017d483fc4e99d66da05c806ec054eaea4a91936718a53b6b33c7fa",
       "source_file_sha256": {
-        "results/aggregate/cplfw_metrics.json": "e886c19e5835c1c09d223491be7570b6ce629b2a5288c321ad8e5e11f8e7675b"
+        "results/aggregate/cplfw_metrics.json": "733be284166e429009c4ff8bb4ef4cc1faac0898cef2010a4bd365ae2f3145d6"
       },
       "source_files": [
         "results/aggregate/cplfw_metrics.json"
@@ -109,12 +109,12 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_06_gallery_outcomes.png",
-      "generated_at": "2026-07-29T00:38:17.303982+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:49.956732+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.5 Duplicate-profile gallery",
       "sha256": "9d1c0d52f5d760da4cf08c6f05bad5cbb08225a7dd05409277ac7491404172fc",
       "source_file_sha256": {
-        "results/aggregate/duplicate_gallery_metrics.json": "cc3dc8a465f36dd1dc9eb7b37465706e71fd7088ee616b6f80e71d026edf7316"
+        "results/aggregate/duplicate_gallery_metrics.json": "1d70f1b8cb60210f4ce7f9922a7521d6a9cb526da3cf1083aa14a9c297403dda"
       },
       "source_files": [
         "results/aggregate/duplicate_gallery_metrics.json"
@@ -128,12 +128,12 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_07_threshold_candidate_comparison.png",
-      "generated_at": "2026-07-29T00:38:17.550092+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:50.194029+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.5 Threshold selection",
       "sha256": "c762d35c005cd7fddea2fe4cfe330195cc0c3f1c90542f1ebc06079468502a31",
       "source_file_sha256": {
-        "results/aggregate/calibrated_threshold.json": "2c49f6811a9bc25b55f068e8918f8de5d51d1aabb9887960ca761562130458d5"
+        "results/aggregate/calibrated_threshold.json": "44897a763bc6dec4eb12d6fc89bcb115d683d9c4ba716613d7b0d6c040f3650a"
       },
       "source_files": [
         "results/aggregate/calibrated_threshold.json"
@@ -147,13 +147,13 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_08_latency_comparison.png",
-      "generated_at": "2026-07-29T00:38:17.768198+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:50.412501+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 4 \u2014 Results, \u00a74.6 Processing latency",
-      "sha256": "816872f1481064686892d1e7f378e7ea254290001d47922c38afd72c9ad77a92",
+      "sha256": "604ca5bf773178853190016a90651402fd1c120ebcceae09f580db801171652e",
       "source_file_sha256": {
-        "results/aggregate/duplicate_gallery_metrics.json": "cc3dc8a465f36dd1dc9eb7b37465706e71fd7088ee616b6f80e71d026edf7316",
-        "results/aggregate/metrics_summary.csv": "4ad4cc6f38bc596c7ef098523e3d6a3ea92274ee8116616985ecbc92a64634d8"
+        "results/aggregate/duplicate_gallery_metrics.json": "1d70f1b8cb60210f4ce7f9922a7521d6a9cb526da3cf1083aa14a9c297403dda",
+        "results/aggregate/metrics_summary.csv": "13123d6432f2bf695ac78feaf1a0476ad65d5c7756e5729e5e7ee04d24247cde"
       },
       "source_files": [
         "results/aggregate/metrics_summary.csv",
@@ -168,12 +168,12 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "figures/figure_09_experiment_flow.png",
-      "generated_at": "2026-07-29T00:38:17.990383+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:50.629728+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.2 Experimental design",
       "sha256": "e7b9b15125bc991d300dcfa44e7bc395607dd3eb725837070bf5e28e90cacddb",
       "source_file_sha256": {
-        "results/aggregate/calibrated_threshold.json": "2c49f6811a9bc25b55f068e8918f8de5d51d1aabb9887960ca761562130458d5"
+        "results/aggregate/calibrated_threshold.json": "44897a763bc6dec4eb12d6fc89bcb115d683d9c4ba716613d7b0d6c040f3650a"
       },
       "source_files": [
         "results/aggregate/calibrated_threshold.json"
@@ -187,10 +187,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_01_environment_check.png",
-      "generated_at": "2026-07-29T00:38:18.203386+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:50.836029+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "333e93b3c78fb0368ccb7e60a274a5d0b6869bcbe83e3096b4d542fe19ea83f9",
+      "sha256": "35bcf074ca7309670dd0119f0db6bd2650dc9ab879ee5e9d201ad6ead83651e4",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The pinned dependency contract verified at run time, not merely declared in pyproject.toml.",
@@ -202,10 +202,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_02_model_verification.png",
-      "generated_at": "2026-07-29T00:38:18.350407+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:50.977997+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "0ff33bcc79a06456eebea99db174b9b3312172257456584c11ca19e818751d07",
+      "sha256": "eef5e12241d77a04b2c01c9113df3e2cc110d40f8ac25b04764ddd603ebdbbac",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Both ONNX models verified against their pinned SHA-256 values before any inference.",
@@ -217,10 +217,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_03_lfw_dataset_verification.png",
-      "generated_at": "2026-07-29T00:38:19.037104+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:52.149492+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "e79c37e6b5ed0f1cb5f32a4b630fae1e77b69b4578c41658b5ca66e48b042228",
+      "sha256": "601c9c2be94a9904916deaed91ac10cf8993f6ea2732fe041b55fa2fb704fe73",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "All three LFW protocol files parsed with every referenced image resolving.",
@@ -232,10 +232,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_04_cplfw_raw_dataset_verification.png",
-      "generated_at": "2026-07-29T00:38:19.497925+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:18:52.921016+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "fd9071397748f843e23ffe67cf74316781f98def8059c3285b6adc8a0e19596e",
+      "sha256": "3bf290d2c99409768e907721a76d5ebd75722d5b19f1350740d186a93b2e1c2e",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "All 6,000 raw CPLFW pairs (3,000 matched, 3,000 mismatched) resolved against the authors' images.rar image set.",
@@ -247,10 +247,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_05_pytest_result.png",
-      "generated_at": "2026-07-29T00:38:39.495045+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:19:13.251494+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "6589d723e72a1710633609feec5a593e1ba173e37f507bd951db36370ae3b42e",
+      "sha256": "f952e6acac7a6e86ae6fd1705e7a750b256fd00858a9fb079d19c08ecef563e3",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The synthetic-fixture test suite, which runs with no dataset or model file present.",
@@ -262,10 +262,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_06_privacy_scan.png",
-      "generated_at": "2026-07-29T00:38:39.631546+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:19:13.386635+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix C \u2014 Data governance evidence",
-      "sha256": "14420aaf2772ea1462e5712811ec6c65edcda2d147e98ef909d99a91b0907cae",
+      "sha256": "cb9aafd844ebb00e1b98767f7491cf0a9a72479438e156548af1957fec081215",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Committed aggregate outputs confirmed free of personal or absolute filesystem paths.",
@@ -277,10 +277,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_07_output_file_listing.png",
-      "generated_at": "2026-07-29T00:38:39.755169+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:19:13.508864+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "0ce4d4e0dcd56b753f552820a24fc1b7df08772a339808c256eda8a8a76b9830",
+      "sha256": "a99bd44cf87a9f3ed0a620832a5a0b4679bf689312c6b5004258a6528835a5a2",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Inventory confirming that all ten aggregate outputs and the evidence pack exist.",
@@ -292,10 +292,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_08_cplfw_variant_evidence.png",
-      "generated_at": "2026-07-29T00:38:39.847437+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:19:13.599509+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.4 Datasets",
-      "sha256": "771bd284da2f3da26c9af70cf4976b6f68420f9bcdee9957bdd5c1a0127d8fcc",
+      "sha256": "9a0e94bdeb2b363009fa924b56509d4868824f48b6d9c0d22447e81790d3ed79",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The reported CPLFW result records the raw authors-distributed image set explicitly, removing the ambiguity present in the superseded aligned run.",
@@ -307,10 +307,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_09_threshold_freeze_evidence.png",
-      "generated_at": "2026-07-29T00:38:39.949859+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:19:13.700634+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 3 \u2014 Methodology, \u00a73.5 Threshold selection",
-      "sha256": "48bdca4da1a62ff606a9ebee54c065fa1c802ed431620d8de650418b4bdd37ca",
+      "sha256": "684d2930185c49b14c6c1332f92bc993f811488ab992a005d463cc8cbf3a6aaa",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "The threshold artifact records status \"frozen\", the protocol it was frozen from, that file's SHA-256, and the deterministic selection rule applied.",
@@ -322,10 +322,10 @@
       "contains_identity_information": false,
       "contains_real_face_image": false,
       "filename": "screenshots/screenshot_10_git_status.png",
-      "generated_at": "2026-07-29T00:38:40.009220+00:00",
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "generated_at": "2026-07-29T04:19:13.758119+00:00",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
-      "sha256": "05b34ac4030d9318268501f356cccefbabd0f0717b73289da76accfe1942f061",
+      "sha256": "4283397457a7ceeb97b09bbb3ce28655422cd1b516c90c1cfa3d6a7be3ee8ffc",
       "source_file_sha256": {},
       "source_files": [],
       "suggested_caption": "Repository state when this evidence pack was generated. A dirty working tree is reported as dirty and never presented as clean.",
@@ -338,7 +338,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_01_github_actions_pass.png",
       "generated_at": null,
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -354,7 +354,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_02_final_github_commit.png",
       "generated_at": null,
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix B \u2014 Reproducibility evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -370,7 +370,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_03_streamlit_review_interface.png",
       "generated_at": null,
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Chapter 5 \u2014 Human-review decision policy",
       "sha256": null,
       "source_file_sha256": {},
@@ -386,7 +386,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_04_au_onedrive_storage_evidence.png",
       "generated_at": null,
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix C \u2014 Data governance evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -402,7 +402,7 @@
       "contains_real_face_image": false,
       "filename": "screenshots/manual_05_ethics_approval_evidence.png",
       "generated_at": null,
-      "git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+      "git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
       "report_section": "Appendix C \u2014 Data governance evidence",
       "sha256": null,
       "source_file_sha256": {},
@@ -413,9 +413,9 @@
       "type": "manual_screenshot"
     }
   ],
-  "provenance_note": "Generated from source commit d947719645f6f3b7ee075349db025ffd520ecebd with a clean working tree. The evidence artefacts themselves are added by a subsequent commit; they are not part of the source commit named here.",
+  "provenance_note": "Generated from source commit c92b2989e5b483d8ae7a3677c52e7965ba07cc56 with a clean working tree. The evidence artefacts themselves are added by a subsequent commit; they are not part of the source commit named here.",
   "schema_version": 1,
-  "source_git_commit": "d947719645f6f3b7ee075349db025ffd520ecebd",
+  "source_git_commit": "c92b2989e5b483d8ae7a3677c52e7965ba07cc56",
   "source_working_tree_clean_before_generation": true,
   "validation_commands_run": true
 }
