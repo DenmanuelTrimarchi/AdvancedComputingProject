@@ -1,38 +1,10 @@
 # Manual screenshots required
 
-These five items cannot be generated locally, and this project will not fabricate them or emit look-alike placeholders. Capture each one yourself and save it into `results/report_evidence/screenshots/` using the filename given below.
+These four items cannot be generated locally, and this project will not fabricate them or emit look-alike placeholders. Capture each one yourself and save it into `results/report_evidence/screenshots/` using the filename given below.
 
-> **Do not capture item 1 until a real GitHub Actions run has actually passed for the final commit.** Nothing in this repository asserts that remote CI has passed.
+GitHub Actions is not part of this list: validation is performed locally on macOS (see `scripts/run_local_mac.sh` and `docs/REPRODUCIBILITY.md`), and GitHub is used only as version-controlled backup — screenshot_15 below evidences that backup, not a remote CI pass.
 
-## `manual_01_github_actions_pass.png`
-
-**Title.** GitHub Actions CI run passing for the final commit
-
-**Where to capture.** GitHub → AdvancedComputingProject → Actions → CI → the run for the final `main` commit
-
-**Must be visible.** The repository name; the workflow name (CI); a green success status; the final commit SHA; and the completed `test` job with its steps expanded.
-
-**Must be redacted.** Unrelated account information; any other repository in the sidebar; private email addresses.
-
-**Report section.** Appendix B — Reproducibility evidence
-
-**Suggested caption.** Continuous integration passing for the submitted commit. CI runs the synthetic-fixture suite only; it never has access to real datasets or model binaries.
-
-## `manual_02_final_github_commit.png`
-
-**Title.** Repository main page at the final commit
-
-**Where to capture.** GitHub → AdvancedComputingProject → the repository main page, on branch `main`
-
-**Must be visible.** That the branch is `main`; the final commit message and short SHA; and the file listing including `scripts/generate_report_evidence.py`.
-
-**Must be redacted.** Unrelated repositories in the sidebar; private email addresses.
-
-**Report section.** Appendix B — Reproducibility evidence
-
-**Suggested caption.** The public repository at the submitted commit, showing that no dataset, model binary or database file is tracked.
-
-## `manual_03_streamlit_review_interface.png`
+## `screenshot_12_streamlit_human_review_interface.png`
 
 **Title.** Local human-review interface
 
@@ -44,23 +16,23 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Report section.** Chapter 5 — Human-review decision policy
 
-**Suggested caption.** The localhost-only review interface. Every case is identified by an opaque one-way hash; a similarity result opens a review case and never an automatic sanction.
+**Suggested caption.** Localhost-only review interface showing opaque case identifiers and proportionate reviewer controls; no automatic account sanction is applied.
 
-## `manual_04_au_onedrive_storage_evidence.png`
+## `screenshot_13_arden_onedrive_storage.png`
 
 **Title.** Institutional storage location
 
 **Where to capture.** The Arden University OneDrive research folder, navigated to the project's own subfolder (not the OneDrive account root) — the migration is complete and verified, see docs/USER_ACTIONS_REQUIRED.md for the checksum/file-count record
 
-**Must be visible.** The university-controlled OneDrive identity/location; the project subfolder; and the high-level folder structure (datasets/, protocols/, models/).
+**Must be visible.** The university-controlled OneDrive identity/location; the project subfolder; and the high-level folder structure (datasets/, protocols/, models/, optionally cache/).
 
 **Must be redacted.** Face-image thumbnails; participant or identity names; unrelated university or personal files; absolute local paths containing your account name. Navigate *into* the project subfolder before capturing rather than screenshotting the OneDrive account root — an institutional OneDrive root commonly also holds unrelated personal documents (coursework, assignments, or similar) that must never appear in a committed screenshot. Switch the file browser out of any thumbnail/preview mode first.
 
 **Report section.** Appendix C — Data governance evidence
 
-**Suggested caption.** Benchmark images, protocols and models held in access-controlled institutional storage, outside the repository and outside any personal cloud service.
+**Suggested caption.** Datasets, protocols and pinned models stored in the access-controlled Arden University OneDrive research location, outside the Git repository.
 
-## `manual_05_ethics_approval_evidence.png`
+## `screenshot_14_ethics_approval.png`
 
 **Title.** Ethics approval record
 
@@ -72,4 +44,18 @@ These five items cannot be generated locally, and this project will not fabricat
 
 **Report section.** Appendix C — Data governance evidence
 
-**Suggested caption.** Institutional ethics approval covering this evaluation. Capture only if your institution permits reproducing the record in a dissertation appendix.
+**Suggested caption.** Institutional ethics approval or recorded authorisation covering the benchmark evaluation.
+
+## `screenshot_15_github_backup_final_commit.png`
+
+**Title.** GitHub backup of the final commit
+
+**Where to capture.** GitHub → AdvancedComputingProject → the repository main page, on branch `main`
+
+**Must be visible.** The repository name; that the branch is `main`; the final commit message and short SHA; and the source file listing.
+
+**Must be redacted.** The Actions tab; billing information; private email addresses; unrelated repositories in the sidebar. GitHub is version-controlled backup evidence here, not an execution-passing claim — do not include an Actions screenshot.
+
+**Report section.** Appendix B — Version-control and backup evidence
+
+**Suggested caption.** GitHub repository used as version-controlled backup of the project source code and privacy-reviewed aggregate artefacts; execution was performed locally on macOS.
