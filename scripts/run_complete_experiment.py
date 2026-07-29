@@ -69,6 +69,49 @@ def _fmt_num(value: Any, digits: int = 4) -> str:
         return "n/a"
 
 
+def _fmt_int(value: Any) -> str:
+    # Thousands separators for pair counts quoted in dissertation prose.
+    try:
+        return f"{int(value):,}"
+    except (TypeError, ValueError):
+        return "n/a"
+
+
+# Category keys carry the side on which extraction terminated; see
+# verification_evaluator.evaluate_pairs for the left-first short-circuit rule.
+_FAILURE_CATEGORY_PROSE = {
+    "zero_faces_left": "zero-face detections on the left image",
+    "zero_faces_right": "zero-face detections on the right image",
+    "multiple_faces_left": "multiple-face detections on the left image",
+    "multiple_faces_right": "multiple-face detections on the right image",
+}
+
+
+def _render_failure_breakdown(payload: Dict[str, Any]) -> str:
+    """Describe the failure categories in prose, reading counts from the
+    result rather than restating them by hand."""
+    breakdown = payload.get("failure_breakdown") or {}
+    if not breakdown:
+        return "No extraction-failure categories were recorded."
+
+    described = [
+        f"{_fmt_int(breakdown[key])} {prose}"
+        for key, prose in _FAILURE_CATEGORY_PROSE.items()
+        if key in breakdown
+    ]
+    # Any category outside the expected four is surfaced, never dropped.
+    described += [f"{_fmt_int(count)} {key}" for key, count in breakdown.items()
+                  if key not in _FAILURE_CATEGORY_PROSE]
+
+    joined = ", ".join(described[:-1]) + (f" and {described[-1]}" if len(described) > 1 else described[0])
+    return (
+        f"The {_fmt_int(payload.get('failed_pairs'))} failures comprised {joined}. Each failed pair "
+        f"carries exactly one category: sides are attempted left first and the pair is abandoned at "
+        f"the first terminal failure, so a right-side category means the left image had already "
+        f"yielded one valid face."
+    )
+
+
 def _render_final_report(payloads: Dict[str, Dict[str, Any]], gallery_payload: Dict[str, Any]) -> str:
     dev, final, cplfw = payloads["lfw_development"], payloads["lfw_final"], payloads["cplfw"]
     lines = [
@@ -111,16 +154,26 @@ def _render_final_report(payloads: Dict[str, Dict[str, Any]], gallery_payload: D
         "",
         "## Experiment 4 — CPLFW cross-pose generalisation (same frozen threshold, no recalibration)",
         "",
-        f"Scored {cplfw.get('scored_pairs', 'n/a')} / {cplfw.get('total_pairs', 'n/a')} pairs — "
-        f"**failure rate {_fmt_pct(cplfw.get('failure_rate'))}** "
-        f"(breakdown: {cplfw.get('failure_breakdown')}). "
-        f"On the pairs that did produce a score: accuracy {_fmt_pct(cplfw.get('accuracy'))}, "
+        # Counts and the decimal rate come from summarize_metrics(); the
+        # percentage is derived here so no figure is ever transcribed by hand.
+        f"Of the {_fmt_int(cplfw.get('total_pairs'))} raw CPLFW protocol pairs, "
+        f"{_fmt_int(cplfw.get('scored_pairs'))} produced valid similarity scores and "
+        f"{_fmt_int(cplfw.get('failed_pairs'))} failed during face extraction. The "
+        f"extraction-failure rate was therefore **{_fmt_pct(cplfw.get('failure_rate'))}** "
+        f"({_fmt_int(cplfw.get('failed_pairs'))} ÷ {_fmt_int(cplfw.get('total_pairs'))}). These "
+        f"failed pairs were retained in the protocol total and reported separately rather than "
+        f"being silently discarded.",
+        "",
+        _render_failure_breakdown(cplfw),
+        "",
+        f"Accuracy, precision, recall, F1-score, ROC-AUC and EER are conditional on the "
+        f"{_fmt_int(cplfw.get('scored_pairs'))} pairs for which both images produced exactly one "
+        f"valid face: accuracy {_fmt_pct(cplfw.get('accuracy'))}, "
         f"F1 {_fmt_num(cplfw.get('f1'))}, false match rate {_fmt_pct(cplfw.get('false_match_rate'))}, "
         f"false non-match rate {_fmt_pct(cplfw.get('false_non_match_rate'))}, "
         f"ROC-AUC {_fmt_num(cplfw.get('roc_auc'))}, EER {_fmt_pct(cplfw.get('equal_error_rate'))}. "
-        f"The dominant failure mode is recorded per-side in the breakdown above — compare "
-        f"`zero_faces_*` against `multiple_faces_*` to see whether detection or over-detection "
-        f"drives the failure rate.",
+        f"An extraction failure is not a verification error: the pipeline never produced a "
+        f"similarity score for those pairs, so they can be neither correct nor incorrect.",
         "",
         "## Experiment 5 — real 1:N duplicate-profile gallery (LFW, seed "
         f"{gallery_payload.get('seed', 'n/a')})",
