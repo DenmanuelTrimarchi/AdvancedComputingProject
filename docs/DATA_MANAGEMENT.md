@@ -31,15 +31,18 @@ drive, or any personal (non-institutional) cloud service such as Dropbox
 or a personal Google Drive/iCloud account — the AU OneDrive research
 folder is the one and only approved location per the ethics form.
 
-**Current status (28 July 2026): not yet migrated.** The dataset/model
-verification and evaluation runs recorded in this repository so far used a
-private, access-controlled local directory outside the repository and
-outside any personal cloud-sync service — it satisfies "not in Git, not a
-personal cloud account," but migration to the actual Arden University
-OneDrive folder has not yet been confirmed. See
-`docs/USER_ACTIONS_REQUIRED.md` for this outstanding action. Nothing below
-this note should be read as a claim that the OneDrive migration has already
-happened.
+**Current status (29 July 2026): migrated and verified.** The datasets,
+protocols, pinned models and the raw CPLFW image set have been copied into
+the researcher's Arden University OneDrive account and verified —
+identical file counts and SHA-256 checksums before and after the copy, and
+a passing re-run of `scripts/verify_models.py`, `scripts/verify_lfw_dataset.py`
+and `scripts/verify_cplfw_dataset.py` against the OneDrive-backed paths.
+The final benchmark evaluation was re-run from those paths; every headline
+metric reproduced exactly. See `docs/USER_ACTIONS_REQUIRED.md` for the full
+verification record and `docs/DATASET_PROVENANCE.md` for the migration
+date and method. Absolute OneDrive paths are intentionally omitted from
+this and every other committed document — see `.env.example` for the
+variable names the local, gitignored `.env` supplies.
 
 ## What is committed vs. what is not
 
