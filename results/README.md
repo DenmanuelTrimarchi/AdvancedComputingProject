@@ -33,6 +33,12 @@ is local (see `docs/REPRODUCIBILITY.md`).
 what changed and why — never a current finding. See
 `results/historical/README.md`.
 
+`results/RESULTS_SUMMARY.md` is a quick-look, plain-English companion —
+every figure inline with a short description of what it means, generated
+by `scripts/generate_results_summary.py`. Aggregate-only, same as
+everything else in this directory. Use it for a fast read of the outcome;
+use `results/report_evidence/` for the dissertation-grade version.
+
 Files produced by a full run of `scripts/run_complete_experiment.py` (the
 last five are generated automatically from the first five, not hand-written):
 

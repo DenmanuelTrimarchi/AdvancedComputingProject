@@ -196,6 +196,20 @@ GitHub Actions is deliberately not among them: see
 `docs/REPRODUCIBILITY.md` for why remote CI is not part of this project's
 validation design.
 
+### Quick look at the results (plain English)
+
+```bash
+python scripts/generate_results_summary.py
+```
+
+Writes `results/RESULTS_SUMMARY.md`: every figure shown inline with a short,
+jargon-light description of what it means — generates the figures first if
+they don't already exist. Open it in VS Code and press **Cmd+Shift+V**
+(Mac) / **Ctrl+Shift+V** (Windows/Linux) for a rendered preview with the
+charts inline. For the dissertation-grade version (chapter placements,
+source hashes, privacy flags), see
+`results/report_evidence/REPORT_EVIDENCE_INDEX.md` instead.
+
 ### Optional: local review demonstration
 
 ```bash
