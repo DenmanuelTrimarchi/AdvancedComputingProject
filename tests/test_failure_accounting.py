@@ -1,3 +1,12 @@
+"""Extraction failures must be counted, never silently dropped.
+
+A pair that yields no usable embedding still belongs in the protocol total;
+dropping it would quietly inflate every reported accuracy figure. These tests
+pin that accounting for each terminal failure category, and check that
+malformed embeddings are rejected at the similarity boundary rather than
+scored as if they were valid.
+"""
+
 from __future__ import annotations
 
 import numpy as np

@@ -1,3 +1,12 @@
+"""1:N gallery search: deterministic ranking and a well-formed manifest.
+
+Rank-1 identification is only meaningful if repeated runs agree, so ordering
+is asserted directly. The manifest guards are equally important: one image
+cannot serve as both gallery entry and probe, and an invalid identity
+partition must fail loudly rather than quietly bias the duplicate-detection
+rate.
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
