@@ -16,14 +16,14 @@ import statistics
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional, Tuple
 
 import numpy as np
 
 from . import metrics as metrics_module
 from .config import DEFAULT_RANDOM_SEED
-from .detector import FaceCountError, YuNetDetector
-from .embedder import SFaceEmbedder
+from .detector import FaceCountError
+from .interfaces import FaceDetector, FaceEmbedder
 from .image_io import ImageLoadError, load_image_bgr
 from .privacy import opaque_id
 from .similarity import SimilarityError, cosine_similarity, l2_normalize
@@ -50,7 +50,7 @@ class GalleryManifest:
 def build_manifest(
     identity_to_images: Dict[str, List[Path]],
     *,
-    excluded_images: Sequence[Path] = (),
+    excluded_images: Iterable[Path] = (),
     seed: int = DEFAULT_RANDOM_SEED,
     max_unknown_identities: Optional[int] = None,
 ) -> GalleryManifest:
@@ -120,7 +120,7 @@ class GalleryEvaluationResult:
 
 
 def _embed_entry(
-    entry: ManifestEntry, detector: YuNetDetector, embedder: SFaceEmbedder
+    entry: ManifestEntry, detector: FaceDetector, embedder: FaceEmbedder
 ) -> Tuple[Optional[np.ndarray], Optional[str]]:
     try:
         loaded = load_image_bgr(entry.image_path)
@@ -136,8 +136,8 @@ def _embed_entry(
 def evaluate_gallery(
     manifest: GalleryManifest,
     *,
-    detector: YuNetDetector,
-    embedder: SFaceEmbedder,
+    detector: FaceDetector,
+    embedder: FaceEmbedder,
     duplicate_review_threshold: float,
 ) -> GalleryEvaluationResult:
     gallery_entries = [e for e in manifest.entries if e.role == "gallery"]

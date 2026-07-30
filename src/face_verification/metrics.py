@@ -10,9 +10,14 @@ fully pinned.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
+
+# Every entry point accepts either a plain sequence or the arrays that
+# _validate_inputs returns, so internal calls need not convert back.
+ScoreInput = Union[Sequence[float], np.ndarray]
+LabelInput = Union[Sequence[int], np.ndarray]
 
 
 class MetricsError(ValueError):
@@ -55,7 +60,7 @@ class ConfusionMatrix:
         }
 
 
-def _validate_inputs(scores: Sequence[float], labels: Sequence[int]) -> Tuple[np.ndarray, np.ndarray]:
+def _validate_inputs(scores: ScoreInput, labels: LabelInput) -> Tuple[np.ndarray, np.ndarray]:
     scores_arr = np.asarray(scores, dtype=np.float64)
     labels_arr = np.asarray(labels, dtype=np.int64)
     if scores_arr.shape[0] != labels_arr.shape[0]:
@@ -74,7 +79,7 @@ def _validate_inputs(scores: Sequence[float], labels: Sequence[int]) -> Tuple[np
     return scores_arr, labels_arr
 
 
-def confusion_matrix(scores: Sequence[float], labels: Sequence[int], threshold: float) -> ConfusionMatrix:
+def confusion_matrix(scores: ScoreInput, labels: LabelInput, threshold: float) -> ConfusionMatrix:
     scores_arr, labels_arr = _validate_inputs(scores, labels)
     predicted_match = scores_arr >= threshold
     actual_match = labels_arr == 1
@@ -120,7 +125,7 @@ def rates_from_confusion(matrix: ConfusionMatrix) -> Dict[str, float]:
     }
 
 
-def roc_points(scores: Sequence[float], labels: Sequence[int]) -> List[Dict[str, float]]:
+def roc_points(scores: ScoreInput, labels: LabelInput) -> List[Dict[str, float]]:
     """ROC curve as ``{threshold, false_match_rate, true_match_rate}`` points,
     one per distinct score plus +/-1 sentinels, ordered by descending threshold."""
     scores_arr, labels_arr = _validate_inputs(scores, labels)
@@ -143,7 +148,7 @@ def roc_points(scores: Sequence[float], labels: Sequence[int]) -> List[Dict[str,
     return points
 
 
-def roc_auc(scores: Sequence[float], labels: Sequence[int]) -> float:
+def roc_auc(scores: ScoreInput, labels: LabelInput) -> float:
     """Rank-based ROC-AUC (Mann-Whitney U statistic), ties broken with
     average ranks. Equivalent to trapezoidal-rule AUC, no sklearn needed."""
     scores_arr, labels_arr = _validate_inputs(scores, labels)
@@ -171,7 +176,7 @@ def roc_auc(scores: Sequence[float], labels: Sequence[int]) -> float:
     return float((sum_ranks_positive - n_pos * (n_pos + 1) / 2.0) / (n_pos * n_neg))
 
 
-def equal_error_rate(scores: Sequence[float], labels: Sequence[int]) -> Dict[str, float]:
+def equal_error_rate(scores: ScoreInput, labels: LabelInput) -> Dict[str, float]:
     """EER via linear interpolation between the ROC points bracketing
     false_match_rate == false_non_match_rate."""
     points = roc_points(scores, labels)
@@ -199,7 +204,9 @@ def equal_error_rate(scores: Sequence[float], labels: Sequence[int]) -> Dict[str
                     best_gap, best_eer, best_threshold = abs(gap), eer, threshold
         previous = (fmr, fnmr, gap, point["threshold"])
 
-    if best_eer is None:
+    # Both are assigned together above, so either both are set or neither is;
+    # testing both is what makes that invariant explicit.
+    if best_eer is None or best_threshold is None:
         closest = min(points, key=lambda p: abs(p["false_match_rate"] - (1.0 - p["true_match_rate"])))
         best_eer = closest["false_match_rate"]
         best_threshold = closest["threshold"]
@@ -215,8 +222,8 @@ class ThresholdCandidate:
 
 
 def select_threshold(
-    scores: Sequence[float],
-    labels: Sequence[int],
+    scores: ScoreInput,
+    labels: LabelInput,
     *,
     strategy: str,
     target_false_match_rate: Optional[float] = None,

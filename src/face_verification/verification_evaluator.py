@@ -14,13 +14,13 @@ import statistics
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
 from . import metrics as metrics_module
-from .detector import FaceCountError, YuNetDetector
-from .embedder import SFaceEmbedder
+from .detector import FaceCountError
+from .interfaces import FaceDetector, FaceEmbedder
 from .image_io import ImageLoadError, load_image_bgr
 from .protocols import Pair
 from .similarity import SimilarityError, cosine_similarity, l2_normalize
@@ -87,8 +87,8 @@ class EvaluationResult:
 
 def _embed_image(
     path: Path,
-    detector: YuNetDetector,
-    embedder: SFaceEmbedder,
+    detector: FaceDetector,
+    embedder: FaceEmbedder,
     cache: Dict[Path, np.ndarray],
     embedding_times: List[float],
 ) -> np.ndarray:
@@ -104,7 +104,7 @@ def _embed_image(
     return normalized
 
 
-def evaluate_pairs(pairs: List[Pair], *, detector: YuNetDetector, embedder: SFaceEmbedder) -> EvaluationResult:
+def evaluate_pairs(pairs: List[Pair], *, detector: FaceDetector, embedder: FaceEmbedder) -> EvaluationResult:
     scored: List[PairScore] = []
     failures: Dict[str, int] = {}
     cache: Dict[Path, np.ndarray] = {}
@@ -113,9 +113,12 @@ def evaluate_pairs(pairs: List[Pair], *, detector: YuNetDetector, embedder: SFac
     def record(code: str) -> None:
         failures[code] = failures.get(code, 0) + 1
 
-    def embed_side(path: Path, side: str) -> "tuple[Optional[np.ndarray], Optional[str]]":
+    # Returns the embedding and an empty failure code, or no embedding and the
+    # code that terminated this side. The empty string carries the same meaning
+    # as the absent embedding, so a caller can branch on either one.
+    def embed_side(path: Path, side: str) -> Tuple[Optional[np.ndarray], str]:
         try:
-            return _embed_image(path, detector, embedder, cache, embedding_times), None
+            return _embed_image(path, detector, embedder, cache, embedding_times), ""
         except FaceCountError as exc:
             code = f"zero_faces_{side}" if exc.face_count == 0 else f"multiple_faces_{side}"
             return None, code

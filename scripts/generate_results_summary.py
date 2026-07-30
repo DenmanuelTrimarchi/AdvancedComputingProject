@@ -200,7 +200,6 @@ def main(argv: List[str] | None = None) -> int:
 
     h("## Figure 5 — Why detection fails on awkward-angle photos")
     fig("05", "figure_05_cplfw_failure_breakdown.png", "Raw CPLFW face-extraction failure categories")
-    dominant = max(("zero_faces_left", "zero_faces_right"), key=lambda k: breakdown.get(k, 0))
     p(
         "Zooming into *why* detection failed: overwhelmingly, no face at all could be "
         f"found ({breakdown.get('zero_faces_left', 0):,} + {breakdown.get('zero_faces_right', 0):,} "

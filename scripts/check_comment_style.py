@@ -397,7 +397,7 @@ def audit(root: Path) -> List[Violation]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
     args = parser.parse_args(argv)
 
