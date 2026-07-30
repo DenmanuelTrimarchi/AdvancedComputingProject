@@ -35,3 +35,21 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.pyright]
+# scripts/ and local_review/ hold runnable tools rather than installed
+# packages, so a type checker cannot follow the sys.path inserts used to
+# import from them at runtime.
+extraPaths = ["scripts", "src", "local_review"]
+
+# Private research inputs are never part of the codebase, and third-party
+# code shipped inside a dataset archive is not ours to type-check.
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.*",
+    "datasets",
+    "data",
+    "models",
+    "cache",
+]
