@@ -210,6 +210,8 @@ def summarize_gallery_metrics(result: GalleryEvaluationResult) -> Dict[str, obje
         if scored_duplicates
         else float("nan")
     )
+    # Self-comparison is the NaN test: with no scored duplicate probes the miss
+    # rate stays undefined instead of being reported as a perfect 1.0.
     true_duplicate_miss_rate = (
         1.0 - duplicate_detection_rate if duplicate_detection_rate == duplicate_detection_rate else float("nan")
     )

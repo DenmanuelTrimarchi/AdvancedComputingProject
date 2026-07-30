@@ -1,3 +1,13 @@
+"""Metric definitions verified against hand-checked values.
+
+Every figure reported in the dissertation comes from this module, and it
+deliberately carries no scikit-learn dependency, so the implementations are
+checked against known-answer cases rather than another library. Tied scores
+and single-class input get particular attention: the first is where a
+rank-based AUC silently goes wrong, the second is where a rate is undefined
+and must not be reported as zero.
+"""
+
 from __future__ import annotations
 
 import math

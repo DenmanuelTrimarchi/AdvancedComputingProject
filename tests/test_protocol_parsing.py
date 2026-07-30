@@ -1,3 +1,13 @@
+"""Official LFW and CPLFW pair files are parsed strictly, or not at all.
+
+The published protocols define the experiment, so a silently misread row
+would invalidate every downstream figure. Each malformed shape is therefore
+required to raise rather than degrade: wrong column counts, declared/actual
+count mismatches, duplicate pairs, single-class protocols, missing images and
+path traversal. CPLFW's two-lines-per-pair layout is covered separately from
+LFW's, because the formats genuinely differ.
+"""
+
 from __future__ import annotations
 
 from pathlib import Path

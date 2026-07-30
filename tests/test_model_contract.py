@@ -1,3 +1,11 @@
+"""The pinned model and dependency contract, checked before any inference.
+
+Results are only comparable if the exact same model weights produced them, so
+a digest mismatch must stop the run before OpenCV ever loads the file — that
+ordering is asserted here, not assumed. No real ONNX binary is needed: the
+hash check is what is under test, and it fails on content alone.
+"""
+
 from __future__ import annotations
 
 from pathlib import Path

@@ -1,3 +1,13 @@
+"""The validation/development/held-out boundary, enforced in code.
+
+This is the project's central methodological guarantee, so each stage is
+tested for what it refuses as well as what it produces: calibration accepts
+only the validation split, selection refuses an already-frozen artifact, and
+a final evaluation refuses any threshold not explicitly frozen. Tie-breaking
+is asserted too, because a non-deterministic choice would make the reported
+threshold unreproducible.
+"""
+
 from __future__ import annotations
 
 import pytest

@@ -1,3 +1,12 @@
+"""Privacy safeguards that stand between the pipeline and a committed result.
+
+Covers the two disclosure routes that matter: an identity reaching a public
+artifact (opaque identifiers, filename scrubbing, embedding-vector and
+name-like key detection), and a personal filesystem path reaching one. The
+library-level scanner is exercised here; the CLI wrapper around it is covered
+in tests/test_public_output_scanner.py.
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
