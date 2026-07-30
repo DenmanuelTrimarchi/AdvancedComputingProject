@@ -1,10 +1,10 @@
-"""Plagiarism-safety checks against this repository's own tracked files.
+"""Provenance and comment-style assertions for this repository's tracked files.
 
-tests/test_comment_style.py proves the checker detects violations using
-synthetic repositories. These tests assert the real repository is clean, and
-guard the two failure modes that matter for an academic submission: claiming
-provenance that was never verified, and pasting an attribution header
-everywhere so it stops carrying meaning.
+tests/test_comment_style.py establishes that the checker reports violations on
+synthetic inputs; the tests here apply it to the repository itself. Two
+conditions carry the most weight: no source may be recorded unless it has been
+verified, and the attribution header must stay confined to the code that
+genuinely warrants one.
 """
 
 from __future__ import annotations
