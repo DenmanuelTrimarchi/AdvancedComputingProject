@@ -106,7 +106,7 @@ def main(argv=None) -> int:
     print(f"OK   copied               : {copied}")
     print(f"OK   duplicates skipped   : {duplicates} (same name, byte-identical content)")
     print(f"OK   collisions           : {len(collisions)} (same name, different content)")
-    print(f"OK   target layout        : flat")
+    print("OK   target layout        : flat")
     return 0
 
 

@@ -485,7 +485,9 @@ def figure_08_latency(summary: Dict[str, Dict[str, str]], gallery: Dict[str, Any
     gallery_mean = as_float(require(gallery, "gallery_search_time_mean_ms", "duplicate_gallery_metrics.json"))
     gallery_p95 = as_float(require(gallery, "gallery_search_time_p95_ms", "duplicate_gallery_metrics.json"))
     base = len(groups) + 0.35
-    for index, (value, label, color) in enumerate(
+    # The series name is deliberately unused: these bars reuse the colours of
+    # the embedding series, so re-labelling would duplicate the legend entries.
+    for index, (value, _label, color) in enumerate(
         ((gallery_mean, "Mean", BLUE), (gallery_p95, "p95", ORANGE))
     ):
         bar = ax.bar([base + (index - 0.5) * width], [value], width=width, color=color, zorder=2)[0]
@@ -623,7 +625,7 @@ def render_terminal(
     ax.set_ylim(0, total_rows)
 
     row = total_rows - 0.7
-    mono = {"family": "DejaVu Sans Mono"}
+    mono: Dict[str, Any] = {"family": "DejaVu Sans Mono"}
 
     ax.text(0.012, row, title, color=TERMINAL_FG, fontsize=11.5, fontweight="bold", va="top", **mono)
     row -= 1.15
@@ -849,6 +851,10 @@ def main(argv: Optional[List[str]] = None) -> int:
                 exit_code = None
             elif rendered is not None:
                 body, exit_code = rendered, None
+            elif argv_ is None:
+                # Reached only if an item is declared with nothing to run,
+                # render or skip; fail here rather than deep inside run_command.
+                raise ValueError(f"Evidence item {number} ({title}) has no command to run.")
             else:
                 exit_code, body = run_command(argv_)
             body = redact(body, redactions)

@@ -125,6 +125,10 @@ def main(argv=None) -> int:
         flagged = [p for p in result.probe_results if p.exceeds_duplicate_threshold]
         with connect(args.review_db) as connection:
             for probe in flagged:
+                # A probe only exceeds the threshold once it has been scored
+                # against a candidate, so both fields are populated here.
+                if probe.top_candidate_identity_hash is None or probe.top_similarity is None:
+                    continue
                 upsert_case(
                     connection,
                     case_id=f"{probe.sample_id}:{probe.top_candidate_identity_hash}",

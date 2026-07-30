@@ -26,6 +26,7 @@ def _load_runner():
     spec = importlib.util.spec_from_file_location(
         "run_complete_experiment", REPO_ROOT / "scripts" / "run_complete_experiment.py"
     )
+    assert spec is not None and spec.loader is not None, "run_complete_experiment.py is not importable"
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module

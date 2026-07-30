@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from typing import Dict, cast
 
 from face_verification.provenance import (
     DependencyContractError,
@@ -37,7 +38,8 @@ def main(argv=None) -> int:
         print(f"Python: {report['python_version']}")
         print(f"Platform: {report['platform']}")
         print(f"Processor: {report['processor']}")
-        for package, info in report["dependencies"].items():
+        dependencies = cast(Dict[str, Dict[str, str]], report["dependencies"])
+        for package, info in dependencies.items():
             status = "OK" if info["installed"] == info["expected"] else "MISMATCH"
             print(f"  {package}: expected={info['expected']} installed={info['installed']} [{status}]")
         if not ok:
